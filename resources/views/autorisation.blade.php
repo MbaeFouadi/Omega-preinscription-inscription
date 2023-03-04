@@ -182,10 +182,10 @@
                                         <p>{{$data->droit}} ({{$data->droit_lettre}} Francs Comorien) de frais d'inscription au compte UDC</p>
                                        
                                         <div class="row">
-                                            <form method="post" action="{{url('https://26901.tagpay.fr/online/online.php')}}">
+                                            <form method="post" action="{{url('https://26900.tagpay.fr/online/online.php')}}">
                                                 @csrf
                                                 <input type="hidden" name="sessionid" value="{{$sessionId}}">
-                                                <input type="hidden" name="merchantid" value="2532345689566942">
+                                                <input type="hidden" name="merchantid" value="2274832632922162">
                                                 <input type="hidden" name="amount" value="{{$data->droit}}">
                                                 <input type="hidden" name="currency" value="174">
                                                 <input type="hidden" name="purchaseref" value="{{$data->num_auto}}">

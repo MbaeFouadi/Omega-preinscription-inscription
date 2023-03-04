@@ -78,7 +78,11 @@ class candidatController extends Controller
                         ->first();
 
                     if (isset($bachelier)) {
-                        $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                        $data = DB::table("candidats")
+                            ->where("user_candidat_id", Auth::user()->id)
+                            ->orWhere("nin", $request->nin_bac)
+                            ->first();
+
 
                         if (!isset($data)) {
                             DB::table('candidats')->insert([
@@ -90,6 +94,9 @@ class candidatController extends Controller
                             ]);
 
                             return redirect("accueil");
+                        } else {
+
+                            $messages = "Cette personne a déjà débuté une préinscription";
                         }
                     } else {
                         $messages = "Vous n'avez pas eu le bac cette année";
@@ -118,6 +125,10 @@ class candidatController extends Controller
 
                         return redirect("accueil");
                     }
+                    else {
+
+                        $messages = "Cette personne a déjà débuté une préinscription";
+                    }
                 }
             } else if ($request->type_bac == 2) {
 
@@ -138,6 +149,10 @@ class candidatController extends Controller
                     ]);
 
                     return redirect("accueil");
+                }
+                else {
+
+                    $messages = "Cette personne a déjà débuté une préinscription";
                 }
             }
         } else if ($request->type_preins == 2) {
@@ -176,7 +191,10 @@ class candidatController extends Controller
                             ->first();
 
                         if (isset($bachelier)) {
-                            $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                            $data = DB::table("candidats")
+                                ->where("user_candidat_id", Auth::user()->id)
+                                ->orWhere("nin", $request->nin_bac)
+                                ->first();
 
                             if (!isset($data)) {
 
@@ -200,6 +218,10 @@ class candidatController extends Controller
                                     $messages = "Le nin ne correspond pas à ce matricule";
                                     return view("mon_bac", compact("messages", "preins"));
                                 }
+                            }
+                            else {
+
+                                $messages = "Cette personne a déjà débuté une préinscription";
                             }
                         } else {
                             $messages = "Vous n'avez pas eu le bac cette année";
@@ -241,6 +263,10 @@ class candidatController extends Controller
                                 return view("mon_bac", compact("messages", "preins"));
                             }
                         }
+                        else {
+
+                            $messages = "Cette personne a déjà débuté une préinscription";
+                        }
                     }
                 } else if ($request->type_bac == 2) {
 
@@ -276,6 +302,10 @@ class candidatController extends Controller
                             $messages = "Le nin ne correspond pas à ce matricule";
                             return view("mon_bac", compact("messages", "preins"));
                         }
+                    }
+                    else {
+
+                        $messages = "Cette personne a déjà débuté une préinscription";
                     }
                 }
             } else {
@@ -312,7 +342,10 @@ class candidatController extends Controller
                             ->first();
 
                         if (isset($bachelier)) {
-                            $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                            $data = DB::table("candidats")
+                                ->where("user_candidat_id", Auth::user()->id)
+                                ->orWhere("nin", $request->nin_bac)
+                                ->first();
 
                             if (!isset($data)) {
 
@@ -340,6 +373,10 @@ class candidatController extends Controller
                                     return view("mon_bac", compact("messages", "preins"));
                                 }
                             }
+                            else {
+
+                                $messages = "Cette personne a déjà débuté une préinscription";
+                            }
                         } else {
                             $messages = "Vous n'avez pas eu le bac cette année";
 
@@ -349,7 +386,10 @@ class candidatController extends Controller
                         }
                     } else {
 
-                        $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                        $data = DB::table("candidats")
+                            ->where("user_candidat_id", Auth::user()->id)
+                            ->orWhere("nin", $request->nin_bac)
+                            ->first();
                         if (!isset($data)) {
                             $request->validate([
                                 'matricule' => 'required',
@@ -380,10 +420,17 @@ class candidatController extends Controller
                                 return view("mon_bac", compact("messages", "preins"));
                             }
                         }
+                        else {
+
+                            $messages = "Cette personne a déjà débuté une préinscription";
+                        }
                     }
                 } else if ($request->type_bac == 2) {
 
-                    $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                    $data = DB::table("candidats")
+                        ->where("user_candidat_id", Auth::user()->id)
+                        ->orWhere("nin", $request->nin_bac)
+                        ->first();
 
                     if (!isset($data)) {
 
@@ -417,6 +464,10 @@ class candidatController extends Controller
                             $messages = "Le nin ne correspond pas à ce matricule";
                             return view("mon_bac", compact("messages", "preins"));
                         }
+                    }
+                    else {
+
+                        $messages = "Cette personne a déjà débuté une préinscription";
                     }
                 }
             } else {
@@ -486,7 +537,7 @@ class candidatController extends Controller
         $ch = curl_init();
         // define options
         $optArray = array(
-            CURLOPT_URL => 'https://26901.tagpay.fr/online/online.php?merchantid=2532345689566942',
+            CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
             CURLOPT_RETURNTRANSFER => true
         );
 
@@ -643,8 +694,10 @@ class candidatController extends Controller
             $imageName = $request->nin . '.' . $request->image->extension();
 
             $request->image->move(public_path('photo'), $imageName);
-
-            DB::table('candidats')
+            $data = DB::table("candidats")->where("nin", $request->nin)->first();
+            if(!isset($data))
+            {
+                DB::table('candidats')
                 ->where('user_candidat_id', Auth::user()->id)
                 ->update([
                     'id_type' => $request->type_preinscription,
@@ -665,7 +718,13 @@ class candidatController extends Controller
                     'photo' => $imageName,
 
                 ]);
-            return redirect("accueil");
+                    return redirect("accueil");
+            }
+            else
+            {
+                $messages="Cette personne a déjà débuté une préinscription";
+            }
+          
         } else if ($datas->type_bac == 2) {
 
 
@@ -694,29 +753,37 @@ class candidatController extends Controller
 
             $request->image->move(public_path('photo'), $imageName);
 
-            DB::table('candidats')
-                ->where('user_candidat_id', Auth::user()->id)
-                ->update([
-                    'id_type' => $request->type_preinscription,
-                    'statut' => '1',
-                    'nin' => $request->nin,
-                    'nom' => $request->nom,
-                    'prenom' => $request->prenom,
-                    'date_naiss' => $request->date_naissance,
-                    'lieu_naiss' => $request->lieu_naissance,
-                    'sexe' => $request->sexe,
-                    'adresse_cand' => $request->adresse,
-                    'pays' => $request->pays,
-                    'tel_mobile' => $request->telephone,
-                    'serie' => $request->serie,
-                    'mention' => $request->mention,
-                    'centre' => $request->centre,
-                    'num_attest' => $request->num_attest,
-                    'annee' => $request->annees,
-                    'photo' => $imageName,
-                ]);
+            $data = DB::table("candidats")->where("nin", $request->nin)->first();
+            if(!isset($data))
+            {
+                DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->type_preinscription,
+                        'statut' => '1',
+                        'nin' => $request->nin,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $request->date_naissance,
+                        'lieu_naiss' => $request->lieu_naissance,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $request->serie,
+                        'mention' => $request->mention,
+                        'centre' => $request->centre,
+                        'num_attest' => $request->num_attest,
+                        'annee' => $request->annees,
+                        'photo' => $imageName,
+                    ]);
 
-            return redirect("accueil");
+                return redirect("accueil");
+            }
+            else
+            {
+                $messages="Cette personne a déjà débuté une préinscription";
+            }   
         }
     }
 
@@ -1139,46 +1206,40 @@ class candidatController extends Controller
     public function notification()
     {
 
-        $periode=DB::table('periode_activite')
-        ->where("user_candidat_id", Auth::user()->id)
-        ->orderByDesc('id')->first();
-        if($periode->type==1)
-        {
-            $recu = $_GET['purchaseref'];
-            $candidat=DB::table("candidats")
+        $periode = DB::table('periode_activite')
             ->where("user_candidat_id", Auth::user()->id)
-            ->first();
-            $ref=DB::table("holo")
-            ->where("nin",$candidat->nin)
-            ->first();
-
-            if($ref->nin==0)
-            {
-                DB::table("holo")->insert([
-                    "reference"=>$_GET['paymentref'],
-                    "nin"=>$candidat->nin
-                ]);
-
-                $refs=DB::table("holo")
-                ->where("nin",$candidat->nin)
+            ->orderByDesc('id')->first();
+        if ($periode->type == 1) {
+            $recu = $_GET['purchaseref'];
+            $candidat = DB::table("candidats")
+                ->where("user_candidat_id", Auth::user()->id)
+                ->first();
+            $ref = DB::table("holo")
+                ->where("nin", $candidat->nin)
                 ->first();
 
-                $update = DB::table('candidats')
-                ->where('user_candidat_id', Auth::user()->id)
-                ->update([
-                    'statut' => 4,
-                    'reference_id' =>$refs->id,
+            if ($ref->nin == 0) {
+                DB::table("holo")->insert([
+                    "reference" => $_GET['paymentref'],
+                    "nin" => $candidat->nin
                 ]);
 
+                $refs = DB::table("holo")
+                    ->where("nin", $candidat->nin)
+                    ->first();
 
+                $update = DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'statut' => 4,
+                        'reference_id' => $refs->id,
+                    ]);
             }
-        }
-        else if($periode->type==2)
-        {
+        } else if ($periode->type == 2) {
             if ($_GET['status'] == "OK") {
 
                 // $nine=substr($_GET['purchaseref'], 1);
-                $num_auto= $_GET['purchaseref'];
+                $num_auto = $_GET['purchaseref'];
                 // $nine = Cookie::get('nin');
 
 
@@ -1200,7 +1261,7 @@ class candidatController extends Controller
 
                         $nin = Cookie::get('nin');
 
-                        $post = DB::table("post_inscription")->where("num_auto",$num_auto)->where("Annee", $annee->Annee)->first();
+                        $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
                         if (!empty($post->matricule)) {
 
                             $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
@@ -1220,7 +1281,7 @@ class candidatController extends Controller
                                 }
 
                                 $dateJ = date('Y-m-d');
-                                $post = DB::table("post_inscription")->where("num_auto",$num_auto)->where("Annee", $annee->Annee)->first();
+                                $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
                                 $etud = DB::table('etudiant')
                                     ->where("mat_etud", $post->matricule)
                                     ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
@@ -1275,7 +1336,7 @@ class candidatController extends Controller
                             } else {
                                 $message = "vous êtes deja inscris cette année";
                                 $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("num_auto",$num_auto)->first();
+                                $post = DB::table("post_inscription")->where("num_auto", $num_auto)->first();
                                 return view("success", compact("message", 'post'));
                             }
                         } else {
@@ -1286,7 +1347,7 @@ class candidatController extends Controller
                             $dernier = intval($etud->mat_etud);
                             $dernier++;
                             $mat = (string) $dernier;
-                            $candidat = DB::table("candidats")->where("user_candidat_id",Auth::user()->id)->first();
+                            $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
                             // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
                             // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
 
@@ -1478,7 +1539,7 @@ class candidatController extends Controller
                             $dernier = intval($etud->mat_etud);
                             $dernier++;
                             $mat = (string) $dernier;
-                            $candidat = DB::table("candidats")->where("user_candidat_id",Auth::user()->id)->first();
+                            $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
                             // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
                             // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
 
@@ -1983,6 +2044,6 @@ class candidatController extends Controller
                     return view("success", compact("message", "post", "s", "date"));
                 }
             }
-        }    
+        }
     }
 }
