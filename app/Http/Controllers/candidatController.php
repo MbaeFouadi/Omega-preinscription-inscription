@@ -124,10 +124,11 @@ class candidatController extends Controller
                         ]);
 
                         return redirect("accueil");
-                    }
-                    else {
+                    } else {
 
                         $messages = "Cette personne a déjà débuté une préinscription";
+                        $preins = DB::table("type_preinscription")->get();
+                        return view("mon_bac", compact('preins', 'messages'));
                     }
                 }
             } else if ($request->type_bac == 2) {
@@ -149,10 +150,11 @@ class candidatController extends Controller
                     ]);
 
                     return redirect("accueil");
-                }
-                else {
+                } else {
 
                     $messages = "Cette personne a déjà débuté une préinscription";
+                    $preins = DB::table("type_preinscription")->get();
+                    return view("mon_bac", compact('preins', 'messages'));
                 }
             }
         } else if ($request->type_preins == 2) {
@@ -218,10 +220,11 @@ class candidatController extends Controller
                                     $messages = "Le nin ne correspond pas à ce matricule";
                                     return view("mon_bac", compact("messages", "preins"));
                                 }
-                            }
-                            else {
-
+                            } else {
+                                
                                 $messages = "Cette personne a déjà débuté une préinscription";
+                                $preins = DB::table("type_preinscription")->get();
+                                return view("mon_bac", compact('preins', 'messages'));
                             }
                         } else {
                             $messages = "Vous n'avez pas eu le bac cette année";
@@ -262,10 +265,11 @@ class candidatController extends Controller
                                 $messages = "Le nin ne correspond pas à ce matricule";
                                 return view("mon_bac", compact("messages", "preins"));
                             }
-                        }
-                        else {
+                        } else {
 
                             $messages = "Cette personne a déjà débuté une préinscription";
+                            $preins = DB::table("type_preinscription")->get();
+                            return view("mon_bac", compact('preins', 'messages'));
                         }
                     }
                 } else if ($request->type_bac == 2) {
@@ -302,10 +306,11 @@ class candidatController extends Controller
                             $messages = "Le nin ne correspond pas à ce matricule";
                             return view("mon_bac", compact("messages", "preins"));
                         }
-                    }
-                    else {
+                    } else {
 
                         $messages = "Cette personne a déjà débuté une préinscription";
+                        $preins = DB::table("type_preinscription")->get();
+                        return view("mon_bac", compact('preins', 'messages'));
                     }
                 }
             } else {
@@ -372,13 +377,15 @@ class candidatController extends Controller
                                     $messages = "Le nin ne correspond pas à ce matricule";
                                     return view("mon_bac", compact("messages", "preins"));
                                 }
-                            }
-                            else {
+                            } else {
 
                                 $messages = "Cette personne a déjà débuté une préinscription";
+                                $preins = DB::table("type_preinscription")->get();
+                                return view("mon_bac", compact('preins', 'messages'));
                             }
                         } else {
                             $messages = "Vous n'avez pas eu le bac cette année";
+                            
 
                             $preins = DB::table("type_preinscription")
                                 ->get();
@@ -419,10 +426,12 @@ class candidatController extends Controller
                                 $messages = "Le nin ne correspond pas à ce matricule";
                                 return view("mon_bac", compact("messages", "preins"));
                             }
-                        }
-                        else {
+                        } else {
 
+                            
                             $messages = "Cette personne a déjà débuté une préinscription";
+                            $preins = DB::table("type_preinscription")->get();
+                            return view("mon_bac", compact('preins', 'messages'));
                         }
                     }
                 } else if ($request->type_bac == 2) {
@@ -464,10 +473,11 @@ class candidatController extends Controller
                             $messages = "Le nin ne correspond pas à ce matricule";
                             return view("mon_bac", compact("messages", "preins"));
                         }
-                    }
-                    else {
+                    } else {
 
                         $messages = "Cette personne a déjà débuté une préinscription";
+                        $preins = DB::table("type_preinscription")->get();
+                        return view("mon_bac", compact('preins', 'messages'));
                     }
                 }
             } else {
@@ -695,36 +705,44 @@ class candidatController extends Controller
 
             $request->image->move(public_path('photo'), $imageName);
             $data = DB::table("candidats")->where("nin", $request->nin)->first();
-            if(!isset($data))
-            {
+            if (!isset($data)) {
                 DB::table('candidats')
-                ->where('user_candidat_id', Auth::user()->id)
-                ->update([
-                    'id_type' => $request->type_preinscription,
-                    'statut' => '1',
-                    'nin' => $request->nin,
-                    'nom' => $request->nom,
-                    'prenom' => $request->prenom,
-                    'date_naiss' => $request->date_naissance,
-                    'lieu_naiss' => $request->lieu_naissance,
-                    'sexe' => $request->sexe,
-                    'adresse_cand' => $request->adresse,
-                    'pays' => $request->pays,
-                    'tel_mobile' => $request->telephone,
-                    'serie' => $request->serie,
-                    'mention' => $request->mention,
-                    'centre' => $request->centre,
-                    'num_attest' => $request->num_attest,
-                    'photo' => $imageName,
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->type_preinscription,
+                        'statut' => '1',
+                        'nin' => $request->nin,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $request->date_naissance,
+                        'lieu_naiss' => $request->lieu_naissance,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $request->serie,
+                        'mention' => $request->mention,
+                        'centre' => $request->centre,
+                        'num_attest' => $request->num_attest,
+                        'photo' => $imageName,
 
-                ]);
-                    return redirect("accueil");
+                    ]);
+                return redirect("accueil");
+            } else {
+
+                $messages = "Cette personne a déjà débuté une préinscription";
+              
+                $annees = DB::table("annee")->get();
+                $pays = DB::table('pays')->get();
+                $type_recu = DB::table('type_recu')
+                    ->where("type_preins_id", $data->type_preins_id)
+                    ->get();
+                $preins = DB::table("type_preinscription")
+                    ->where("id", $data->type_preins_id)
+                    ->first();
+
+                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages'));
             }
-            else
-            {
-                $messages="Cette personne a déjà débuté une préinscription";
-            }
-          
         } else if ($datas->type_bac == 2) {
 
 
@@ -754,8 +772,7 @@ class candidatController extends Controller
             $request->image->move(public_path('photo'), $imageName);
 
             $data = DB::table("candidats")->where("nin", $request->nin)->first();
-            if(!isset($data))
-            {
+            if (!isset($data)) {
                 DB::table('candidats')
                     ->where('user_candidat_id', Auth::user()->id)
                     ->update([
@@ -779,11 +796,20 @@ class candidatController extends Controller
                     ]);
 
                 return redirect("accueil");
+            } else {
+                $messages = "Cette personne a déjà débuté une préinscription";
+              
+                $annees = DB::table("annee")->get();
+                $pays = DB::table('pays')->get();
+                $type_recu = DB::table('type_recu')
+                    ->where("type_preins_id", $data->type_preins_id)
+                    ->get();
+                $preins = DB::table("type_preinscription")
+                    ->where("id", $data->type_preins_id)
+                    ->first();
+
+                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages'));
             }
-            else
-            {
-                $messages="Cette personne a déjà débuté une préinscription";
-            }   
         }
     }
 
@@ -1210,30 +1236,32 @@ class candidatController extends Controller
             ->where("user_candidat_id", Auth::user()->id)
             ->orderByDesc('id')->first();
         if ($periode->type == 1) {
-            $recu = $_GET['purchaseref'];
-            $candidat = DB::table("candidats")
-                ->where("user_candidat_id", Auth::user()->id)
-                ->first();
-            $ref = DB::table("holo")
-                ->where("nin", $candidat->nin)
-                ->first();
-
-            if ($ref->nin == 0) {
-                DB::table("holo")->insert([
-                    "reference" => $_GET['paymentref'],
-                    "nin" => $candidat->nin
-                ]);
-
-                $refs = DB::table("holo")
-                    ->where("nin", $candidat->nin)
+            if ($_GET['status'] == "OK") {
+                $recu = $_GET['purchaseref'];
+                $candidat = DB::table("candidats")
+                    ->where("user_candidat_id", Auth::user()->id)
                     ->first();
+                $ref = DB::table("holo")
+                    ->where("nin", $candidat->nin)
+                    ->get();
 
-                $update = DB::table('candidats')
-                    ->where('user_candidat_id', Auth::user()->id)
-                    ->update([
-                        'statut' => 4,
-                        'reference_id' => $refs->id,
+                if ($ref->count() == 0) {
+                    DB::table("holo")->insert([
+                        "reference" => $_GET['paymentref'],
+                        "nin" => $candidat->nin
                     ]);
+
+                    $refs = DB::table("holo")
+                        ->where("nin", $candidat->nin)
+                        ->first();
+
+                    $update = DB::table('candidats')
+                        ->where('user_candidat_id', Auth::user()->id)
+                        ->update([
+                            'statut' => 4,
+                            'reference_id' => $refs->id,
+                        ]);
+                }
             }
         } else if ($periode->type == 2) {
             if ($_GET['status'] == "OK") {

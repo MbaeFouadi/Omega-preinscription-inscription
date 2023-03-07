@@ -223,7 +223,7 @@
 											</select> <br>
 											<div id="an">
 												<label for=""> Année d'Obtention</label>
-												<select name="annee" id="annee" class="form-control" >
+												<select name="annee" id="annee" class="form-control">
 													<option value=''>Sélectionner l'année</option>
 													<script>
 														let an = "<option value=''>Sélectionner l'année</option>";
@@ -262,9 +262,9 @@
 							<!-- Step 1 -->
 							<h6>Informations candidat</h6>
 							<section id="xd" sec="222">
-									@isset($messages)
-									<div class="alert alert-danger">{{ $messages }}</div>
-									@endisset
+								@isset($messages)
+								<div class="alert alert-danger">{{ $messages }}</div>
+								@endisset
 								@isset($data)
 								@if ($data->statut==1 || $data->statut==2 || $data->statut==3 || $data->statut==4 )
 								<div class="container" id="info-data">
@@ -348,19 +348,19 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-													
+
 													<label for="addressline1" class="form-label">Nin </label>
 													<input type="text" class="form-control" id="nin" disabled value='{{$bachelier->NIN}}' required>
 												</div>
 											</div>
 											@if($data->type_preins_id==2 || $data->type_preins_id==3)
-												<div class="col-md-6">
+											<div class="col-md-6">
 												<div class="form-group">
 													@error('matricule')
-                                                    	<div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Matricule </label>
-													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled   required>
+													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
 												</div>
 											</div>
 											@endif
@@ -369,8 +369,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('type_preinscription')
-                                                    	<div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="firstName5" class="form-label">Types de {{$preins->design_preins}} <span class="text-danger">*</span></label>
 													<select class="form-control select2" data-validation-required-message="Ce champ est obligatoire" name="type_preinscription" id="type_preinscription" style="width: 100%;" required>
 														<option value="">Sélectionner</option>
@@ -383,8 +383,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('image')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="lastName1" class="form-label">Image <span class="text-danger">*</span></label>
 													<input type="file" class="form-control" id="image" name="image" data-validation-required-message="Ce champ est obligatoire" required>
 												</div>
@@ -394,7 +394,7 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="firstName5" class="form-label">Nom </label>
-													<input type="text"  class="form-control" id="nom" name="nom" value="{{$bachelier->Nom}}"  required>
+													<input type="text" class="form-control" id="nom" name="nom" value="{{$bachelier->Nom}}" required>
 												</div>
 											</div>
 											<div class="col-md-6">
@@ -421,9 +421,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-														@error('sexe')
-														<div class="alert alert-danger">{{ $message }}</div>
-														@enderror
+													@error('sexe')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Sexe <span class="text-danger">*</span> </label>
 													<select name="sexe" data-validation-required-message="Ce champ est obligatoire" id="sexe" class="form-control" required>
 														<option value="">Sélectionner le sexe</option>
@@ -435,9 +435,9 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('adresse')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
-													<label for="addressline1" data-validation-required-message="Ce champ est obligatoire"  class="form-label">Adresse <span class="text-danger">*</span></label>
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
+													<label for="addressline1" data-validation-required-message="Ce champ est obligatoire" class="form-label">Adresse <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" name="adresse" id="adresse" value="{{old('adresse')}}" required>
 												</div>
 											</div>
@@ -446,8 +446,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('pays')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Pays <span class="text-danger">*</span></label>
 													<select name="pays" id="pays" data-validation-required-message="Ce champ est obligatoire" class="form-control" required>
 														<option value="">Sélectionner le pays</option>
@@ -460,9 +460,9 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-														@error('telephone')
-														<div class="alert alert-danger">{{ $message }}</div>
-														@enderror
+													@error('telephone')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Téléphone <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('telephone')}}" name="telephone" id="telephone" required>
 												</div>
@@ -526,10 +526,10 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('nin')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Nin <span class="text-danger">*</span></label>
-													<input type="text" class="form-control"  name="nin" id="nin" required data-validation-required-message="Ce champ est obligatoire">
+													<input type="text" class="form-control" name="nin" id="nin" required data-validation-required-message="Ce champ est obligatoire">
 												</div>
 											</div>
 										</div>
@@ -537,10 +537,10 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('type_preinscription')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="firstName5" class="form-label">Types de {{$preins->design_preins}} <span class="text-danger">*</span></label>
-													<select class="form-control select2" style="width: 100%;" required data-validation-required-message="Ce champ est obligatoire" name="type_preinscription" id="type_preinscription" >
+													<select class="form-control select2" style="width: 100%;" required data-validation-required-message="Ce champ est obligatoire" name="type_preinscription" id="type_preinscription">
 														<option value="">Sélectionner</option>
 														@foreach ($type_recu as $recu )
 														<option value="{{$recu->id_type}}">{{$recu->nom_type}}</option>
@@ -551,8 +551,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('image')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="lastName1" class="form-label">Image <span class="text-danger">*</span></label>
 													<input type="file" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="image" name="image" required>
 												</div>
@@ -561,18 +561,18 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('nom')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('nom')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="firstName5" class="form-label">Nom <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="nom" name="nom" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('prenom')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('prenom')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="lastName1" class="form-label">Prénom <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="prenom" name="prenom" required>
 												</div>
@@ -582,8 +582,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('date_naissance')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="emailAddress1" class="form-label">Date de naissance <span class="text-danger">*</span></label>
 													<input type="date" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="date_naissance" name="date_naissance" required>
 												</div>
@@ -591,8 +591,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('lieu_naissance')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="phoneNumber1" class="form-label">Lieu de naissance <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="lieu_naissance" name="lieu_naissance" required>
 												</div>
@@ -601,9 +601,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('sexe')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('sexe')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Sexe <span class="text-danger">*</span></label>
 													<select name="sexe" id="sexe" data-validation-required-message="Ce champ est obligatoire" class="form-control" required>
 														<option value="">Sélectionner le sexe</option>
@@ -615,8 +615,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													@error('adresse')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Adresse <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" name="adresse" id="adresse" required>
 												</div>
@@ -625,9 +625,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('pays')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('pays')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Pays <span class="text-danger">*</span></label>
 													<select name="pays" id="pays" class="form-control" data-validation-required-message="Ce champ est obligatoire" required>
 														<option value="">Sélectionner le pays</option>
@@ -640,9 +640,9 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('telephone')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('telephone')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Téléphone <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" name="telephone" id="telephone" required>
 												</div>
@@ -651,18 +651,18 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('serie')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('serie')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Série <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="serie" name="serie" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('mention')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('mention')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Mention <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="mention" name="mention" required>
 												</div>
@@ -671,20 +671,20 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('centre')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('centre')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Centre <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="centre" name="centre" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('annee')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('annee')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Année d'obtention</label>
-													<input type="text"  class="form-control" id="annee" name="annee" value="{{$data->annee}}" disabled required>
+													<input type="text" class="form-control" id="annee" name="annee" value="{{$data->annee}}" disabled required>
 												</div>
 											</div>
 										</div>
@@ -692,9 +692,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('num_attest')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('num_attest')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Numéro d'attestation <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" name="num_attest" id="num_attest" required>
 												</div>
@@ -720,9 +720,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('nin')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('nin')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Nin <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('nin')}}" name="nin" id="nin" required>
 												</div>
@@ -731,9 +731,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('type_preinscription')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('type_preinscription')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="firstName5" class="form-label">Types de {{$preins->design_preins}} <span class="text-danger">*</span></label>
 													<select class="form-control select2" data-validation-required-message="Ce champ est obligatoire" style="width: 100%;" name="type_preinscription" id="type_preinscription" required>
 														<option value="">Sélectionner</option>
@@ -745,9 +745,9 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('image')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('image')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="lastName1" class="form-label">Image <span class="text-danger">*</span> </label>
 													<input type="file" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="image" name="image" required>
 												</div>
@@ -756,18 +756,18 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('nom')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('nom')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="firstName5" class="form-label">Nom <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('nom')}}" id="nom" name="nom" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('prenom')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('prenom')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="lastName1" class="form-label">Prénom <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('prenom')}}" id="prenom" name="prenom" required>
 												</div>
@@ -776,18 +776,18 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('date_naissance')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
-													<label for="emailAddress1"  class="form-label">Date de naissance <span class="text-danger">*</span></label>
+													@error('date_naissance')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
+													<label for="emailAddress1" class="form-label">Date de naissance <span class="text-danger">*</span></label>
 													<input type="date" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('date_naissance')}}" id="date_naissance" name="date_naissance" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('lieu_naissance')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('lieu_naissance')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="phoneNumber1" class="form-label">Lieu de naissance <span class="text-danger">*</span></label>
 													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('lieu_naissance')}}" id="lieu_naissance" name="lieu_naissance" required>
 												</div>
@@ -796,9 +796,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('sexe')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('sexe')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Sexe <span class="text-danger">*</span></label>
 													<select name="sexe" id="sexe" class="form-control" data-validation-required-message="Ce champ est obligatoire" required>
 														<option value="">Sélectionner le sexe</option>
@@ -809,9 +809,9 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('adresse')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('adresse')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Adresse <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" id="adresse" value="{{old('adresse')}}" data-validation-required-message="Ce champ est obligatoire" name="adresse" required>
 												</div>
@@ -820,9 +820,9 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('pays')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('pays')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Pays <span class="text-danger">*</span></label>
 													<select name="pays" id="pays" class="form-control" required data-validation-required-message="Ce champ est obligatoire">
 														<option value="">Sélectionner le pays</option>
@@ -835,9 +835,9 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('telephone')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('telephone')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Téléphone <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('telephone')}}" id="telephone" name="telephone" required>
 												</div>
@@ -846,18 +846,18 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('serie')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('serie')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Série <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" id="serie" data-validation-required-message="Ce champ est obligatoire" value="{{old('serie')}}" name="serie" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('mention')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('mention')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline2" class="form-label">Mention <span class="text-danger">*</span></label>
 													<input type="text" class="form-control" id="mention" data-validation-required-message="Ce champ est obligatoire" value="{{old('mention')}}" name="mention" required>
 												</div>
@@ -866,17 +866,17 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-												@error('centre')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+													@error('centre')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
 													<label for="addressline1" class="form-label">Centre <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" id="centre" data-validation-required-message="Ce champ est obligatoire" value="{{old('centre')}}"  name="centre" required>
+													<input type="text" class="form-control" id="centre" data-validation-required-message="Ce champ est obligatoire" value="{{old('centre')}}" name="centre" required>
 												</div>
 											</div>
 											<div class="col-md-6">
-											@error('annees')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+												@error('annees')
+												<div class="alert alert-danger">{{ $message }}</div>
+												@enderror
 												<div class="form-group">
 													<label for="addressline2" class="form-label">Année d'obtention <span class="text-danger">*</span></label>
 
@@ -952,7 +952,7 @@
 
 											<div class="col-md-3">
 												<div class="form-group">
-													<label class="form-label">2ème choix  <br> <br> Composantes <span class="text-danger">*</span></label>
+													<label class="form-label">2ème choix <br> <br> Composantes <span class="text-danger">*</span></label>
 													<select class="form-control select2" id="composante2" name="composante2" style="width: 100%;">
 														<option>Sélectionner</option>
 
@@ -967,7 +967,7 @@
 											</div>
 											<div class="col-md-3">
 												<div class="form-group">
-													<label class="form-label">3ème choix   <br> <br> Composantes <span class="text-danger">*</span></label>
+													<label class="form-label">3ème choix <br> <br> Composantes <span class="text-danger">*</span></label>
 													<select class="form-control select2" style="width: 100%;" id="composante3" name="composante3">
 														<option>Sélectionner</option>
 
@@ -1104,12 +1104,12 @@
 			<!-- Step 4 -->
 			<h6>Paiement</h6>
 			<section sec="4" id="4">
-				
+
 				<div id="fil" sec="4">
 					<div class="row">
 						<div class="col-lg-6 col-12">
-							<div class="box" id="infoP" >
-								
+							<div class="box" id="infoP">
+
 							</div>
 							<!-- /.box -->
 						</div>
@@ -1119,26 +1119,26 @@
 								<div class="box-header with-border">
 									<h4 class="box-title">Mes choix de filières</h4>
 								</div>
-								
+
 							</div>
 							<!-- /.box -->
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4" id="paye">
-				<form method="post" action="{{url('https://26900.tagpay.fr/online/online.php')}}">
-					@csrf
-					<input type="hidden" name="sessionid" value="{{$sessionId}}">
-					<input type="hidden" name="merchantid" value="2274832632922162">
-					<input type="hidden" name="amount" value="5000">
-					<input type="hidden" name="currency" value="174">
-					<input type="hidden" name="purchaseref" value="{{$data->num_recu}}">
-					<input type="hidden" name="accepturl" value="https://inscription.univ-comores.km/accepturl">
-					<input type="hidden" name="cancelurl" value="https://inscription.univ-comores.km/cancelurl">
-					<input type="hidden" name="declineurl" value="https://inscription.univ-comores.km/declineurl">
-					<input type="submit" class="btn btn-sm btn-success" name="ok" value="Payer via Holo">
-					
-				</form>
+					<form method="post" action="{{url('https://26900.tagpay.fr/online/online.php')}}">
+						@csrf
+						<input type="hidden" name="sessionid" value="{{$sessionId}}">
+						<input type="hidden" name="merchantid" value="2274832632922162">
+						<input type="hidden" name="amount" value="5000">
+						<input type="hidden" name="currency" value="174">
+						<input type="hidden" name="purchaseref" value="{{$data->num_recu}}">
+						<input type="hidden" name="accepturl" value="http://omega-xd.univ-comores.km/accepturl">
+						<input type="hidden" name="cancelurl" value="http://omega-xd.univ-comores.km/cancelurl">
+						<input type="hidden" name="declineurl" value="http://omega-xd.univ-comores.km/declineurl">
+						<input type="submit" class="btn btn-sm btn-success" name="ok" value="Payer via Holo">
+
+					</form>
 				</div>
 
 
@@ -1400,7 +1400,7 @@
 
 
 										}
-									} else if (data.data.statut == 2 ||data.data.statut == 3) {
+									} else if (data.data.statut == 2 || data.data.statut == 3) {
 										$.ajax({
 											_token: '{{csrf_token()}}',
 											type: "GET",
@@ -1454,16 +1454,14 @@
 						success: function(data) {
 							if (data) {
 								jQuery.each([data], function(i, val, fa, x) {
-									if(data.statut==null)
-									{
+									if (data.statut == null) {
 										// console.log(data.statut);
 										$("#docs").empty();
 										$("#doc").hide();
 										$("#do").hide();
 										$("#buttond").hide();
 										$("#docs").append("Veuillez remplir les rubrique précédentes");
-									}
-									else if (data.statut == 1) {
+									} else if (data.statut == 1) {
 
 										// console.log(data.statut);
 										console.log(data.id_type);
@@ -1492,28 +1490,24 @@
 											$("#master").show();
 
 										}
-									}
-									else if(data.statut==3)
-									{
-										
+									} else if (data.statut == 3) {
+
 										$("#doc").empty();
 										$("#do").empty();
 										$("#docs").empty();
-									
+
 										// $("#docs").append("Votre document est bien chargé");
-										$("#docs").append("<embed  src='document/"+data.document+"' width=800 height=500 type='application/pdf' /><br><br><p class=><a href='{{route('dossier')}}' target='_blank'>Voir plus</a></p>");
+										$("#docs").append("<embed  src='document/" + data.document + "' width=800 height=500 type='application/pdf' /><br><br><p class=><a href='{{route('dossier')}}' target='_blank'>Voir plus</a></p>");
 										// $("#docs").hide();
 
 
 									}
-									
+
 								});
 							}
 						}
 					})
-				}
-				else if(id==3)
-				{
+				} else if (id == 3) {
 					$.ajax({
 						_token: '{{csrf_token()}}',
 						type: "GET",
@@ -1526,23 +1520,19 @@
 
 							jQuery.each([data], function(i, val, fa, x) {
 								// console.log(data.departement.design_facult)
-								if(data.candidat.statut ==3)
-								{
-										if(data.candidat.id_type==1)
-									{
+								if (data.candidat.statut == 3) {
+									if (data.candidat.id_type == 1) {
 										$("#infoP").empty();
 										$("#choixf").empty();
-										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personneles</h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> "+data.candidat.nom +" </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> "+data.candidat.prenom +" </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> "+data.candidat.date_naiss +" </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>"+data.candidat.lieu_naiss +" </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>"+data.candidat.mention +" </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> "+data.candidat.serie +" </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> "+data.candidat.adresse_cand +" </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> "+data.candidat.tel_mobile +" </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
-										$("#choixf").append("<form class='form'><div class='box-body'><h4 class='box-title text-dark mb-0'>Type de préinscription : <strong> "+data.recu.nom_type+" </strong></h4> <br> <h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : "+data.departement1.design_facult+"</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : "+data.departement1.design_depart+"</label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : "+data.departement2.design_facult+"</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : "+data.departement2.design_depart+"</label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : "+data.departement3.design_facult+"</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : "+data.departement3.design_depart+"</label><label class='form-label'></label></div></div></div></div></form>")
+										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personneles</h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> " + data.candidat.nom + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> " + data.candidat.prenom + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> " + data.candidat.date_naiss + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>" + data.candidat.lieu_naiss + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>" + data.candidat.mention + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> " + data.candidat.serie + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> " + data.candidat.adresse_cand + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> " + data.candidat.tel_mobile + " </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
+										$("#choixf").append("<form class='form'><div class='box-body'><h4 class='box-title text-dark mb-0'>Type de préinscription : <strong> " + data.recu.nom_type + " </strong></h4> <br> <h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : " + data.departement1.design_facult + "</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : " + data.departement1.design_depart + "</label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : " + data.departement2.design_facult + "</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : " + data.departement2.design_depart + "</label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : " + data.departement3.design_facult + "</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : " + data.departement3.design_depart + "</label><label class='form-label'></label></div></div></div></div></form>")
 										$("#paye").show();
 
-									}
-									else
-									{
+									} else {
 										$("#infoP").empty();
 										$("#choixf").empty();
-										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personneles</h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> "+data.candidat.nom +" </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> "+data.candidat.prenom +" </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> "+data.candidat.date_naiss +" </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>"+data.candidat.lieu_naiss +" </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>"+data.candidat.mention +" </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> "+data.candidat.serie +" </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> "+data.candidat.adresse_cand +" </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> "+data.candidat.tel_mobile +" </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
-										$("#choixf").append("<form class='form'><div class='box-body'><h4 class='box-title text-dark mb-0'>Type de préinscription : <strong> "+data.recu.nom_type+" </strong> </h4> <br><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>"+data.departement.design_facult+" </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département :<strong> "+data.departement.design_depart+" </strong></label><label class='form-label'></label></div></div></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'></label></div></div></div></div></div></div></div></form>")
+										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personneles</h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> " + data.candidat.nom + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> " + data.candidat.prenom + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> " + data.candidat.date_naiss + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>" + data.candidat.lieu_naiss + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>" + data.candidat.mention + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> " + data.candidat.serie + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> " + data.candidat.adresse_cand + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> " + data.candidat.tel_mobile + " </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
+										$("#choixf").append("<form class='form'><div class='box-body'><h4 class='box-title text-dark mb-0'>Type de préinscription : <strong> " + data.recu.nom_type + " </strong> </h4> <br><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement.design_facult + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département :<strong> " + data.departement.design_depart + " </strong></label><label class='form-label'></label></div></div></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'></label></div></div></div></div></div></div></div></form>")
 
 										// $("#infoP").show();
 										$("#paye").show();
@@ -1551,7 +1541,7 @@
 
 									}
 								}
-								
+
 
 							})
 						}
@@ -1600,9 +1590,8 @@
 							$("#info-data").empty();
 						}
 					},
-					error: function(jqXHR, status, error)
-					{
-						jsonValue = jQuery.parseJSON( jqXHR.responseText );
+					error: function(jqXHR, status, error) {
+						jsonValue = jQuery.parseJSON(jqXHR.responseText);
 						console.log(jqXHR.responseJSON.errors);
 						$("#message").empty();
 						$("#message").append("<div class='alert alert-warning' role='alert'>L'image doit être du type JPG,PNG,JPEG</div>");
@@ -1638,27 +1627,26 @@
 							$("#info-data").empty();
 						}
 					},
-					error: function(jqXHR, status, error)
-					{
-						jsonValue = jQuery.parseJSON( jqXHR.responseText );
+					error: function(jqXHR, status, error) {
+						jsonValue = jQuery.parseJSON(jqXHR.responseText);
 						console.log(jqXHR.responseJSON);
 						// $("#messagef").append("<div class='text-warning'>"+jsonValue.errors.document[0]+"</div>")
 						$("#messagef").empty();
 						$("#messagef").append("<div class='alert alert-warning'>Tous les champs sont obligatoires</div>")
-					
+
 					}
 				});
 			});
 
 			$("#document").submit(function(event) {
 				event.preventDefault();
-				var doc= $("#document").serializeArray();
-				
+				var doc = $("#document").serializeArray();
+
 				var formData = new FormData(this);
 
 
 				// let name=$("input[name=name]")
-			
+
 				console.log(formData);
 
 				$.ajax({
@@ -1682,7 +1670,7 @@
 							// });
 
 						} else {
-							$.each(res,function(f,a){
+							$.each(res, function(f, a) {
 
 								console.log(res)
 							});
@@ -1690,15 +1678,14 @@
 						}
 					},
 
-					error: function(jqXHR, status, error)
-					{
-						jsonValue = jQuery.parseJSON( jqXHR.responseText );
+					error: function(jqXHR, status, error) {
+						jsonValue = jQuery.parseJSON(jqXHR.responseText);
 						console.log(jsonValue);
 
 						$("#messaged").empty();
 						$("#messaged").append("<div class='alert alert-warning'>Le document doit être de type pdf et de taille inférieure ou égale à 2Mo </div>")
 						// $("#messaged").append("<div class='alert alert-warning'>"+jsonValue.errors.document[0]+"</div>")
-					
+
 					}
 				});
 			});

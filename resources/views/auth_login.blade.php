@@ -45,7 +45,7 @@
 
 									<div class="form-group">
 										<div class="input-group mb-3">
-											<span class="input-group-text bg-white"><i class="ti-user"></i></span>
+											<span class="input-group-text bg-white"><i class="ti-email"></i></span>
 											<input type="email" name="email" class="form-control ps-15 bg-white" placeholder="Email" required>
 										</div>
 									</div>

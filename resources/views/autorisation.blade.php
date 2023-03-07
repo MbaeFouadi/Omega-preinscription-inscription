@@ -189,9 +189,9 @@
                                                 <input type="hidden" name="amount" value="{{$data->droit}}">
                                                 <input type="hidden" name="currency" value="174">
                                                 <input type="hidden" name="purchaseref" value="{{$data->num_auto}}">
-                                                <input type="hidden" name="accepturl" value="https://inscription.univ-comores.km/accepturl">
-                                                <input type="hidden" name="cancelurl" value="https://inscription.univ-comores.km/cancelurl">
-                                                <input type="hidden" name="declineurl" value="https://inscription.univ-comores.km/declineurl">
+                                                <input type="hidden" name="accepturl" value="http://omega-xd.univ-comores.km/accepturl">
+                                                <input type="hidden" name="cancelurl" value="http://omega-xd.univ-comores.km/cancelurl">
+                                                <input type="hidden" name="declineurl" value="http://omega-xd.univ-comores.km/declineurl">
                                                 <input type="submit" class="btn btn-sm btn-success" name="ok" value="Payer via Holo">
                                                 <a href="{{route('accueil')}}" class="btn btn-sm btn-success">Payer après</a>
                                             </form>

@@ -48,7 +48,7 @@
 
                                         </a>
                                         <ul class="treeview-menu">
-                                            <li><a href="{{('inscription')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Inscription</a></li>
+                                            <li><a href="{{('inscriptions')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Inscription</a></li>
                                             <li><a href="{{('re-inscription')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Re-inscription</a></li>
                                             
                                         </ul>
