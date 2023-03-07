@@ -628,6 +628,27 @@ class candidatController extends Controller
     }
     public function candidat_info(Request $request)
     {
+        $ch = curl_init();
+        // define options
+        $optArray = array(
+            CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+            CURLOPT_RETURNTRANSFER => true
+        );
+
+        // apply those options
+        curl_setopt_array($ch, $optArray);
+
+        // execute request and get response
+        $result = curl_exec($ch);
+
+        // also get the error and response code
+        $errors = curl_error($ch);
+        $response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        // var_dump($errors);
+        $sessionId = substr($result, 3);
         $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
         $datas = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
         $bachelier = DB::table("bachelier")->where("NIN", $data->nin)->where("annee", $data->annee)->first();
@@ -731,7 +752,6 @@ class candidatController extends Controller
             } else {
 
                 $messages = "Cette personne a déjà débuté une préinscription";
-              
                 $annees = DB::table("annee")->get();
                 $pays = DB::table('pays')->get();
                 $type_recu = DB::table('type_recu')
@@ -740,13 +760,12 @@ class candidatController extends Controller
                 $preins = DB::table("type_preinscription")
                     ->where("id", $data->type_preins_id)
                     ->first();
+                $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
 
-                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages'));
+
+                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages','recu'));
             }
         } else if ($datas->type_bac == 2) {
-
-
-
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg|max:1048',
                 'type_preinscription' => 'required',
@@ -771,8 +790,9 @@ class candidatController extends Controller
 
             $request->image->move(public_path('photo'), $imageName);
 
-            $data = DB::table("candidats")->where("nin", $request->nin)->first();
-            if (!isset($data)) {
+            $das = DB::table("candidats")->where("nin", $request->nin)->first();
+            if (!isset($das)) {
+
                 DB::table('candidats')
                     ->where('user_candidat_id', Auth::user()->id)
                     ->update([
@@ -807,8 +827,9 @@ class candidatController extends Controller
                 $preins = DB::table("type_preinscription")
                     ->where("id", $data->type_preins_id)
                     ->first();
+                    $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
 
-                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages'));
+                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages','recu'));
             }
         }
     }
