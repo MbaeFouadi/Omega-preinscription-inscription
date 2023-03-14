@@ -78,6 +78,6 @@ Route::post('/Candidat_nouveau', [candidatsController::class,'candidat_nv'])->mi
 Route::post('/etudiant', [candidatsController::class,'candidat_an'])->middleware(['auth', 'verified'])->name('recherche_etudiant');
 Route::post('/autorisation_etudiant', [PostInscriptionController::class,'autorisation_an'])->middleware(['auth', 'verified'])->name('autorisation_an');
 Route::resource('/autorisation', PostInscriptionController::class)->middleware(['auth', 'verified']);
-Route::get('notification', [candidatController::class, 'notification'])->middleware(['auth', 'verified'])->name("notification");
+Route::get('/notification', [candidatController::class, 'notification'])->middleware(['auth', 'verified'])->name("notification");
 
 

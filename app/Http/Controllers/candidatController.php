@@ -673,7 +673,6 @@ class candidatController extends Controller
             ]);
 
             $imageName = $data->NIN . '.' . $request->image->extension();
-
             $request->image->move(public_path('photo'), $imageName);
 
             DB::table('candidats')
@@ -700,7 +699,6 @@ class candidatController extends Controller
         } else if ($datas->type_bac == 1 && $datas->nin == NULL) {
 
             $data = DB::table("bachelier")->where("NIN", $datas->nin)->where("annee", $datas->annee)->first();
-
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg|max:1048',
                 'type_preinscription' => 'required',
@@ -722,11 +720,12 @@ class candidatController extends Controller
 
             ]);
 
-            $imageName = $request->nin . '.' . $request->image->extension();
-
-            $request->image->move(public_path('photo'), $imageName);
+         
             $data = DB::table("candidats")->where("nin", $request->nin)->first();
             if (!isset($data)) {
+
+                $imageName = $request->nin . '.' . $request->image->extension();
+                $request->image->move(public_path('photo'), $imageName);
                 DB::table('candidats')
                     ->where('user_candidat_id', Auth::user()->id)
                     ->update([
@@ -786,13 +785,13 @@ class candidatController extends Controller
                 'annees' => 'required',
             ]);
 
-            $imageName = $request->nin . '.' . $request->image->extension();
-
-            $request->image->move(public_path('photo'), $imageName);
 
             $das = DB::table("candidats")->where("nin", $request->nin)->first();
             if (!isset($das)) {
 
+                
+            $imageName = $request->nin . '.' . $request->image->extension();
+            $request->image->move(public_path('photo'), $imageName);
                 DB::table('candidats')
                     ->where('user_candidat_id', Auth::user()->id)
                     ->update([
@@ -1248,8 +1247,6 @@ class candidatController extends Controller
         }
     }
 
-
-
     public function notification()
     {
 
@@ -1257,10 +1254,37 @@ class candidatController extends Controller
             ->where("user_candidat_id", Auth::user()->id)
             ->orderByDesc('id')->first();
         if ($periode->type == 1) {
+            // if ($_GET['status'] == "OK") {
+            //     $recu = $_GET['purchaseref'];
+            //     $candidat = DB::table("candidats")
+            //         ->where("user_candidat_id", Auth::user()->id)
+            //         ->first();
+            //     $ref = DB::table("holo")
+            //         ->where("nin", $candidat->nin)
+            //         ->get();
+
+            //     if ($ref->count() == 0) {
+            //         DB::table("holo")->insert([
+            //             "reference" => $_GET['paymentref'],
+            //             "nin" => $candidat->nin
+            //         ]);
+
+            //         $refs = DB::table("holo")
+            //             ->where("nin", $candidat->nin)
+            //             ->first();
+
+            //         $update = DB::table('candidats')
+            //             ->where('user_candidat_id', Auth::user()->id)
+            //             ->update([
+            //                 'statut' => 4,
+            //                 'reference_id' => $refs->id,
+            //             ]);
+            //     }
+            // }
             if ($_GET['status'] == "OK") {
                 $recu = $_GET['purchaseref'];
                 $candidat = DB::table("candidats")
-                    ->where("user_candidat_id", Auth::user()->id)
+                    ->where("num_recu",$recu)
                     ->first();
                 $ref = DB::table("holo")
                     ->where("nin", $candidat->nin)
@@ -1277,7 +1301,7 @@ class candidatController extends Controller
                         ->first();
 
                     $update = DB::table('candidats')
-                        ->where('user_candidat_id', Auth::user()->id)
+                        ->where("num_recu",$recu)
                         ->update([
                             'statut' => 4,
                             'reference_id' => $refs->id,
@@ -1396,7 +1420,7 @@ class candidatController extends Controller
                             $dernier = intval($etud->mat_etud);
                             $dernier++;
                             $mat = (string) $dernier;
-                            $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                            $candidat = DB::table("candidats")->where("nin",  $poste->nin)->first();
                             // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
                             // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
 
@@ -1588,7 +1612,7 @@ class candidatController extends Controller
                             $dernier = intval($etud->mat_etud);
                             $dernier++;
                             $mat = (string) $dernier;
-                            $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                            $candidat = DB::table("candidats")->where("nin",  $poste->nin)->first();
                             // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
                             // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
 
@@ -1689,410 +1713,411 @@ class candidatController extends Controller
                     $message = "Vous avez dejà un quitus";
                     return view("success", compact("message", "post", "s", "date"));
                 }
-            } else {
-                // $nine=substr($_GET['purchaseref'], 1);
-                // $nine = $_GET['purchaseref'];
-                $nines = Cookie::get('nin');
+            } 
+            // else {
+            //     // $nine=substr($_GET['purchaseref'], 1);
+            //     // $nine = $_GET['purchaseref'];
+            //     $nines = Cookie::get('nin');
 
 
 
-                $annee = DB::table('annee')->orderByDesc("id_annee")->first();
-                $quitus = DB::table('quitus')->where("nin", $nines)->where("Annee", $annee->Annee)->get();
-                $poste = DB::table('post_inscription')->where("nin", $nines)->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
+            //     $annee = DB::table('annee')->orderByDesc("id_annee")->first();
+            //     $quitus = DB::table('quitus')->where("nin", $nines)->where("Annee", $annee->Annee)->get();
+            //     $poste = DB::table('post_inscription')->where("nin", $nines)->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
 
-                if ($quitus->count() == 0) {
-                    $annees = DB::table('quitus')->where("Annee", $annee->Annee)->get();
-                    if ($annees->count() == 0) {
-                        $ins_quitus = DB::table("quitus")->insert([
-                            "num_quitus" => 1,
-                            "num_auto" => $poste->num_auto,
-                            "nin" => $nines,
-                            // "trans_udc" => $_GET['paymentref'],
-                            "Annee" => $annee->Annee,
-                        ]);
+            //     if ($quitus->count() == 0) {
+            //         $annees = DB::table('quitus')->where("Annee", $annee->Annee)->get();
+            //         if ($annees->count() == 0) {
+            //             $ins_quitus = DB::table("quitus")->insert([
+            //                 "num_quitus" => 1,
+            //                 "num_auto" => $poste->num_auto,
+            //                 "nin" => $nines,
+            //                 // "trans_udc" => $_GET['paymentref'],
+            //                 "Annee" => $annee->Annee,
+            //             ]);
 
-                        $nin = Cookie::get('nin');
+            //             $nin = Cookie::get('nin');
 
-                        $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-                        if (!empty($post->matricule)) {
+            //             $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
+            //             if (!empty($post->matricule)) {
 
-                            $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-                            $inscription = DB::table("inscription")->where("mat_etud", $etudiants->mat_etud)->where('Annee', $annee->Annee)->get();
-                            if ($inscription->count() == 0) {
-                                $admission = DB::table('admission')->where('matricule', $etudiants->mat_etud)->get();
-                                $admissions = DB::table('admission')->where('matricule', $etudiants->mat_etud)->first();
+            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
+            //                 $inscription = DB::table("inscription")->where("mat_etud", $etudiants->mat_etud)->where('Annee', $annee->Annee)->get();
+            //                 if ($inscription->count() == 0) {
+            //                     $admission = DB::table('admission')->where('matricule', $etudiants->mat_etud)->get();
+            //                     $admissions = DB::table('admission')->where('matricule', $etudiants->mat_etud)->first();
 
-                                if ($admission->count() == 0) {
-                                    $resultat = "ajourné";
-                                    $session = "";
-                                    $mention = "";
-                                } else {
-                                    $resultat = "admis";
-                                    $session = $admissions->session;
-                                    $mention = $admissions->mention;
-                                }
+            //                     if ($admission->count() == 0) {
+            //                         $resultat = "ajourné";
+            //                         $session = "";
+            //                         $mention = "";
+            //                     } else {
+            //                         $resultat = "admis";
+            //                         $session = $admissions->session;
+            //                         $mention = $admissions->mention;
+            //                     }
 
-                                $dateJ = date('Y-m-d');
-                                $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-                                $etud = DB::table('etudiant')
-                                    ->where("mat_etud", $post->matricule)
-                                    ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
-                                $ins = $post->num_auto . "/" . $annee->Annee;
-                                $inscri = DB::table("inscription")->insert([
-                                    "Num_Inscrip" => $ins,
-                                    "NIN" => $post->nin,
-                                    "Date_Inscrip" => $dateJ,
-                                    "Mt_Regl_Inscrip" => $post->droit,
-                                    // "Date_Reg_Inscrip"=>$post->nin,
-                                    "code_depart" => $post->code_depart,
-                                    "code_niv" => $post->code_niv,
-                                    "Annee" => $post->Annee,
-                                    "mat_etud" => $post->matricule,
-                                    "Parour_Etud" => "Ancien",
-                                    "Resultat" => $resultat,
-                                    "Session" => $session,
-                                    "Mention" => $mention,
-                                ]);
+            //                     $dateJ = date('Y-m-d');
+            //                     $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
+            //                     $etud = DB::table('etudiant')
+            //                         ->where("mat_etud", $post->matricule)
+            //                         ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
+            //                     $ins = $post->num_auto . "/" . $annee->Annee;
+            //                     $inscri = DB::table("inscription")->insert([
+            //                         "Num_Inscrip" => $ins,
+            //                         "NIN" => $post->nin,
+            //                         "Date_Inscrip" => $dateJ,
+            //                         "Mt_Regl_Inscrip" => $post->droit,
+            //                         // "Date_Reg_Inscrip"=>$post->nin,
+            //                         "code_depart" => $post->code_depart,
+            //                         "code_niv" => $post->code_niv,
+            //                         "Annee" => $post->Annee,
+            //                         "mat_etud" => $post->matricule,
+            //                         "Parour_Etud" => "Ancien",
+            //                         "Resultat" => $resultat,
+            //                         "Session" => $session,
+            //                         "Mention" => $mention,
+            //                     ]);
 
-                                $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-                                $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-                                $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-                                // $carte=DB::table('carte')->insert([
-                                //     "matricule"=>$post->matricule,
-                                //     "nom"=>$post->nom,
-                                //     "prenom"=>$post->prenom,
-                                //     "date_nais"=>$post->date_naiss,
-                                //     "lieu_nais"=>$post->lieu_naiss,
-                                //     "faculte"=>$composante->design_facult,
-                                //     "departement"=>$departement->design_depart,
-                                //     "niveau"=>$niveau->intit_niv,
-                                //     "annee"=>$post->Annee,
-                                //     "Photo"=>$post->matricule,
-                                // ]);
-                                // $nin=Cookie::get('nin');
-                                // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
-                                $data = DB::table('inscription')
-                                    ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-                                    ->select('inscription.*', 'etudiant.*')
-                                    ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->first();
+            //                     $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
+            //                     $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
+            //                     $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
+            //                     // $carte=DB::table('carte')->insert([
+            //                     //     "matricule"=>$post->matricule,
+            //                     //     "nom"=>$post->nom,
+            //                     //     "prenom"=>$post->prenom,
+            //                     //     "date_nais"=>$post->date_naiss,
+            //                     //     "lieu_nais"=>$post->lieu_naiss,
+            //                     //     "faculte"=>$composante->design_facult,
+            //                     //     "departement"=>$departement->design_depart,
+            //                     //     "niveau"=>$niveau->intit_niv,
+            //                     //     "annee"=>$post->Annee,
+            //                     //     "Photo"=>$post->matricule,
+            //                     // ]);
+            //                     // $nin=Cookie::get('nin');
+            //                     // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
+            //                     $data = DB::table('inscription')
+            //                         ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+            //                         ->select('inscription.*', 'etudiant.*')
+            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->first();
 
-                                $datas = DB::table('inscription')
-                                    ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-                                    ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-                                    ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-                                    ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-                                    ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->get();
+            //                     $datas = DB::table('inscription')
+            //                         ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
+            //                         ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
+            //                         ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
+            //                         ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
+            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->get();
 
-                                $message = "success";
-                                return view("fiche", compact("message", 'data', "post", 'datas'));
-                            } else {
-                                $message = "vous êtes deja inscris cette année";
-                                $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("nin", $nines)->first();
-                                return view("success", compact("message", 'post'));
-                            }
-                        } else {
+            //                     $message = "success";
+            //                     return view("fiche", compact("message", 'data', "post", 'datas'));
+            //                 } else {
+            //                     $message = "vous êtes deja inscris cette année";
+            //                     $nin = Cookie::get('nin');
+            //                     $post = DB::table("post_inscription")->where("nin", $nines)->first();
+            //                     return view("success", compact("message", 'post'));
+            //                 }
+            //             } else {
 
-                            $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-                            $etud = DB::table("etudiant")->orderByDesc("id")->first();
-                            $mat = $etud->mat_etud;
-                            $dernier = intval($etud->mat_etud);
-                            $dernier++;
-                            $mat = (string) $dernier;
-                            $candidat = DB::table("candidats")->where("nin", $nines)->first();
-                            // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
-                            // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
-
-
-
-                            $date = date('Y-m-d H:i:s');
-                            // $dateJ=date('Y-m-d');
-
-                            $dateJ = date('Y-m-d');
-                            $ins = $post->num_auto . "/" . $annee->Annee;
-                            $et = DB::table("etudiant")->where('nin', $candidat->nin)->get();
-                            if ($et->count() == 0) {
-                                $inscriptions = DB::table("etudiant")->insert([
-                                    'mat_etud' => $mat,
-                                    'nin' => $candidat->nin,
-                                    'nom' => $candidat->nom,
-                                    'prenom' => $candidat->prenom,
-                                    'date_naiss' => $candidat->date_naiss,
-                                    'lieu_naiss' => $candidat->lieu_naiss,
-                                    'nationalite' => $candidat->nationalite,
-                                    'sexe' => $candidat->sexe,
-                                    'Adr_Etud' => $candidat->adresse_cand,
-                                    'Tel_Etud' => $candidat->tel_mobile,
-                                    'ile' => $candidat->ile,
-                                    'situat_familliale' => $candidat->situation,
-                                    'nbr_enfants' => $candidat->Nbr_enfants,
-                                    'serie_bac' => $candidat->serie,
-                                    'mention_bac' => $candidat->mention,
-                                    'annee_bac' => $candidat->annee,
-                                    'lieu_obt_bac' => $candidat->centre,
-                                    'eqv_bac' => $candidat->equiv,
-                                    'code_niv' => $post->code_niv,
-                                    'code_depart' => $post->code_depart,
-                                    'Num_preinscr' => $candidat->num_recu,
-                                    'Date_preinscr' => $candidat->datePrescript,
-                                    'An_Univ' => $post->Annee,
-                                    'date_j' => $date,
-                                    'profession' => $candidat->pro
-                                ]);
-                            }
-                            $ins = $post->num_auto . "/" . $annee->Annee;
-                            $inscri = DB::table("inscription")->insert([
-                                "Num_Inscrip" => $ins,
-                                "NIN" => $post->nin,
-                                "Date_Inscrip" => $dateJ,
-                                "Mt_Regl_Inscrip" => $post->droit,
-                                // "Date_Reg_Inscrip"=>$post->nin,
-                                "code_depart" => $post->code_depart,
-                                "code_niv" => $post->code_niv,
-                                "Annee" => $post->Annee,
-                                "mat_etud" => $mat,
-                                "Parour_Etud" => "Nouveau",
-                                "Resultat" => "",
-                                "Session" => "",
-                                "Mention" => "",
-                            ]);
-
-                            $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-                            $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-                            $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-                            $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
-                            // $carte=DB::table('carte')->insert([
-                            //     "matricule"=>$et->mat_etud,
-                            //     "nom"=>$post->nom,
-                            //     "prenom"=>$post->prenom,
-                            //     "date_nais"=>$post->date_naiss,
-                            //     "lieu_nais"=>$post->lieu_naiss,
-                            //     "faculte"=>$composante->design_facult,
-                            //     "departement"=>$departement->design_depart,
-                            //     "niveau"=>$niveau->intit_niv,
-                            //     "annee"=>$post->Annee,
-                            //     "Photo"=>$et->mat_etud,
-                            // ]);
-
-                            $data = DB::table('inscription')
-                                ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-                                ->select('inscription.*', 'etudiant.*')
-                                ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
-
-                            $datas = DB::table('inscription')
-                                ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-                                ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-                                ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-                                ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-                                ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
-                            $message = "Matricule Ajouté avec succés!";
-                            return view("fiche", compact("message", "post", "data", 'datas'));
-                        }
-                    } else {
-                        $nin = Cookie::get('nin');
-                        $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-                        $quitus_in = DB::table("quitus")->where("Annee", $annee->Annee)->orderByDesc("num_quitus")->first();
-                        $num = intval($quitus_in->num_quitus + 1);
-                        $ins_quitus = DB::table("quitus")->insert([
-                            "num_quitus" => $num,
-                            "num_auto" => $poste->num_auto,
-                            "nin" => $nines,
-                            // "trans_udc" => $_GET['paymentref'],
-                            "trans_mutuelle" => $_GET['reason'],
-                            "traitant_quitus" => $_GET['error'],
-                            "Annee" => $annee->Annee,
-                        ]);
-                        $nin = Cookie::get('nin');
-                        $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-                        if (!empty($post->matricule)) {
-
-                            $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-                            $inscription = DB::table("inscription")->where("mat_etud", $etudiants->mat_etud)->where('Annee', $annee->Annee)->get();
-                            if ($inscription->count() == 0) {
-                                $admission = DB::table('admission')->where('matricule', $etudiants->mat_etud)->get();
-                                $admissions = DB::table('admission')->where('matricule', $etudiants->mat_etud)->first();
-
-                                if ($admission->count() == 0) {
-                                    $resultat = "ajourné";
-                                    $session = "";
-                                    $mention = "";
-                                } else {
-                                    $resultat = "admis";
-                                    $session = $admissions->session;
-                                    $mention = $admissions->mention;
-                                }
-
-                                $dateJ = date('Y-m-d');
-                                $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-                                $etud = DB::table('etudiant')
-                                    ->where("mat_etud", $post->matricule)
-                                    ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
-                                $ins = $post->num_auto . "/" . $annee->Annee;
-                                $inscri = DB::table("inscription")->insert([
-                                    "Num_Inscrip" => $ins,
-                                    "NIN" => $post->nin,
-                                    "Date_Inscrip" => $dateJ,
-                                    "Mt_Regl_Inscrip" => $post->droit,
-                                    // "Date_Reg_Inscrip"=>$post->nin,
-                                    "code_depart" => $post->code_depart,
-                                    "code_niv" => $post->code_niv,
-                                    "Annee" => $post->Annee,
-                                    "mat_etud" => $post->matricule,
-                                    "Parour_Etud" => "Ancien",
-                                    "Resultat" => $resultat,
-                                    "Session" => $session,
-                                    "Mention" => $mention,
-                                ]);
-
-                                $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-                                $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-                                $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-                                // $carte=DB::table('carte')->insert([
-                                //     "matricule"=>$post->matricule,
-                                //     "nom"=>$post->nom,
-                                //     "prenom"=>$post->prenom,
-                                //     "date_nais"=>$post->date_naiss,
-                                //     "lieu_nais"=>$post->lieu_naiss,
-                                //     "faculte"=>$composante->design_facult,
-                                //     "departement"=>$departement->design_depart,
-                                //     "niveau"=>$niveau->intit_niv,
-                                //     "annee"=>$post->Annee,
-                                //     "Photo"=>$post->matricule,
-                                // ]);
-                                // $nin=Cookie::get('nin');
-                                // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
-                                $data = DB::table('inscription')
-                                    ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-                                    ->select('inscription.*', 'etudiant.*')
-                                    ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->first();
-
-                                $datas = DB::table('inscription')
-                                    ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-                                    ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-                                    ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-                                    ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-                                    ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->get();
-                                $message = "success";
-                                return view("fiche", compact("message", 'post', 'data', 'datas'));
-                            } else {
-                                $message = "vous etes deja inscris cette année";
-                                $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("nin", $nines)->first();
-                                $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
-                                $dt = new DateTime();
-                                $date = $dt->format('Y-m-d');
-                                return view("success", compact("message", 'post', "s", "date"));
-                            }
-                        } else {
-
-                            $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-                            $etud = DB::table("etudiant")->orderByDesc("id")->first();
-                            $matmat = $etud->mat_etud;
-                            $dernier = intval($etud->mat_etud);
-                            $dernier++;
-                            $mat = (string) $dernier;
-                            $candidat = DB::table("candidats")->where("nin", $nines)->first();
-                            // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
-                            // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
+            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
+            //                 $etud = DB::table("etudiant")->orderByDesc("id")->first();
+            //                 $mat = $etud->mat_etud;
+            //                 $dernier = intval($etud->mat_etud);
+            //                 $dernier++;
+            //                 $mat = (string) $dernier;
+            //                 $candidat = DB::table("candidats")->where("nin", $nines)->first();
+            //                 // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
+            //                 // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
 
 
 
-                            $date = date('Y-m-d H:i:s');
-                            // $dateJ=date('Y-m-d');
+            //                 $date = date('Y-m-d H:i:s');
+            //                 // $dateJ=date('Y-m-d');
 
-                            $dateJ = date('Y-m-d');
-                            // $ins=$post->num_auto."/".$annee->Annee;
-                            $et = DB::table("etudiant")->where('nin', $candidat->nin)->get();
-                            if ($et->count() == 0) {
-                                $inscriptions = DB::table("etudiant")->insert([
-                                    'mat_etud' => $mat,
-                                    'nin' => $candidat->nin,
-                                    'nom' => $candidat->nom,
-                                    'prenom' => $candidat->prenom,
-                                    'date_naiss' => $candidat->date_naiss,
-                                    'lieu_naiss' => $candidat->lieu_naiss,
-                                    'nationalite' => $candidat->nationalite,
-                                    'sexe' => $candidat->sexe,
-                                    'Adr_Etud' => $candidat->adresse_cand,
-                                    'Tel_Etud' => $candidat->tel_mobile,
-                                    'ile' => $candidat->ile,
-                                    'situat_familliale' => $candidat->situation,
-                                    'nbr_enfants' => $candidat->Nbr_enfants,
-                                    'serie_bac' => $candidat->serie,
-                                    'mention_bac' => $candidat->mention,
-                                    'annee_bac' => $candidat->annee,
-                                    'lieu_obt_bac' => $candidat->centre,
-                                    'eqv_bac' => $candidat->equiv,
-                                    'code_niv' => $post->code_niv,
-                                    'code_depart' => $post->code_depart,
-                                    'Num_preinscr' => $candidat->num_recu,
-                                    'Date_preinscr' => $candidat->datePrescript,
-                                    'An_Univ' => $post->Annee,
-                                    'date_j' => $date,
-                                    'profession' => $candidat->pro,
-                                ]);
-                            }
+            //                 $dateJ = date('Y-m-d');
+            //                 $ins = $post->num_auto . "/" . $annee->Annee;
+            //                 $et = DB::table("etudiant")->where('nin', $candidat->nin)->get();
+            //                 if ($et->count() == 0) {
+            //                     $inscriptions = DB::table("etudiant")->insert([
+            //                         'mat_etud' => $mat,
+            //                         'nin' => $candidat->nin,
+            //                         'nom' => $candidat->nom,
+            //                         'prenom' => $candidat->prenom,
+            //                         'date_naiss' => $candidat->date_naiss,
+            //                         'lieu_naiss' => $candidat->lieu_naiss,
+            //                         'nationalite' => $candidat->nationalite,
+            //                         'sexe' => $candidat->sexe,
+            //                         'Adr_Etud' => $candidat->adresse_cand,
+            //                         'Tel_Etud' => $candidat->tel_mobile,
+            //                         'ile' => $candidat->ile,
+            //                         'situat_familliale' => $candidat->situation,
+            //                         'nbr_enfants' => $candidat->Nbr_enfants,
+            //                         'serie_bac' => $candidat->serie,
+            //                         'mention_bac' => $candidat->mention,
+            //                         'annee_bac' => $candidat->annee,
+            //                         'lieu_obt_bac' => $candidat->centre,
+            //                         'eqv_bac' => $candidat->equiv,
+            //                         'code_niv' => $post->code_niv,
+            //                         'code_depart' => $post->code_depart,
+            //                         'Num_preinscr' => $candidat->num_recu,
+            //                         'Date_preinscr' => $candidat->datePrescript,
+            //                         'An_Univ' => $post->Annee,
+            //                         'date_j' => $date,
+            //                         'profession' => $candidat->pro
+            //                     ]);
+            //                 }
+            //                 $ins = $post->num_auto . "/" . $annee->Annee;
+            //                 $inscri = DB::table("inscription")->insert([
+            //                     "Num_Inscrip" => $ins,
+            //                     "NIN" => $post->nin,
+            //                     "Date_Inscrip" => $dateJ,
+            //                     "Mt_Regl_Inscrip" => $post->droit,
+            //                     // "Date_Reg_Inscrip"=>$post->nin,
+            //                     "code_depart" => $post->code_depart,
+            //                     "code_niv" => $post->code_niv,
+            //                     "Annee" => $post->Annee,
+            //                     "mat_etud" => $mat,
+            //                     "Parour_Etud" => "Nouveau",
+            //                     "Resultat" => "",
+            //                     "Session" => "",
+            //                     "Mention" => "",
+            //                 ]);
 
-                            $ins = $post->num_auto . "/" . $annee->Annee;
-                            $inscri = DB::table("inscription")->insert([
-                                "Num_Inscrip" => $ins,
-                                "NIN" => $post->nin,
-                                "Date_Inscrip" => $dateJ,
-                                "Mt_Regl_Inscrip" => $post->droit,
-                                // "Date_Reg_Inscrip"=>$post->nin,
-                                "code_depart" => $post->code_depart,
-                                "code_niv" => $post->code_niv,
-                                "Annee" => $post->Annee,
-                                "mat_etud" => $mat,
-                                "Parour_Etud" => "Nouveau",
-                                "Resultat" => "",
-                                "Session" => "",
-                                "Mention" => "",
-                            ]);
+            //                 $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
+            //                 $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
+            //                 $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
+            //                 $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
+            //                 // $carte=DB::table('carte')->insert([
+            //                 //     "matricule"=>$et->mat_etud,
+            //                 //     "nom"=>$post->nom,
+            //                 //     "prenom"=>$post->prenom,
+            //                 //     "date_nais"=>$post->date_naiss,
+            //                 //     "lieu_nais"=>$post->lieu_naiss,
+            //                 //     "faculte"=>$composante->design_facult,
+            //                 //     "departement"=>$departement->design_depart,
+            //                 //     "niveau"=>$niveau->intit_niv,
+            //                 //     "annee"=>$post->Annee,
+            //                 //     "Photo"=>$et->mat_etud,
+            //                 // ]);
 
-                            $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-                            $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-                            $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-                            $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
-                            // $carte=DB::table('carte')->insert([
-                            //     "matricule"=>$et->mat_etud,
-                            //     "nom"=>$post->nom,
-                            //     "prenom"=>$post->prenom,
-                            //     "date_nais"=>$post->date_naiss,
-                            //     "lieu_nais"=>$post->lieu_naiss,
-                            //     "faculte"=>$composante->design_facult,
-                            //     "departement"=>$departement->design_depart,
-                            //     "niveau"=>$niveau->intit_niv,
-                            //     "annee"=>$post->Annee,
-                            //     "Photo"=>$et->mat_etud,
-                            // ]);
+            //                 $data = DB::table('inscription')
+            //                     ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+            //                     ->select('inscription.*', 'etudiant.*')
+            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
+
+            //                 $datas = DB::table('inscription')
+            //                     ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
+            //                     ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
+            //                     ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
+            //                     ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
+            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
+            //                 $message = "Matricule Ajouté avec succés!";
+            //                 return view("fiche", compact("message", "post", "data", 'datas'));
+            //             }
+            //         } else {
+            //             $nin = Cookie::get('nin');
+            //             $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
+            //             $quitus_in = DB::table("quitus")->where("Annee", $annee->Annee)->orderByDesc("num_quitus")->first();
+            //             $num = intval($quitus_in->num_quitus + 1);
+            //             $ins_quitus = DB::table("quitus")->insert([
+            //                 "num_quitus" => $num,
+            //                 "num_auto" => $poste->num_auto,
+            //                 "nin" => $nines,
+            //                 // "trans_udc" => $_GET['paymentref'],
+            //                 "trans_mutuelle" => $_GET['reason'],
+            //                 "traitant_quitus" => $_GET['error'],
+            //                 "Annee" => $annee->Annee,
+            //             ]);
+            //             $nin = Cookie::get('nin');
+            //             $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
+            //             if (!empty($post->matricule)) {
+
+            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
+            //                 $inscription = DB::table("inscription")->where("mat_etud", $etudiants->mat_etud)->where('Annee', $annee->Annee)->get();
+            //                 if ($inscription->count() == 0) {
+            //                     $admission = DB::table('admission')->where('matricule', $etudiants->mat_etud)->get();
+            //                     $admissions = DB::table('admission')->where('matricule', $etudiants->mat_etud)->first();
+
+            //                     if ($admission->count() == 0) {
+            //                         $resultat = "ajourné";
+            //                         $session = "";
+            //                         $mention = "";
+            //                     } else {
+            //                         $resultat = "admis";
+            //                         $session = $admissions->session;
+            //                         $mention = $admissions->mention;
+            //                     }
+
+            //                     $dateJ = date('Y-m-d');
+            //                     $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
+            //                     $etud = DB::table('etudiant')
+            //                         ->where("mat_etud", $post->matricule)
+            //                         ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
+            //                     $ins = $post->num_auto . "/" . $annee->Annee;
+            //                     $inscri = DB::table("inscription")->insert([
+            //                         "Num_Inscrip" => $ins,
+            //                         "NIN" => $post->nin,
+            //                         "Date_Inscrip" => $dateJ,
+            //                         "Mt_Regl_Inscrip" => $post->droit,
+            //                         // "Date_Reg_Inscrip"=>$post->nin,
+            //                         "code_depart" => $post->code_depart,
+            //                         "code_niv" => $post->code_niv,
+            //                         "Annee" => $post->Annee,
+            //                         "mat_etud" => $post->matricule,
+            //                         "Parour_Etud" => "Ancien",
+            //                         "Resultat" => $resultat,
+            //                         "Session" => $session,
+            //                         "Mention" => $mention,
+            //                     ]);
+
+            //                     $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
+            //                     $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
+            //                     $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
+            //                     // $carte=DB::table('carte')->insert([
+            //                     //     "matricule"=>$post->matricule,
+            //                     //     "nom"=>$post->nom,
+            //                     //     "prenom"=>$post->prenom,
+            //                     //     "date_nais"=>$post->date_naiss,
+            //                     //     "lieu_nais"=>$post->lieu_naiss,
+            //                     //     "faculte"=>$composante->design_facult,
+            //                     //     "departement"=>$departement->design_depart,
+            //                     //     "niveau"=>$niveau->intit_niv,
+            //                     //     "annee"=>$post->Annee,
+            //                     //     "Photo"=>$post->matricule,
+            //                     // ]);
+            //                     // $nin=Cookie::get('nin');
+            //                     // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
+            //                     $data = DB::table('inscription')
+            //                         ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+            //                         ->select('inscription.*', 'etudiant.*')
+            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->first();
+
+            //                     $datas = DB::table('inscription')
+            //                         ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
+            //                         ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
+            //                         ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
+            //                         ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
+            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->get();
+            //                     $message = "success";
+            //                     return view("fiche", compact("message", 'post', 'data', 'datas'));
+            //                 } else {
+            //                     $message = "vous etes deja inscris cette année";
+            //                     $nin = Cookie::get('nin');
+            //                     $post = DB::table("post_inscription")->where("nin", $nines)->first();
+            //                     $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+            //                     $dt = new DateTime();
+            //                     $date = $dt->format('Y-m-d');
+            //                     return view("success", compact("message", 'post', "s", "date"));
+            //                 }
+            //             } else {
+
+            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
+            //                 $etud = DB::table("etudiant")->orderByDesc("id")->first();
+            //                 $matmat = $etud->mat_etud;
+            //                 $dernier = intval($etud->mat_etud);
+            //                 $dernier++;
+            //                 $mat = (string) $dernier;
+            //                 $candidat = DB::table("candidats")->where("nin", $nines)->first();
+            //                 // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
+            //                 // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
 
 
-                            $data = DB::table('inscription')
-                                ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-                                ->select('inscription.*', 'etudiant.*')
-                                ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
 
-                            $datas = DB::table('inscription')
-                                ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-                                ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-                                ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-                                ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-                                ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
-                            $message = "Matricule Ajouté avec succés!";
-                            return view("fiche", compact("message", "post", "data", 'datas'));
-                        }
-                    }
-                } else {
-                    $nin = Cookie::get('nin');
-                    $post = DB::table("post_inscription")->where("nin", $nines)->first();
-                    $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
-                    $dt = new DateTime();
-                    $date = $dt->format('Y-m-d');
-                    $message = "Vous avez dejà un quitus";
-                    return view("success", compact("message", "post", "s", "date"));
-                }
-            }
+            //                 $date = date('Y-m-d H:i:s');
+            //                 // $dateJ=date('Y-m-d');
+
+            //                 $dateJ = date('Y-m-d');
+            //                 // $ins=$post->num_auto."/".$annee->Annee;
+            //                 $et = DB::table("etudiant")->where('nin', $candidat->nin)->get();
+            //                 if ($et->count() == 0) {
+            //                     $inscriptions = DB::table("etudiant")->insert([
+            //                         'mat_etud' => $mat,
+            //                         'nin' => $candidat->nin,
+            //                         'nom' => $candidat->nom,
+            //                         'prenom' => $candidat->prenom,
+            //                         'date_naiss' => $candidat->date_naiss,
+            //                         'lieu_naiss' => $candidat->lieu_naiss,
+            //                         'nationalite' => $candidat->nationalite,
+            //                         'sexe' => $candidat->sexe,
+            //                         'Adr_Etud' => $candidat->adresse_cand,
+            //                         'Tel_Etud' => $candidat->tel_mobile,
+            //                         'ile' => $candidat->ile,
+            //                         'situat_familliale' => $candidat->situation,
+            //                         'nbr_enfants' => $candidat->Nbr_enfants,
+            //                         'serie_bac' => $candidat->serie,
+            //                         'mention_bac' => $candidat->mention,
+            //                         'annee_bac' => $candidat->annee,
+            //                         'lieu_obt_bac' => $candidat->centre,
+            //                         'eqv_bac' => $candidat->equiv,
+            //                         'code_niv' => $post->code_niv,
+            //                         'code_depart' => $post->code_depart,
+            //                         'Num_preinscr' => $candidat->num_recu,
+            //                         'Date_preinscr' => $candidat->datePrescript,
+            //                         'An_Univ' => $post->Annee,
+            //                         'date_j' => $date,
+            //                         'profession' => $candidat->pro,
+            //                     ]);
+            //                 }
+
+            //                 $ins = $post->num_auto . "/" . $annee->Annee;
+            //                 $inscri = DB::table("inscription")->insert([
+            //                     "Num_Inscrip" => $ins,
+            //                     "NIN" => $post->nin,
+            //                     "Date_Inscrip" => $dateJ,
+            //                     "Mt_Regl_Inscrip" => $post->droit,
+            //                     // "Date_Reg_Inscrip"=>$post->nin,
+            //                     "code_depart" => $post->code_depart,
+            //                     "code_niv" => $post->code_niv,
+            //                     "Annee" => $post->Annee,
+            //                     "mat_etud" => $mat,
+            //                     "Parour_Etud" => "Nouveau",
+            //                     "Resultat" => "",
+            //                     "Session" => "",
+            //                     "Mention" => "",
+            //                 ]);
+
+            //                 $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
+            //                 $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
+            //                 $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
+            //                 $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
+            //                 // $carte=DB::table('carte')->insert([
+            //                 //     "matricule"=>$et->mat_etud,
+            //                 //     "nom"=>$post->nom,
+            //                 //     "prenom"=>$post->prenom,
+            //                 //     "date_nais"=>$post->date_naiss,
+            //                 //     "lieu_nais"=>$post->lieu_naiss,
+            //                 //     "faculte"=>$composante->design_facult,
+            //                 //     "departement"=>$departement->design_depart,
+            //                 //     "niveau"=>$niveau->intit_niv,
+            //                 //     "annee"=>$post->Annee,
+            //                 //     "Photo"=>$et->mat_etud,
+            //                 // ]);
+
+
+            //                 $data = DB::table('inscription')
+            //                     ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+            //                     ->select('inscription.*', 'etudiant.*')
+            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
+
+            //                 $datas = DB::table('inscription')
+            //                     ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
+            //                     ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
+            //                     ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
+            //                     ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
+            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
+            //                 $message = "Matricule Ajouté avec succés!";
+            //                 return view("fiche", compact("message", "post", "data", 'datas'));
+            //             }
+            //         }
+            //     } else {
+            //         $nin = Cookie::get('nin');
+            //         $post = DB::table("post_inscription")->where("nin", $nines)->first();
+            //         $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+            //         $dt = new DateTime();
+            //         $date = $dt->format('Y-m-d');
+            //         $message = "Vous avez dejà un quitus";
+            //         return view("success", compact("message", "post", "s", "date"));
+            //     }
+            // }
         }
     }
 }
