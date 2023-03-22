@@ -29,154 +29,8 @@
 
 
 
-		<header class="main-header">
-			<div class="d-flex align-items-center logo-box justify-content-start
-					d-md-none d-block">
-				<!-- Logo -->
-				<a href="{{('accueil')}}" class="logo">
-					<!-- logo-->
-					<!-- <div class="logo-mini w-30">
-						<span class="light-logo"><img src="images/logo-letter.png" alt="logo"></span>
-						<span class="dark-logo"><img src="images/logo-letter-white.png" alt="logo"></span>
-					</div> -->
-					<div class="logo-lg">
-						<!-- <span class="light-logo"><img src="../../../images/logo-dark-text.png" alt="logo"></span> -->
-						<span class="light-logo fs-36 fw-700"> <strong>Omeg<span class="text-success">a</strong></span></span>
-						<span class="dark-logo"><img src="images/" alt="logo"></span>
-					</div>
-				</a>
-			</div>
-			<!-- Header Navbar -->
-			<nav class="navbar navbar-static-top">
-				<!-- Sidebar toggle button-->
-				<div class="app-menu">
-					<ul class="header-megamenu nav">
-						<li class="btn-group nav-item">
-							<a href="#" class="waves-effect waves-light nav-link push-btn
-									btn-primary-light" data-toggle="push-menu" role="button">
-								<i class="icon-Menu"><span class="path1"></span><span class="path2"></span></i>
-							</a>
-						</li>
-						<li class="btn-group d-lg-inline-flex d-none">
-							<div class="app-menu">
-								<div class="search-bx mx-5">
-
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-
-				<div class="navbar-custom-menu r-side">
-					<ul class="nav navbar-nav">
-						<li class="dropdown notifications-menu btn-group nav-item">
-
-							<ul class="dropdown-menu animated bounceIn">
-								<li class="header">
-									<div class="p-20">
-										<div class="flexbox">
-											<div>
-
-											</div>
-										</div>
-								</li>
-
-							</ul>
-						</li>
-
-
-
-
-
-
-					</ul>
-				</div>
-			</nav>
-		</header>
-		<aside class="main-sidebar">
-			<!-- sidebar-->
-			<section class="sidebar position-relative">
-				<div class="d-flex align-items-center logo-box justify-content-start
-							d-md-block d-none">
-					<!-- Logo -->
-					<a href="{{('accueil')}}" class="logo">
-						<!-- logo-->
-						<!-- &&	 -->
-						<div class="logo-lg">
-							<span class="light-logo fs-36 fw-700"> <strong> Omeg<span class="text-success">a </strong></span></span>
-						</div>
-					</a>
-				</div>
-				<div class="user-profile my-15 px-20 py-10 b-1 rounded10 mx-15">
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="image d-flex align-items-center">
-							<img src="images/avatar/avatar-13.png" class="rounded-0 me-10" alt="User Image">
-							<div>
-								<h4 class="mb-0 fw-600">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h4>
-								<p class="mb-0">Candidat</p>
-							</div>
-						</div>
-						<div class="info">
-							<a class="dropdown-toggle p-15 d-grid" data-bs-toggle="dropdown" href="#"></a>
-							<div class="dropdown-menu dropdown-menu-end">
-
-
-								<a class="dropdown-item" href="{{ route('logout') }}"><i class="ti-lock"></i>
-									Déconnexion</a>
-
-
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="multinav">
-					<div class="multinav-scroll" style="height: 97%;">
-						<!-- sidebar menu-->
-						<ul class="sidebar-menu" data-widget="tree">
-							<li class="header">Menu principal</li>
-
-							<li>
-								<a href="{{('accueil')}}">
-									<i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i>
-									<span>Préinscription</span>
-								</a>
-							</li>
-							<li class="treeview">
-								<a href="#">
-									<i class="icon-Address-card"></i>
-
-									<span>Modifications</span>
-									<span class="pull-right-container">
-										<!-- <i class="fa fa-angle-right pull-right"></i> -->
-									</span>
-								</a>
-								<ul class="treeview-menu">
-									<li class="treeview">
-										<a href="#">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Candidat
-											<span class="pull-right-container">
-												<!-- <i class="fa fa-angle-right pull-right"></i> -->
-											</span>
-										</a>
-										<ul class="treeview-menu">
-											<li><a href="box_cards.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Informations personelles</a></li>
-											<li><a href="box_advanced.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Choix des filières</a></li>
-											<li><a href="box_basic.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Documents</a></li>
-										</ul>
-									</li>
-
-
-
-
-								</ul>
-							</li>
-						</ul>
-
-
-					</div>
-				</div>
-			</section>
-		</aside>
+		@include("include.header")
+        @include("include.aside")
 	</div>
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
@@ -266,7 +120,7 @@
 								<div class="alert alert-danger">{{ $messages }}</div>
 								@endisset
 								@isset($data)
-								@if ($data->statut==1 || $data->statut==2 || $data->statut==3 || $data->statut==4 )
+								@if ($data->statut==1 || $data->statut==2 || $data->statut==3 || $data->statut==4 || $data->statut==5 )
 								<div class="container" id="info-data">
 									<div class="row">
 										<div class="col-md-6">
@@ -532,6 +386,17 @@
 													<input type="text" class="form-control" name="nin" id="nin" required data-validation-required-message="Ce champ est obligatoire">
 												</div>
 											</div>
+											@if($data->type_preins_id==2 || $data->type_preins_id==3)
+											<div class="col-md-6">
+												<div class="form-group">
+													@error('matricule')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
+													<label for="addressline1" class="form-label">Matricule </label>
+													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
+												</div>
+											</div>
+											@endif
 										</div>
 										<div class="row">
 											<div class="col-md-6">
@@ -727,6 +592,17 @@
 													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('nin')}}" name="nin" id="nin" required>
 												</div>
 											</div>
+											@if($data->type_preins_id==2 || $data->type_preins_id==3)
+											<div class="col-md-6">
+												<div class="form-group">
+													@error('matricule')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
+													<label for="addressline1" class="form-label">Matricule </label>
+													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
+												</div>
+											</div>
+											@endif
 										</div>
 										<div class="row">
 											<div class="col-md-6">
@@ -1132,7 +1008,7 @@
 						<input type="hidden" name="merchantid" value="2274832632922162">
 						<input type="hidden" name="amount" value="5000">
 						<input type="hidden" name="currency" value="174">
-						<input type="hidden" name="purchaseref" value="{{$data->num_recu}}">
+						<input type="hidden" name="purchaseref" value="{{$data->user_candidat_id}}">
 						<input type="hidden" name="accepturl" value="http://omega-xd.univ-comores.km/accepturl">
 						<input type="hidden" name="cancelurl" value="http://omega-xd.univ-comores.km/cancelurl">
 						<input type="hidden" name="declineurl" value="http://omega-xd.univ-comores.km/declineurl">
@@ -1400,7 +1276,7 @@
 
 
 										}
-									} else if (data.data.statut == 2 || data.data.statut == 3) {
+									} else if (data.data.statut == 2 || data.data.statut == 3 || data.data.statut == 4 || data.data.statut == 5) {
 										$.ajax({
 											_token: '{{csrf_token()}}',
 											type: "GET",
@@ -1418,7 +1294,7 @@
 														$("#buttonf").empty();
 														$("#fili").empty();
 														if (data.data.id_type == 1) {
-															$("#fili").append("<div class='box-body'><h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement1.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement1.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement2.design_facult + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement2.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong> " + data.departement3.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement3.design_depart + " </strong></label><label class='form-label'></label></div></div></div></div>")
+															$("#fili").append("<div class='box-body'><h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement1.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement1.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>"+data.departement2.design_facult +"</strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement2.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong> " + data.departement3.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement3.design_depart + "</strong></label><label class='form-label'></label></div></div></div></div>")
 
 														} else {
 															$("#fili").append("<div class='box-body'><h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement.design_depart + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'></div></div></div></div>")
@@ -1490,7 +1366,7 @@
 											$("#master").show();
 
 										}
-									} else if (data.statut == 3) {
+									} else if (data.statut == 3 || data.statut == 4 || data.statut == 5) {
 
 										$("#doc").empty();
 										$("#do").empty();
@@ -1520,22 +1396,34 @@
 
 							jQuery.each([data], function(i, val, fa, x) {
 								// console.log(data.departement.design_facult)
-								if (data.candidat.statut == 3) {
+								if (data.candidat.statut == 3 || data.candidat.statut == 4 || data.candidat.statut == 5) {
 									if (data.candidat.id_type == 1) {
 										$("#infoP").empty();
 										$("#choixf").empty();
-										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personneles</h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> " + data.candidat.nom + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> " + data.candidat.prenom + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> " + data.candidat.date_naiss + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>" + data.candidat.lieu_naiss + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>" + data.candidat.mention + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> " + data.candidat.serie + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> " + data.candidat.adresse_cand + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> " + data.candidat.tel_mobile + " </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
+										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personnelles </h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> " + data.candidat.nom + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> " + data.candidat.prenom + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> " + data.candidat.date_naiss + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>" + data.candidat.lieu_naiss + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>" + data.candidat.mention + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> " + data.candidat.serie + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> " + data.candidat.adresse_cand + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> " + data.candidat.tel_mobile + " </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
 										$("#choixf").append("<form class='form'><div class='box-body'><h4 class='box-title text-dark mb-0'>Type de préinscription : <strong> " + data.recu.nom_type + " </strong></h4> <br> <h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : " + data.departement1.design_facult + "</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : " + data.departement1.design_depart + "</label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : " + data.departement2.design_facult + "</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : " + data.departement2.design_depart + "</label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : " + data.departement3.design_facult + "</label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : " + data.departement3.design_depart + "</label><label class='form-label'></label></div></div></div></div></form>")
-										$("#paye").show();
+										if (data.candidat.statut == 4 || data.candidat.statut == 5) {
+											$("#paye").hide();
+
+										} else {
+											$("#paye").show();
+
+										}
 
 									} else {
 										$("#infoP").empty();
 										$("#choixf").empty();
-										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personneles</h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> " + data.candidat.nom + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> " + data.candidat.prenom + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> " + data.candidat.date_naiss + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>" + data.candidat.lieu_naiss + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>" + data.candidat.mention + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> " + data.candidat.serie + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> " + data.candidat.adresse_cand + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> " + data.candidat.tel_mobile + " </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
+										$("#infoP").append("<div class='box-header with-border'><h4 class='box-title'>Mes informations personnelles </h4></div><form class='form' ><div class='box-body'><h4 class='box-title text-success mb-0'><i class='ti-user me-15'></i> Info</h4><hr class='my-15'><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Nom : <strong> " + data.candidat.nom + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Prénom : <strong> " + data.candidat.prenom + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Date de naissance : <strong> " + data.candidat.date_naiss + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Lieu de naissance: <strong>" + data.candidat.lieu_naiss + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Mention : <strong>" + data.candidat.mention + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Série : <strong> " + data.candidat.serie + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Adresse : <strong> " + data.candidat.adresse_cand + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Téléphone : <strong> " + data.candidat.tel_mobile + " </strong></label><label class='form-label'></label></div></div></div><div class='form-group'></div></div></form>");
 										$("#choixf").append("<form class='form'><div class='box-body'><h4 class='box-title text-dark mb-0'>Type de préinscription : <strong> " + data.recu.nom_type + " </strong> </h4> <br><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement.design_facult + " </strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département :<strong> " + data.departement.design_depart + " </strong></label><label class='form-label'></label></div></div></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'></label></div></div></div></div></div></div></div></form>")
+										if (data.candidat.statut == 4 || data.candidat.statut == 5) {
+											$("#paye").hide();
 
+										} else {
+											$("#paye").show();
+
+										}
 										// $("#infoP").show();
-										$("#paye").show();
+										// $("#paye").show();
 
 
 
@@ -1897,9 +1785,6 @@
 				text += '<option value=' + i + '>' + i + '</option>';
 				text.html();
 			}
-
-
-
 
 			$("#filiere").submit(function(e) {
 				e.preventDefault();

@@ -110,9 +110,11 @@
                 <div class="user-profile my-15 px-20 py-10 b-1 rounded10 mx-15">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="image d-flex align-items-center">
+
                             <img src="images/avatar/avatar-13.png" class="rounded-0 me-10" alt="User Image">
+
                             <div>
-                                <h4 class="mb-0 fw-600"></h4>
+                                <h4 class="mb-0 fw-600">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h4>
                                 <p class="mb-0">Candidat</p>
                             </div>
                         </div>
@@ -141,35 +143,7 @@
                                     <span>Préinscription</span>
                                 </a>
                             </li>
-                            <li class="treeview">
-                                <a href="#">
-                                    <i class="icon-Address-card"></i>
 
-                                    <span>Modifications</span>
-                                    <span class="pull-right-container">
-                                        <!-- <i class="fa fa-angle-right pull-right"></i> -->
-                                    </span>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li class="treeview">
-                                        <a href="#">
-                                            <i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Candidat
-                                            <span class="pull-right-container">
-                                                <!-- <i class="fa fa-angle-right pull-right"></i> -->
-                                            </span>
-                                        </a>
-                                        <ul class="treeview-menu">
-                                            <li><a href="box_cards.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Informations personelles</a></li>
-                                            <li><a href="box_advanced.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Choix des filières</a></li>
-                                            <li><a href="box_basic.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Documents</a></li>
-                                        </ul>
-                                    </li>
-
-
-
-
-                                </ul>
-                            </li>
                         </ul>
 
 
@@ -197,76 +171,76 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                   
+
                                                     <label class="form-label">Type de BAC</label>
                                                     <select name="type_bac" id="type_bac" class="form-select" required aria-required="Selectionner">
-                                                    <option value="">Sélectionner</option>
+                                                        <option value="">Sélectionner</option>
                                                         <option value="1">BAC national</option>
                                                         <option value="2">BAC Etranger</option>
                                                     </select> <br>
                                                 </div>
                                             </div>
-                                                    @error('annee')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                    @enderror
+                                            @error('annee')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
                                             <div class="col-md-6" id="an">
                                                 <div class="form-group">
                                                     <label for="form-label"> Année d'obtention</label>
-                                                        <select name="annee" id="annee" class="form-select" >
-                                                            <option value=''>Sélectionner l'année</option>
-                                                            <script>
-                                                                let an = "<option value=''>Sélectionner l'année</option>";
-                                                                for (var i = 1960; i <= 2023; i++) {
-                                                                    an += '<option value=' + i + '>' + i + '</option>';
-                                                                }
-                                                                document.getElementById('annee').innerHTML = an;
-                                                            </script>
-                                                        </select>
+                                                    <select name="annee" id="annee" class="form-select">
+                                                        <option value=''>Sélectionner l'année</option>
+                                                        <script>
+                                                            let an = "<option value=''>Sélectionner l'année</option>";
+                                                            for (var i = 1960; i <= 2023; i++) {
+                                                                an += '<option value=' + i + '>' + i + '</option>';
+                                                            }
+                                                            document.getElementById('annee').innerHTML = an;
+                                                        </script>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
-                                            @error('nin_bac')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
+                                        @error('nin_bac')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                         <div class="row">
                                             <div class="col-md-6" id="nine">
                                                 <div class="form-group">
-                                                  
+
                                                     <label class="form-label">Nin</label>
-												    <input type="text" id="nin_bac" class="form-control" placeholder="Inserer votre nin conforme à votre relevet du bac ou attestation du bac" name="nin_bac">
+                                                    <input type="text" id="nin_bac" class="form-control" placeholder="Inserer votre nin conforme à votre relevet du bac ou attestation du bac" name="nin_bac">
 
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     @error('type_preins')
-                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                    <div class="alert alert-danger">{{ $message }}</div>
                                                     @enderror
                                                     <label class="form-label">Type de préinscription</label>
-                                                   <select name="type_preins" class="form-select" id="type_preins" required>
-                                                            <option value="">Sélectionner</option>
-                                                            @foreach ($preins as $prein )
-                                                                <option value="{{$prein->id}}">{{$prein->design_preins}}</option>
-                                                            @endforeach
-                                                   </select>
+                                                    <select name="type_preins" class="form-select" id="type_preins" required>
+                                                        <option value="">Sélectionner</option>
+                                                        @foreach ($preins as $prein )
+                                                        <option value="{{$prein->id}}">{{$prein->design_preins}}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
-                                           
+
                                         </div>
                                         @error('matricule')
-                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                         <div class="row" id="mat">
-                                            <div class="col-md-6" >
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                  
+
                                                     <label class="form-label">Matricule</label>
-												    <input type="text" id="matricule"  class="form-control" placeholder="Inserer votre matricule" name="matricule">
+                                                    <input type="text" id="matricule" class="form-control" placeholder="Inserer votre matricule" name="matricule">
 
                                                 </div>
                                             </div>
-                                            
-                                           
+
+
                                         </div>
 
                                     </div>
@@ -281,7 +255,7 @@
                                     </div>
                                 </form>
                             </div>
-                        <div class="col-lg-2"></div>
+                            <div class="col-lg-2"></div>
                         </div>
                     </div>
 
@@ -289,7 +263,7 @@
             </div>
         </div>
     </div>
-    
+
 
 
     </section>
@@ -839,7 +813,7 @@
             $("#type_bac").change(function() {
 
                 var type_bac = $(this).val();
-                var type_prein=$("#type_preins");
+                var type_prein = $("#type_preins");
 
 
                 if (type_bac == 1) {
@@ -847,18 +821,18 @@
 
                     $("#annee").change(function() {
                         var anne = $("#annee").val()
-                        
+
 
                         if (anne >= 2010) {
 
                             $("#nine").show();
 
-                          
+
 
                         } else if (anne < 2010) {
                             $("#nine").hide();
-                            
-                        } 
+
+                        }
 
                     })
                 } else if (type_bac == 2) {
@@ -910,16 +884,12 @@
                 }
             });
 
-            $("#type_preins").change(function(e)
-            {
-                var preins=$(this).val();
+            $("#type_preins").change(function(e) {
+                var preins = $(this).val();
 
-                if(preins==1)
-                {
+                if (preins == 1) {
                     $("#mat").hide();
-                }
-                else if(preins==2 || preins==3)
-                {
+                } else if (preins == 2 || preins == 3) {
                     $("#mat").show();
                 }
             })

@@ -28,8 +28,9 @@
         <!-- <div id="loader"></div> -->
 
 
-        @include("include.inscription.header")
-        @include("include.inscription.aside")
+
+        @include("include.header")
+        @include("include.aside")
         <div class="content-wrapper">
 	  <div class="container-full">
 		<!-- Content Header (Page header) -->
@@ -41,43 +42,29 @@
 		<section class="content">
 
 		  <div class="row">
-          <div class="col-3"></div>
-
-			<div class="col-6">
-			  <div class="box border-shadow">
+          <div class="col-md-2"></div>
+			<div class="col-md-8">
+			  <div class="box">
 				  
-              <form class="form" action="{{route('recherche_candidat')}}" method="POST">
-                                    @csrf
-                                    <div class="box-body">
-                                        @isset($message)
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @endisset
-                                        <div class="row">
-                                            <div class="col-md-2"></div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                  
-                                                    <label class="form-label">Nin</label>
-												    <input type="text" id="nin" class="form-control" placeholder="Insérer votre nin" name="nin">
+				<div class="box-header">
+					<h4 class="box-title">Préinscription</h4>  
+				</div>
+			
+			
+			
+				<!-- /.box-header -->
+				<div class="box-body">
 
-                                                </div>
-                                                <input type="submit" class=" btn btn-md btn-success"  value="Valider">
-                                            </div> 
-                                            <div class="col-md-2"></div>
-                                            
-                              
+					<h3 class="text-center"> <strong>Paiement interrompu</strong></h3> <br> <br>
 
-                                    </div> <br>
-                         
-                                </form>
+				</div>
 				<!-- /.box-body -->
 			  </div>
 			  <!-- /.box -->
 			</div>
-          <div class="col-3"></div>
-
 			<!-- ./col -->
 		  </div>
+          <div class="col-md-2"></div>
 		  <!-- /.row -->
 		</section>
 		<!-- /.content -->

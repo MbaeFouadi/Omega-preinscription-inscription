@@ -22,12 +22,12 @@
 
 </head>
 
-<body class="hold-transition theme-primary" style="background-image: url(../../../images/lg.png)">
+<body class="hold-transition theme-primary" >
 	
 	<div class="container h-p100">
-		<div class="row align-items-center justify-content-md-center h-p100">
+		<div class="row align-items-center justify-content-md-center h-p100 card">
 			
-			<div class="col-12">
+			<div class="col-10">
 				<div class="row justify-content-center g-0">
 					<div class="col-lg-5 col-md-5 col-12">
 						<div >
@@ -39,27 +39,20 @@
 								<!-- <p class="mb-0">Register a new membership</p>							 -->
 							</div>
 							<div class="p-40">
-								<form action="{{ route('register') }}" method="post">
+								<form action="{{route('password.update')}}" method="post">
         						<strong><x-auth-validation-errors class="mb-4 text-dark" :errors="$errors" /></strong>
 									@csrf
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<span class="input-group-text bg-white"><i class="ti-email"></i></span>
-											<input type="email" name="email" class="form-control ps-15 bg-white" placeholder="Email" required>
+											<input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+											<!-- <input type="email" name="email" :value="old('email', $request->email)" autofocus   class="form-control ps-15 bg-white" required> -->
+											<x-input id="email" class="form-control ps-15 bg-white" type="email" name="email" :value="old('email', $request->email)" required autofocus />
+
 										</div>
 									</div>
-									<div class="form-group">
-										<div class="input-group mb-3">
-											<span class="input-group-text bg-white"><i class="ti-user"></i></span>
-											<input type="text" name="nom" class="form-control ps-15 bg-white" placeholder="Nom" required>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="input-group mb-3">
-											<span class="input-group-text bg-white"><i class="ti-user"></i></span>
-											<input type="text" name="prenom" class="form-control ps-15 bg-white" placeholder="Prénom" required>
-										</div>
-									</div>
+									
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<span class="input-group-text bg-white"><i class="ti-lock"></i></span>
@@ -76,14 +69,12 @@
 										
 										<!-- /.col -->
 										<div class="col-12 text-center">
-										  <button type="submit" class="btn btn-success margin-top-10">S'inscrire</button>
+										  <button type="submit" class="btn btn-success margin-top-10">Modifier</button>
 										</div>
 										<!-- /.col -->
 									  </div>
 								</form>				
-								<div class="text-center">
-									<p class="mt-15 mb-0 text-dark"> <strong> Vous avez déjà un compte ?</strong> <a href="{{('/')}}" class="text-success ms-5"><strong>Connectez-vous</strong></a></p>
-								</div><br>
+								
 							</div>
 						</div>								
 

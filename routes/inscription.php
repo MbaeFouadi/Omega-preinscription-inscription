@@ -56,28 +56,15 @@ Route::get("periode",function(){
 ->middleware(['auth', 'verified'])
 ->name("fiche_renseignement");
 
-Route::get("accepturl",function(){
-    return view("accept");
-})
-->middleware(['auth', 'verified'])
-->name("accepturl");
 
-Route::get("declineurl",function(){
-    return view("decline");
-})
-->middleware(['auth', 'verified'])
-->name("declineurl");
 
-Route::get("cancelurl",function(){
-    return view("cancel");
-})
-->middleware(['auth', 'verified'])
-->name("cancelurl");
-
+Route::get('accepturl', [candidatController::class, 'accepturl'])->middleware(['auth', 'verified'])->name("accepturl");
+Route::get('cancelurl', [candidatController::class, 'cancelurl'])->middleware(['auth', 'verified'])->name("cancelurl");
+Route::get('declineurl', [candidatController::class, 'declineurl'])->middleware(['auth', 'verified'])->name("declineurl");
 Route::post('/Candidat_nouveau', [candidatsController::class,'candidat_nv'])->middleware(['auth', 'verified'])->name('recherche_candidat');
 Route::post('/etudiant', [candidatsController::class,'candidat_an'])->middleware(['auth', 'verified'])->name('recherche_etudiant');
 Route::post('/autorisation_etudiant', [PostInscriptionController::class,'autorisation_an'])->middleware(['auth', 'verified'])->name('autorisation_an');
 Route::resource('/autorisation', PostInscriptionController::class)->middleware(['auth', 'verified']);
-Route::get('/notification', [candidatController::class, 'notification'])->middleware(['auth', 'verified'])->name("notification");
+Route::get('notification', [candidatController::class, 'notification'])->name("notification");
 
 

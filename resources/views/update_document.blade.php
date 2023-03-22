@@ -28,8 +28,9 @@
         <!-- <div id="loader"></div> -->
 
 
-        @include("include.inscription.header")
-        @include("include.inscription.aside")
+
+        @include("include.header")
+        @include("include.aside")
         <div class="content-wrapper">
             <div class="container-full">
                 <!-- Content Header (Page header) -->
@@ -41,56 +42,66 @@
                 <section class="content">
 
                     <div class="row">
-                        <div class="col-3"></div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div class="box">
 
-                        <div class="col-6">
-                            <div class="box border-shadow">
-
-                                <form class="form" action="{{route('recherche_etudiant')}}" method="POST">
-                                    @csrf
-                                    <div class="box-body">
-                                        @isset($message)
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @endisset
-
-
-                                        <div class="row">
-                                            <div class="col-md-2"></div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-
-                                                    <label class="form-label"><strong> Nin </strong></label>
-                                                    <input type="text" id="nin" class="form-control" placeholder="Insérer votre nin" name="nin" required>
-
-                                                </div>
-                                                <div class="form-group">
-
-                                                    <label class="form-label"><strong> Matricule </strong></label>
-                                                    <input type="text" id="matricule" class="form-control" placeholder="Insérer votre matricule" name="matricule" required>
-
-                                                </div>
-                                                <input type="submit" class=" btn btn-md btn-success" value="Valider">
-                                            </div>
-                                            <div class="col-md-2"></div>
+                                <div class="box-header">
+                                    <h4 class="box-title ">Préinscription</h4>
+                                </div>
 
 
 
-                                        </div> <br>
+                                <!-- /.box-header -->
+                                <div class="box-body">
 
-                                </form>
-                                <!-- /.box-body -->
+
+                                    <section id="c">
+                                        <div id="dossier" sec="3">
+                                            <div id="messaged"></div>
+                                                   
+                                            <form action="{{route('update_doc')}}" method="post" id="document" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="row">
+                                                @error('document')
+													<div class="alert alert-danger">{{ $message }}</div>
+													@enderror
+                                                    <div id="docs"></div>
+                                                    <div class="col-lg-6 col-12" id="doc">
+                                                        <label for="formFile" class="form-label">Mes dossiers</label>
+                                                        <input class="form-control" type="file" id="document" name="document" required> <br>
+
+                                                        <input type="submit" id="buttond" class="form-control btn-sm btn-success" value="Enregistrez">
+                                                    </div>
+
+
+                                                
+                                                            
+                                            </form>
+                                        </div>
+                                    </section>
+                                </div>
                             </div>
-                            <!-- /.box -->
                         </div>
-                        <div class="col-3"></div>
 
-                        <!-- ./col -->
                     </div>
-                    <!-- /.row -->
+
                 </section>
-                <!-- /.content -->
+
             </div>
+            <!-- /.box-body -->
         </div>
+        <!-- /.box -->
+    </div>
+
+
+    <!-- ./col -->
+    </div>
+    <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    </div>
+    </div>
     </div>
 
 

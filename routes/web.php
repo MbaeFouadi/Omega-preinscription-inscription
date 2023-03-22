@@ -46,6 +46,21 @@ Route::get('info_fili', [candidatController::class, 'info_fili'])->middleware(['
 Route::get('showDoc', [candidatController::class, 'showDoc'])->middleware(['auth', 'verified'])->name("showDoc");
 Route::get('getInfo', [candidatController::class, 'getInfo'])->middleware(['auth', 'verified'])->name("getInfo");
 
+Route::get('Modification_info', [candidatController::class, 'Modification_info'])->middleware(['auth', 'verified'])->name("Modification_info");
+Route::get('Modification_fili', [candidatController::class, 'Modification_fili'])->middleware(['auth', 'verified'])->name("Modification_fili");
+Route::get('Modification_doc', [candidatController::class, 'Modification_doc'])->middleware(['auth', 'verified'])->name("Modification_doc");
+
+Route::post("/update_info",[candidatController::class,'update_info'])->middleware(['auth', 'verified'])->name("update_info");
+Route::post("update_info/getPreins1",[candidatController::class,'getPreins1'])->middleware(['auth', 'verified'])->name("getPreins1");
+Route::post("update_info/getPreins2",[candidatController::class,'getPreins2'])->middleware(['auth', 'verified'])->name("getPreins2");
+
+
+Route::post("/update_fili",[candidatController::class,'update_fili'])->middleware(['auth', 'verified'])->name("update_fili");
+Route::post("/update_doc",[candidatController::class,'update_doc'])->middleware(['auth', 'verified'])->name("update_doc");
+
+
+
+
 Route::resource('candidat', candidatController::class)->middleware(['auth', 'verified']);
 
 // Route::get('bac',function(){

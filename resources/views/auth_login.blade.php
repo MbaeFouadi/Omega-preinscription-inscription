@@ -60,11 +60,14 @@
 										  <button type="submit" class="btn btn-success mt-10">Se connecter</button>
 										</div>
 										<!-- /.col -->
-									  </div>
+									 
 								</form>	
 								<div class="text-center">
-									<p class="mt-15 mb-0 text-success">Vous n'avez pas un compte ? <a href="{{('inscription')}}" class="text-dark ms-5"><strong>S'inscrire</strong></a></p>
-								</div><br>
+									<p class="mt-15 mb-0 text-dark"><strong>Vous n'avez pas un compte ? </strong><a href="{{('inscription')}}" class="text-success ms-5"><strong>S'inscrire</strong></a></p>
+								</div>
+								<div class="text-center">
+									<p class="mt-15 mb-0 text-dark"><strong> Mot de passe oublié ?</strong><a href="{{('forgot-password')}}" class="text-success ms-5"><strong>Réinitialiser votre mot de passe</strong></a></p>
+								</div>
 							</div>						
 						</div>
 					
@@ -73,8 +76,6 @@
 			</div>
 		</div>
 	</div>
-
-
 	<!-- Vendor JS -->
 	<script src="../src/js/vendors.min.js"></script>
 	<script src="../src/js/pages/chat-popup.js"></script>

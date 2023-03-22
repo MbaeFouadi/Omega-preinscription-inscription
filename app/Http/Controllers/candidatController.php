@@ -60,8 +60,6 @@ class candidatController extends Controller
         $request->validate([
             'type_bac' => 'required',
         ]);
-
-
         if ($request->type_preins == 1) {
 
             if ($request->type_bac == 1) {
@@ -142,6 +140,7 @@ class candidatController extends Controller
                         'type_preins' => 'required'
                     ]);
 
+                
                     DB::table('candidats')->insert([
                         'type_bac' => $request->type_bac,
                         'type_preins_id' => $request->type_preins,
@@ -196,6 +195,7 @@ class candidatController extends Controller
                             $data = DB::table("candidats")
                                 ->where("user_candidat_id", Auth::user()->id)
                                 ->orWhere("nin", $request->nin_bac)
+                                ->orWhere("matricule", $request->matricule)
                                 ->first();
 
                             if (!isset($data)) {
@@ -221,7 +221,7 @@ class candidatController extends Controller
                                     return view("mon_bac", compact("messages", "preins"));
                                 }
                             } else {
-                                
+
                                 $messages = "Cette personne a déjà débuté une préinscription";
                                 $preins = DB::table("type_preinscription")->get();
                                 return view("mon_bac", compact('preins', 'messages'));
@@ -235,7 +235,12 @@ class candidatController extends Controller
                         }
                     } else {
 
-                        $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                        $data = DB::table("candidats")
+                        ->where("user_candidat_id", Auth::user()->id)
+                        ->orWhere("nin", $request->nin_bac)
+                        ->orWhere("matricule", $request->matricule)
+
+                        ->first();
                         if (!isset($data)) {
                             $request->validate([
                                 'matricule' => 'required',
@@ -274,23 +279,27 @@ class candidatController extends Controller
                     }
                 } else if ($request->type_bac == 2) {
 
-                    $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+                    $data = DB::table("candidats")
+                    ->where("user_candidat_id", Auth::user()->id)
+                    ->orWhere("matricule", $request->matricule)
 
+                    ->first();
                     if (!isset($data)) {
-
                         $request->validate([
-
                             'type_bac' => 'required',
                             'type_preins' => 'required',
-                            'matricule' => 'required'
                         ]);
+                        if ($request->type_preins == 1) {
+                            DB::table('candidats')->insert([
+                                'type_bac' => $request->type_bac,
+                                'type_preins_id' => $request->type_preins,
+                                'user_candidat_id' => Auth::user()->id,
+                             
 
+                            ]);
 
-                        $inscriptions = DB::table("inscription")
-                            ->where("mat_etud", $request->matricule)
-                            ->orderBy('Date_Inscrip', 'desc')
-                            ->first();
-                        if ($inscriptions->NIN == $request->nin_bac) {
+                            return redirect("accueil");
+                        } else {
                             DB::table('candidats')->insert([
 
                                 'type_bac' => $request->type_bac,
@@ -301,10 +310,6 @@ class candidatController extends Controller
                             ]);
 
                             return redirect("accueil");
-                        } else {
-                            $preins = DB::table("type_preinscription")->get();
-                            $messages = "Le nin ne correspond pas à ce matricule";
-                            return view("mon_bac", compact("messages", "preins"));
                         }
                     } else {
 
@@ -350,6 +355,7 @@ class candidatController extends Controller
                             $data = DB::table("candidats")
                                 ->where("user_candidat_id", Auth::user()->id)
                                 ->orWhere("nin", $request->nin_bac)
+                                ->orWhere("matricule", $request->matricule)
                                 ->first();
 
                             if (!isset($data)) {
@@ -385,7 +391,7 @@ class candidatController extends Controller
                             }
                         } else {
                             $messages = "Vous n'avez pas eu le bac cette année";
-                            
+
 
                             $preins = DB::table("type_preinscription")
                                 ->get();
@@ -396,6 +402,8 @@ class candidatController extends Controller
                         $data = DB::table("candidats")
                             ->where("user_candidat_id", Auth::user()->id)
                             ->orWhere("nin", $request->nin_bac)
+                            ->orWhere("matricule", $request->matricule)
+
                             ->first();
                         if (!isset($data)) {
                             $request->validate([
@@ -428,7 +436,7 @@ class candidatController extends Controller
                             }
                         } else {
 
-                            
+
                             $messages = "Cette personne a déjà débuté une préinscription";
                             $preins = DB::table("type_preinscription")->get();
                             return view("mon_bac", compact('preins', 'messages'));
@@ -438,44 +446,49 @@ class candidatController extends Controller
 
                     $data = DB::table("candidats")
                         ->where("user_candidat_id", Auth::user()->id)
-                        ->orWhere("nin", $request->nin_bac)
                         ->first();
 
                     if (!isset($data)) {
 
                         $request->validate([
-
                             'type_bac' => 'required',
                             'type_preins' => 'required',
-                            'matricule' => 'required'
+                         
                         ]);
 
+                        if($request->type_preins==1)
+                        {
+                            DB::table('candidats')->insert([
 
+                                'type_bac' => $request->type_bac,
+                                'type_preins_id' => $request->type_preins,
+                                'user_candidat_id' => Auth::user()->id,
+                          
 
-                        $inscriptions = DB::table("inscription")
-                            ->where("mat_etud", $request->matricule)
-                            ->orderBy('Date_Inscrip', 'desc')
-                            ->first();
+                            ]);
 
-                        if ($inscriptions->NIN == $request->nin_bac) {
+                            return redirect("accueil");
+                        }
+                        else
+                        {
                             DB::table('candidats')->insert([
 
                                 'type_bac' => $request->type_bac,
                                 'type_preins_id' => $request->type_preins,
                                 'user_candidat_id' => Auth::user()->id,
                                 'matricule' => $request->matricule
-
                             ]);
 
                             return redirect("accueil");
-                        } else {
-                            $preins = DB::table("type_preinscription")->get();
-                            $messages = "Le nin ne correspond pas à ce matricule";
-                            return view("mon_bac", compact("messages", "preins"));
                         }
+
+                           
+
+                            
+                    
                     } else {
 
-                        $messages = "Cette personne a déjà débuté une préinscription";
+                        $messages = "Vpous avez  déjà débuté une préinscription";
                         $preins = DB::table("type_preinscription")->get();
                         return view("mon_bac", compact('preins', 'messages'));
                     }
@@ -531,7 +544,6 @@ class candidatController extends Controller
      */
     public function destroy($id)
     {
-        //
     }
     public function updates(Request $request)
     {
@@ -720,7 +732,7 @@ class candidatController extends Controller
 
             ]);
 
-         
+
             $data = DB::table("candidats")->where("nin", $request->nin)->first();
             if (!isset($data)) {
 
@@ -762,7 +774,7 @@ class candidatController extends Controller
                 $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
 
 
-                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages','recu'));
+                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId', 'messages', 'recu'));
             }
         } else if ($datas->type_bac == 2) {
             $request->validate([
@@ -789,9 +801,9 @@ class candidatController extends Controller
             $das = DB::table("candidats")->where("nin", $request->nin)->first();
             if (!isset($das)) {
 
-                
-            $imageName = $request->nin . '.' . $request->image->extension();
-            $request->image->move(public_path('photo'), $imageName);
+
+                $imageName = $request->nin . '.' . $request->image->extension();
+                $request->image->move(public_path('photo'), $imageName);
                 DB::table('candidats')
                     ->where('user_candidat_id', Auth::user()->id)
                     ->update([
@@ -817,7 +829,7 @@ class candidatController extends Controller
                 return redirect("accueil");
             } else {
                 $messages = "Cette personne a déjà débuté une préinscription";
-              
+
                 $annees = DB::table("annee")->get();
                 $pays = DB::table('pays')->get();
                 $type_recu = DB::table('type_recu')
@@ -826,9 +838,9 @@ class candidatController extends Controller
                 $preins = DB::table("type_preinscription")
                     ->where("id", $data->type_preins_id)
                     ->first();
-                    $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
+                $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
 
-                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId','messages','recu'));
+                return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId', 'messages', 'recu'));
             }
         }
     }
@@ -1167,6 +1179,12 @@ class candidatController extends Controller
     public function getInfo()
     {
         $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+        $periode = DB::table('periode_activite')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('id')->first();
+        Cookie::queue('user_candidat_id', $periode->user_candidat_id);
+
+        $user_candidat_id = Cookie::get('user_candidat_id');
         $docs = DB::table("documents")->where("user_candidat_id", Auth::user()->id)->first();
         if ($candidat->id_type == 1) {
             $departement1 = DB::table("departement")
@@ -1196,7 +1214,8 @@ class candidatController extends Controller
                 'departement2' => $departement2,
                 'departement3' => $departement3,
                 'docs' => $docs,
-                'recu' => $recu
+                'recu' => $recu,
+                'user_candidat_id' => $user_candidat_id
 
             ]);
         } else {
@@ -1214,7 +1233,9 @@ class candidatController extends Controller
                 'candidat' => $candidat,
                 'departement' => $departement,
                 'docs' => $docs,
-                'recu' => $recu
+                'recu' => $recu,
+                'user_candidat_id' => $user_candidat_id
+
 
             ]);
         }
@@ -1249,42 +1270,19 @@ class candidatController extends Controller
 
     public function notification()
     {
+        if ($_GET['status'] == "OK") {
 
-        $periode = DB::table('periode_activite')
-            ->where("user_candidat_id", Auth::user()->id)
-            ->orderByDesc('id')->first();
-        if ($periode->type == 1) {
-            // if ($_GET['status'] == "OK") {
-            //     $recu = $_GET['purchaseref'];
-            //     $candidat = DB::table("candidats")
-            //         ->where("user_candidat_id", Auth::user()->id)
-            //         ->first();
-            //     $ref = DB::table("holo")
-            //         ->where("nin", $candidat->nin)
-            //         ->get();
+            $periode = DB::table('periode_activite')
+                ->where("user_candidat_id", $_GET['purchaseref'])
+                ->orderByDesc('id')->first();
 
-            //     if ($ref->count() == 0) {
-            //         DB::table("holo")->insert([
-            //             "reference" => $_GET['paymentref'],
-            //             "nin" => $candidat->nin
-            //         ]);
+            if ($periode->type == 1) {
 
-            //         $refs = DB::table("holo")
-            //             ->where("nin", $candidat->nin)
-            //             ->first();
 
-            //         $update = DB::table('candidats')
-            //             ->where('user_candidat_id', Auth::user()->id)
-            //             ->update([
-            //                 'statut' => 4,
-            //                 'reference_id' => $refs->id,
-            //             ]);
-            //     }
-            // }
-            if ($_GET['status'] == "OK") {
+                // if ($_GET['status'] == "OK") {
                 $recu = $_GET['purchaseref'];
                 $candidat = DB::table("candidats")
-                    ->where("num_recu",$recu)
+                    ->where("user_candidat_id", $_GET['purchaseref'])
                     ->first();
                 $ref = DB::table("holo")
                     ->where("nin", $candidat->nin)
@@ -1301,23 +1299,22 @@ class candidatController extends Controller
                         ->first();
 
                     $update = DB::table('candidats')
-                        ->where("num_recu",$recu)
+                        ->where("num_recu", $candidat->num_recu)
                         ->update([
                             'statut' => 4,
                             'reference_id' => $refs->id,
                         ]);
                 }
-            }
-        } else if ($periode->type == 2) {
-            if ($_GET['status'] == "OK") {
+                // }
+            } else if ($periode->type == 2) {
+                // if ($_GET['status'] == "OK") {
 
                 // $nine=substr($_GET['purchaseref'], 1);
-                $num_auto = $_GET['purchaseref'];
+                $annee = DB::table('annee')->orderByDesc("id_annee")->first();
+                $num_auto = DB::table('post_inscription')->where("user_candidat_id", $_GET['purchaseref'])->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
                 // $nine = Cookie::get('nin');
 
 
-
-                $annee = DB::table('annee')->orderByDesc("id_annee")->first();
                 $quitus = DB::table('quitus')->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->where("trans_udc", $_GET['paymentref'])->get();
                 $poste = DB::table('post_inscription')->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
 
@@ -1364,7 +1361,6 @@ class candidatController extends Controller
                                     "NIN" => $post->nin,
                                     "Date_Inscrip" => $dateJ,
                                     "Mt_Regl_Inscrip" => $post->droit,
-                                    // "Date_Reg_Inscrip"=>$post->nin,
                                     "code_depart" => $post->code_depart,
                                     "code_niv" => $post->code_niv,
                                     "Annee" => $post->Annee,
@@ -1378,20 +1374,7 @@ class candidatController extends Controller
                                 $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
                                 $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
                                 $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-                                // $carte=DB::table('carte')->insert([
-                                //     "matricule"=>$post->matricule,
-                                //     "nom"=>$post->nom,
-                                //     "prenom"=>$post->prenom,
-                                //     "date_nais"=>$post->date_naiss,
-                                //     "lieu_nais"=>$post->lieu_naiss,
-                                //     "faculte"=>$composante->design_facult,
-                                //     "departement"=>$departement->design_depart,
-                                //     "niveau"=>$niveau->intit_niv,
-                                //     "annee"=>$post->Annee,
-                                //     "Photo"=>$post->matricule,
-                                // ]);
-                                // $nin=Cookie::get('nin');
-                                // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
+
                                 $data = DB::table('inscription')
                                     ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
                                     ->select('inscription.*', 'etudiant.*')
@@ -1675,18 +1658,6 @@ class candidatController extends Controller
                             $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
                             $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
                             $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
-                            // $carte=DB::table('carte')->insert([
-                            //     "matricule"=>$et->mat_etud,
-                            //     "nom"=>$post->nom,
-                            //     "prenom"=>$post->prenom,
-                            //     "date_nais"=>$post->date_naiss,
-                            //     "lieu_nais"=>$post->lieu_naiss,
-                            //     "faculte"=>$composante->design_facult,
-                            //     "departement"=>$departement->design_depart,
-                            //     "niveau"=>$niveau->intit_niv,
-                            //     "annee"=>$post->Annee,
-                            //     "Photo"=>$et->mat_etud,
-                            // ]);
 
 
                             $data = DB::table('inscription')
@@ -1713,411 +1684,409 @@ class candidatController extends Controller
                     $message = "Vous avez dejà un quitus";
                     return view("success", compact("message", "post", "s", "date"));
                 }
-            } 
-            // else {
-            //     // $nine=substr($_GET['purchaseref'], 1);
-            //     // $nine = $_GET['purchaseref'];
-            //     $nines = Cookie::get('nin');
-
-
-
-            //     $annee = DB::table('annee')->orderByDesc("id_annee")->first();
-            //     $quitus = DB::table('quitus')->where("nin", $nines)->where("Annee", $annee->Annee)->get();
-            //     $poste = DB::table('post_inscription')->where("nin", $nines)->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
-
-            //     if ($quitus->count() == 0) {
-            //         $annees = DB::table('quitus')->where("Annee", $annee->Annee)->get();
-            //         if ($annees->count() == 0) {
-            //             $ins_quitus = DB::table("quitus")->insert([
-            //                 "num_quitus" => 1,
-            //                 "num_auto" => $poste->num_auto,
-            //                 "nin" => $nines,
-            //                 // "trans_udc" => $_GET['paymentref'],
-            //                 "Annee" => $annee->Annee,
-            //             ]);
-
-            //             $nin = Cookie::get('nin');
-
-            //             $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-            //             if (!empty($post->matricule)) {
-
-            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-            //                 $inscription = DB::table("inscription")->where("mat_etud", $etudiants->mat_etud)->where('Annee', $annee->Annee)->get();
-            //                 if ($inscription->count() == 0) {
-            //                     $admission = DB::table('admission')->where('matricule', $etudiants->mat_etud)->get();
-            //                     $admissions = DB::table('admission')->where('matricule', $etudiants->mat_etud)->first();
-
-            //                     if ($admission->count() == 0) {
-            //                         $resultat = "ajourné";
-            //                         $session = "";
-            //                         $mention = "";
-            //                     } else {
-            //                         $resultat = "admis";
-            //                         $session = $admissions->session;
-            //                         $mention = $admissions->mention;
-            //                     }
-
-            //                     $dateJ = date('Y-m-d');
-            //                     $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-            //                     $etud = DB::table('etudiant')
-            //                         ->where("mat_etud", $post->matricule)
-            //                         ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
-            //                     $ins = $post->num_auto . "/" . $annee->Annee;
-            //                     $inscri = DB::table("inscription")->insert([
-            //                         "Num_Inscrip" => $ins,
-            //                         "NIN" => $post->nin,
-            //                         "Date_Inscrip" => $dateJ,
-            //                         "Mt_Regl_Inscrip" => $post->droit,
-            //                         // "Date_Reg_Inscrip"=>$post->nin,
-            //                         "code_depart" => $post->code_depart,
-            //                         "code_niv" => $post->code_niv,
-            //                         "Annee" => $post->Annee,
-            //                         "mat_etud" => $post->matricule,
-            //                         "Parour_Etud" => "Ancien",
-            //                         "Resultat" => $resultat,
-            //                         "Session" => $session,
-            //                         "Mention" => $mention,
-            //                     ]);
-
-            //                     $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-            //                     $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-            //                     $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-            //                     // $carte=DB::table('carte')->insert([
-            //                     //     "matricule"=>$post->matricule,
-            //                     //     "nom"=>$post->nom,
-            //                     //     "prenom"=>$post->prenom,
-            //                     //     "date_nais"=>$post->date_naiss,
-            //                     //     "lieu_nais"=>$post->lieu_naiss,
-            //                     //     "faculte"=>$composante->design_facult,
-            //                     //     "departement"=>$departement->design_depart,
-            //                     //     "niveau"=>$niveau->intit_niv,
-            //                     //     "annee"=>$post->Annee,
-            //                     //     "Photo"=>$post->matricule,
-            //                     // ]);
-            //                     // $nin=Cookie::get('nin');
-            //                     // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
-            //                     $data = DB::table('inscription')
-            //                         ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-            //                         ->select('inscription.*', 'etudiant.*')
-            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->first();
-
-            //                     $datas = DB::table('inscription')
-            //                         ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-            //                         ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-            //                         ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-            //                         ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->get();
-
-            //                     $message = "success";
-            //                     return view("fiche", compact("message", 'data', "post", 'datas'));
-            //                 } else {
-            //                     $message = "vous êtes deja inscris cette année";
-            //                     $nin = Cookie::get('nin');
-            //                     $post = DB::table("post_inscription")->where("nin", $nines)->first();
-            //                     return view("success", compact("message", 'post'));
-            //                 }
-            //             } else {
-
-            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-            //                 $etud = DB::table("etudiant")->orderByDesc("id")->first();
-            //                 $mat = $etud->mat_etud;
-            //                 $dernier = intval($etud->mat_etud);
-            //                 $dernier++;
-            //                 $mat = (string) $dernier;
-            //                 $candidat = DB::table("candidats")->where("nin", $nines)->first();
-            //                 // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
-            //                 // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
-
-
-
-            //                 $date = date('Y-m-d H:i:s');
-            //                 // $dateJ=date('Y-m-d');
-
-            //                 $dateJ = date('Y-m-d');
-            //                 $ins = $post->num_auto . "/" . $annee->Annee;
-            //                 $et = DB::table("etudiant")->where('nin', $candidat->nin)->get();
-            //                 if ($et->count() == 0) {
-            //                     $inscriptions = DB::table("etudiant")->insert([
-            //                         'mat_etud' => $mat,
-            //                         'nin' => $candidat->nin,
-            //                         'nom' => $candidat->nom,
-            //                         'prenom' => $candidat->prenom,
-            //                         'date_naiss' => $candidat->date_naiss,
-            //                         'lieu_naiss' => $candidat->lieu_naiss,
-            //                         'nationalite' => $candidat->nationalite,
-            //                         'sexe' => $candidat->sexe,
-            //                         'Adr_Etud' => $candidat->adresse_cand,
-            //                         'Tel_Etud' => $candidat->tel_mobile,
-            //                         'ile' => $candidat->ile,
-            //                         'situat_familliale' => $candidat->situation,
-            //                         'nbr_enfants' => $candidat->Nbr_enfants,
-            //                         'serie_bac' => $candidat->serie,
-            //                         'mention_bac' => $candidat->mention,
-            //                         'annee_bac' => $candidat->annee,
-            //                         'lieu_obt_bac' => $candidat->centre,
-            //                         'eqv_bac' => $candidat->equiv,
-            //                         'code_niv' => $post->code_niv,
-            //                         'code_depart' => $post->code_depart,
-            //                         'Num_preinscr' => $candidat->num_recu,
-            //                         'Date_preinscr' => $candidat->datePrescript,
-            //                         'An_Univ' => $post->Annee,
-            //                         'date_j' => $date,
-            //                         'profession' => $candidat->pro
-            //                     ]);
-            //                 }
-            //                 $ins = $post->num_auto . "/" . $annee->Annee;
-            //                 $inscri = DB::table("inscription")->insert([
-            //                     "Num_Inscrip" => $ins,
-            //                     "NIN" => $post->nin,
-            //                     "Date_Inscrip" => $dateJ,
-            //                     "Mt_Regl_Inscrip" => $post->droit,
-            //                     // "Date_Reg_Inscrip"=>$post->nin,
-            //                     "code_depart" => $post->code_depart,
-            //                     "code_niv" => $post->code_niv,
-            //                     "Annee" => $post->Annee,
-            //                     "mat_etud" => $mat,
-            //                     "Parour_Etud" => "Nouveau",
-            //                     "Resultat" => "",
-            //                     "Session" => "",
-            //                     "Mention" => "",
-            //                 ]);
-
-            //                 $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-            //                 $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-            //                 $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-            //                 $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
-            //                 // $carte=DB::table('carte')->insert([
-            //                 //     "matricule"=>$et->mat_etud,
-            //                 //     "nom"=>$post->nom,
-            //                 //     "prenom"=>$post->prenom,
-            //                 //     "date_nais"=>$post->date_naiss,
-            //                 //     "lieu_nais"=>$post->lieu_naiss,
-            //                 //     "faculte"=>$composante->design_facult,
-            //                 //     "departement"=>$departement->design_depart,
-            //                 //     "niveau"=>$niveau->intit_niv,
-            //                 //     "annee"=>$post->Annee,
-            //                 //     "Photo"=>$et->mat_etud,
-            //                 // ]);
-
-            //                 $data = DB::table('inscription')
-            //                     ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-            //                     ->select('inscription.*', 'etudiant.*')
-            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
-
-            //                 $datas = DB::table('inscription')
-            //                     ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-            //                     ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-            //                     ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-            //                     ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
-            //                 $message = "Matricule Ajouté avec succés!";
-            //                 return view("fiche", compact("message", "post", "data", 'datas'));
-            //             }
-            //         } else {
-            //             $nin = Cookie::get('nin');
-            //             $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-            //             $quitus_in = DB::table("quitus")->where("Annee", $annee->Annee)->orderByDesc("num_quitus")->first();
-            //             $num = intval($quitus_in->num_quitus + 1);
-            //             $ins_quitus = DB::table("quitus")->insert([
-            //                 "num_quitus" => $num,
-            //                 "num_auto" => $poste->num_auto,
-            //                 "nin" => $nines,
-            //                 // "trans_udc" => $_GET['paymentref'],
-            //                 "trans_mutuelle" => $_GET['reason'],
-            //                 "traitant_quitus" => $_GET['error'],
-            //                 "Annee" => $annee->Annee,
-            //             ]);
-            //             $nin = Cookie::get('nin');
-            //             $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-            //             if (!empty($post->matricule)) {
-
-            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-            //                 $inscription = DB::table("inscription")->where("mat_etud", $etudiants->mat_etud)->where('Annee', $annee->Annee)->get();
-            //                 if ($inscription->count() == 0) {
-            //                     $admission = DB::table('admission')->where('matricule', $etudiants->mat_etud)->get();
-            //                     $admissions = DB::table('admission')->where('matricule', $etudiants->mat_etud)->first();
-
-            //                     if ($admission->count() == 0) {
-            //                         $resultat = "ajourné";
-            //                         $session = "";
-            //                         $mention = "";
-            //                     } else {
-            //                         $resultat = "admis";
-            //                         $session = $admissions->session;
-            //                         $mention = $admissions->mention;
-            //                     }
-
-            //                     $dateJ = date('Y-m-d');
-            //                     $post = DB::table("post_inscription")->where("nin", $nines)->where("Annee", $annee->Annee)->first();
-            //                     $etud = DB::table('etudiant')
-            //                         ->where("mat_etud", $post->matricule)
-            //                         ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
-            //                     $ins = $post->num_auto . "/" . $annee->Annee;
-            //                     $inscri = DB::table("inscription")->insert([
-            //                         "Num_Inscrip" => $ins,
-            //                         "NIN" => $post->nin,
-            //                         "Date_Inscrip" => $dateJ,
-            //                         "Mt_Regl_Inscrip" => $post->droit,
-            //                         // "Date_Reg_Inscrip"=>$post->nin,
-            //                         "code_depart" => $post->code_depart,
-            //                         "code_niv" => $post->code_niv,
-            //                         "Annee" => $post->Annee,
-            //                         "mat_etud" => $post->matricule,
-            //                         "Parour_Etud" => "Ancien",
-            //                         "Resultat" => $resultat,
-            //                         "Session" => $session,
-            //                         "Mention" => $mention,
-            //                     ]);
-
-            //                     $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-            //                     $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-            //                     $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-            //                     // $carte=DB::table('carte')->insert([
-            //                     //     "matricule"=>$post->matricule,
-            //                     //     "nom"=>$post->nom,
-            //                     //     "prenom"=>$post->prenom,
-            //                     //     "date_nais"=>$post->date_naiss,
-            //                     //     "lieu_nais"=>$post->lieu_naiss,
-            //                     //     "faculte"=>$composante->design_facult,
-            //                     //     "departement"=>$departement->design_depart,
-            //                     //     "niveau"=>$niveau->intit_niv,
-            //                     //     "annee"=>$post->Annee,
-            //                     //     "Photo"=>$post->matricule,
-            //                     // ]);
-            //                     // $nin=Cookie::get('nin');
-            //                     // $post=DB::table("post_inscription")->where("nin",$nin)->where("Annee",$annee)->first();
-            //                     $data = DB::table('inscription')
-            //                         ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-            //                         ->select('inscription.*', 'etudiant.*')
-            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->first();
-
-            //                     $datas = DB::table('inscription')
-            //                         ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-            //                         ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-            //                         ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-            //                         ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-            //                         ->where("inscription.mat_etud", $post->matricule)->orderByDesc("Annee")->get();
-            //                     $message = "success";
-            //                     return view("fiche", compact("message", 'post', 'data', 'datas'));
-            //                 } else {
-            //                     $message = "vous etes deja inscris cette année";
-            //                     $nin = Cookie::get('nin');
-            //                     $post = DB::table("post_inscription")->where("nin", $nines)->first();
-            //                     $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
-            //                     $dt = new DateTime();
-            //                     $date = $dt->format('Y-m-d');
-            //                     return view("success", compact("message", 'post', "s", "date"));
-            //                 }
-            //             } else {
-
-            //                 $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
-            //                 $etud = DB::table("etudiant")->orderByDesc("id")->first();
-            //                 $matmat = $etud->mat_etud;
-            //                 $dernier = intval($etud->mat_etud);
-            //                 $dernier++;
-            //                 $mat = (string) $dernier;
-            //                 $candidat = DB::table("candidats")->where("nin", $nines)->first();
-            //                 // $admission=DB::table('admission')->where('matricule',$etudiants->mat_etud)->get();
-            //                 // $admissions=DB::table('admission')->where('matricule',$etudiants->mat_etud)->first();
-
-
-
-            //                 $date = date('Y-m-d H:i:s');
-            //                 // $dateJ=date('Y-m-d');
-
-            //                 $dateJ = date('Y-m-d');
-            //                 // $ins=$post->num_auto."/".$annee->Annee;
-            //                 $et = DB::table("etudiant")->where('nin', $candidat->nin)->get();
-            //                 if ($et->count() == 0) {
-            //                     $inscriptions = DB::table("etudiant")->insert([
-            //                         'mat_etud' => $mat,
-            //                         'nin' => $candidat->nin,
-            //                         'nom' => $candidat->nom,
-            //                         'prenom' => $candidat->prenom,
-            //                         'date_naiss' => $candidat->date_naiss,
-            //                         'lieu_naiss' => $candidat->lieu_naiss,
-            //                         'nationalite' => $candidat->nationalite,
-            //                         'sexe' => $candidat->sexe,
-            //                         'Adr_Etud' => $candidat->adresse_cand,
-            //                         'Tel_Etud' => $candidat->tel_mobile,
-            //                         'ile' => $candidat->ile,
-            //                         'situat_familliale' => $candidat->situation,
-            //                         'nbr_enfants' => $candidat->Nbr_enfants,
-            //                         'serie_bac' => $candidat->serie,
-            //                         'mention_bac' => $candidat->mention,
-            //                         'annee_bac' => $candidat->annee,
-            //                         'lieu_obt_bac' => $candidat->centre,
-            //                         'eqv_bac' => $candidat->equiv,
-            //                         'code_niv' => $post->code_niv,
-            //                         'code_depart' => $post->code_depart,
-            //                         'Num_preinscr' => $candidat->num_recu,
-            //                         'Date_preinscr' => $candidat->datePrescript,
-            //                         'An_Univ' => $post->Annee,
-            //                         'date_j' => $date,
-            //                         'profession' => $candidat->pro,
-            //                     ]);
-            //                 }
-
-            //                 $ins = $post->num_auto . "/" . $annee->Annee;
-            //                 $inscri = DB::table("inscription")->insert([
-            //                     "Num_Inscrip" => $ins,
-            //                     "NIN" => $post->nin,
-            //                     "Date_Inscrip" => $dateJ,
-            //                     "Mt_Regl_Inscrip" => $post->droit,
-            //                     // "Date_Reg_Inscrip"=>$post->nin,
-            //                     "code_depart" => $post->code_depart,
-            //                     "code_niv" => $post->code_niv,
-            //                     "Annee" => $post->Annee,
-            //                     "mat_etud" => $mat,
-            //                     "Parour_Etud" => "Nouveau",
-            //                     "Resultat" => "",
-            //                     "Session" => "",
-            //                     "Mention" => "",
-            //                 ]);
-
-            //                 $composante = DB::table("faculte")->where("code_facult", $post->code_facult)->first();
-            //                 $departement = DB::table("departement")->where("code_depart", $post->code_depart)->first();
-            //                 $niveau = DB::table("niveau")->where("code_niv", $post->code_niv)->first();
-            //                 $et = DB::table("etudiant")->where("NIN", $post->nin)->first();
-            //                 // $carte=DB::table('carte')->insert([
-            //                 //     "matricule"=>$et->mat_etud,
-            //                 //     "nom"=>$post->nom,
-            //                 //     "prenom"=>$post->prenom,
-            //                 //     "date_nais"=>$post->date_naiss,
-            //                 //     "lieu_nais"=>$post->lieu_naiss,
-            //                 //     "faculte"=>$composante->design_facult,
-            //                 //     "departement"=>$departement->design_depart,
-            //                 //     "niveau"=>$niveau->intit_niv,
-            //                 //     "annee"=>$post->Annee,
-            //                 //     "Photo"=>$et->mat_etud,
-            //                 // ]);
-
-
-            //                 $data = DB::table('inscription')
-            //                     ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
-            //                     ->select('inscription.*', 'etudiant.*')
-            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
-
-            //                 $datas = DB::table('inscription')
-            //                     ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
-            //                     ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
-            //                     ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
-            //                     ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
-            //                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
-            //                 $message = "Matricule Ajouté avec succés!";
-            //                 return view("fiche", compact("message", "post", "data", 'datas'));
-            //             }
-            //         }
-            //     } else {
-            //         $nin = Cookie::get('nin');
-            //         $post = DB::table("post_inscription")->where("nin", $nines)->first();
-            //         $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
-            //         $dt = new DateTime();
-            //         $date = $dt->format('Y-m-d');
-            //         $message = "Vous avez dejà un quitus";
-            //         return view("success", compact("message", "post", "s", "date"));
-            //     }
-            // }
+            }
         }
+    }
+
+    public function accepturl()
+    {
+        $periode = DB::table('periode_activite')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('id')->first();
+
+        $data = DB::table('candidats')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('num_recu')->first();
+
+
+        if ($periode->type == 1) {
+
+            if ($data->statut == 4) {
+                return view("accept", compact('data'));
+            } else {
+                return redirect("accueil");
+            }
+        } else {
+            return view("fiche_renseignement", compact('data'));
+        }
+    }
+
+    public function cancelurl()
+    {
+        $periode = DB::table('periode_activite')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('id')->first();
+
+        $data = DB::table('candidats')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('num_recu')->first();
+
+        if ($periode->type == 1) {
+
+            return view("cancelUrl_preinscription", compact('data'));
+        } else {
+            return view("cancelUrl_inscription", compact("data"));
+        }
+    }
+
+    public function declineurl()
+    {
+        $periode = DB::table('periode_activite')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('id')->first();
+
+        $data = DB::table('candidats')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('num_recu')->first();
+
+        if ($periode->type == 1) {
+
+            return view("declineUrl_preinscription", compact("data"));
+        } else {
+            return view("declineUrl_inscription", compact("data"));
+        }
+    }
+
+    public function Modification_doc()
+    {
+
+        $data = DB::table('candidats')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('num_recu')->first();
+
+        return view("update_document", compact("data"));
+    }
+    public function Modification_info()
+    {
+
+
+        $data = DB::table('candidats')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('num_recu')->first();
+
+        $annees = DB::table("annee")->get();
+        $pays = DB::table('pays')->get();
+        $type_recu = DB::table('type_recu')
+            ->where("type_preins_id", $data->type_preins_id)
+            ->get();
+        $preins = DB::table("type_preinscription")
+            ->where("id", $data->type_preins_id)
+            ->first();
+
+        $preine = DB::table("type_preinscription")->get();
+
+        $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
+
+        $bachelier = DB::table("bachelier")->where("NIN", $data->nin)->where("annee", $data->annee)->first();
+
+
+        return view("update_info", compact("data", "annees", "pays", "type_recu", "preins", "recu", "bachelier", "preine"));
+    }
+
+    public function Modification_fili()
+    {
+
+        $data = DB::table('candidats')
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('num_recu')->first();
+
+            $faculte = DB::table("faculte")->where("concours", 0)->get();
+            $facultes = DB::table("faculte")->get();
+
+            $candidat = DB::table("candidats")
+            ->join("departement","candidats.choix1","departement.code_depart")
+            ->join("faculte","faculte.code_facult","departement.code_facult")
+            ->where("user_candidat_id", Auth::user()->id)
+            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
+            ->first();
+
+            $candidat1 = DB::table("candidats")
+            ->join("departement","candidats.choix1","departement.code_depart")
+            ->join("faculte","faculte.code_facult","departement.code_facult")
+            ->where("user_candidat_id", Auth::user()->id)
+            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
+            ->first();
+    
+            
+            $candidat2 = DB::table("candidats")
+            ->join("departement","candidats.choix2","departement.code_depart")
+            ->join("faculte","faculte.code_facult","departement.code_facult")
+            ->where("user_candidat_id", Auth::user()->id)
+            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
+            ->first();
+    
+            
+            $candidat3 = DB::table("candidats")
+            ->join("departement","candidats.choix3","departement.code_depart")
+            ->join("faculte","faculte.code_facult","departement.code_facult")
+            ->where("user_candidat_id", Auth::user()->id)
+            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
+            ->first();
+    
+
+        return view("update_fili", compact("data","faculte","facultes","candidat","candidat1","candidat2","candidat3"));
+    }
+
+    public function update_info(Request $request)
+    {
+
+        $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+        $datas = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+        $bachelier = DB::table("bachelier")->where("NIN", $data->nin)->where("annee", $data->annee)->first();
+        $type_recu = DB::table('type_recu');
+        $pays = DB::table('pays')->get();
+        $type_recu = DB::table('type_recu')
+            ->where("type_preins_id", $data->type_preins_id)
+            ->get();
+
+        if ($datas->type_bac == 1 && $datas->annee >= 2010) {
+
+            if ($request->image == null) {
+                DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->preinscription1,
+                        'type_preins_id' => $request->type_preinscription1,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $datas->date_naiss,
+                        'lieu_naiss' => $datas->lieu_naiss,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $datas->serie,
+                        'mention' => $datas->mention,
+                        'centre' => $datas->centre,
+                        'num_attest' => $datas->num_attest,
+
+                    ]);
+
+                return redirect("accueil");
+            } else {
+                $imageName = $datas->nin . '.' . $request->image->extension();
+                $request->image->move(public_path('photo'), $imageName);
+                DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->preinscription1,
+                        'type_preins_id' => $request->type_preinscription1,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $datas->date_naiss,
+                        'lieu_naiss' => $datas->lieu_naiss,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $datas->serie,
+                        'mention' => $datas->mention,
+                        'centre' => $datas->centre,
+                        'num_attest' => $datas->num_attest,
+                        'photo' => $imageName,
+                    ]);
+
+                return redirect("accueil");
+            }
+        } else if ($datas->type_bac == 1  && $datas->annee <= 2010) {
+
+            $data = DB::table("bachelier")->where("NIN", $datas->nin)->where("annee", $datas->annee)->first();
+
+            if ($request->image == null) {
+                DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->preinscription2,
+                        'type_preins_id' => $request->type_preinscription2,
+                        'nin' => $request->nin,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $request->date_naissance,
+                        'lieu_naiss' => $request->lieu_naissance,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $request->serie,
+                        'mention' => $request->mention,
+                        'centre' => $request->centre,
+                        'num_attest' => $request->num_attest,
+
+
+                    ]);
+                return redirect("accueil");
+            } else {
+                $imageName = $request->nin . '.' . $request->image->extension();
+                $request->image->move(public_path('photo'), $imageName);
+                DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->preinscription2,
+                        'type_preins_id' => $request->type_preinscription2,
+                        'nin' => $request->nin,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $request->date_naissance,
+                        'lieu_naiss' => $request->lieu_naissance,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $request->serie,
+                        'mention' => $request->mention,
+                        'centre' => $request->centre,
+                        'num_attest' => $request->num_attest,
+                        'photo' => $imageName,
+
+                    ]);
+                return redirect("accueil");
+            }
+        } else if ($datas->type_bac == 2) {
+
+            if($request->image == null)
+            {
+                DB::table('candidats')
+                ->where('user_candidat_id', Auth::user()->id)
+                ->update([
+                    'id_type' => $request->preinscription2,
+                    'type_preins_id' => $request->type_preinscription2,
+                    'nin' => $request->nin,
+                    'nom' => $request->nom,
+                    'prenom' => $request->prenom,
+                    'date_naiss' => $request->date_naissance,
+                    'lieu_naiss' => $request->lieu_naissance,
+                    'sexe' => $request->sexe,
+                    'adresse_cand' => $request->adresse,
+                    'pays' => $request->pays,
+                    'tel_mobile' => $request->telephone,
+                    'serie' => $request->serie,
+                    'mention' => $request->mention,
+                    'centre' => $request->centre,
+                    'num_attest' => $request->num_attest,
+                  
+                   
+                ]);
+
+                return redirect("accueil");
+
+            }
+            else
+            {
+                $imageName = $request->nin . '.' . $request->image->extension();
+                $request->image->move(public_path('photo'), $imageName);
+                DB::table('candidats')
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->preinscription2,
+                        'type_preins_id' => $request->type_preinscription2,
+                        'nin' => $request->nin,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $request->date_naissance,
+                        'lieu_naiss' => $request->lieu_naissance,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $request->serie,
+                        'mention' => $request->mention,
+                        'centre' => $request->centre,
+                        'num_attest' => $request->num_attest,
+                    
+                        'photo' => $imageName,
+                    ]);
+    
+                return redirect("accueil");
+            }
+          
+        }
+    }
+
+    public function update_fili(Request $request)
+    {
+        $candidat = DB::table("candidats")
+        ->where("user_candidat_id", Auth::user()->id)
+        ->first();
+
+        if ($candidat->id_type == 1) {
+          
+
+            $update = DB::table('candidats')
+                ->where('user_candidat_id', Auth::user()->id)
+                ->update([
+                   
+                    'choix1' => $request->departement1,
+                    'choix2' => $request->departement2,
+                    'choix3' => $request->departement3
+                ]);
+
+            return Redirect("accueil");
+        } else {
+            $request->validate([
+                'departement' => 'required',
+
+            ]);
+
+            $update = DB::table('candidats')
+                ->where('user_candidat_id', Auth::user()->id)
+                ->update([
+                  
+                    'choix1' => $request->departement,
+                ]);
+
+            return Redirect("accueil");
+        }
+    }
+
+    public function update_doc(Request $request)
+    {
+
+        $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+        $doc = DB::table("documents")->where("user_candidat_id", Auth::user()->id)->first();
+
+        $request->validate([
+            'document' => 'required|mimes:pdf|max:2048',
+        ]);
+
+
+        $document = $candidat->nin . '.' . $request->document->extension();
+
+        $request->document->move(public_path('document'), $document);
+
+        DB::table('documents')->where(
+            "user_candidat_id",
+            Auth::user()->id
+        )
+            ->update([
+                "document" => $document
+            ]);
+
+        // $docs = DB::table("documents")->where("user_candidat_id", Auth::user()->id)->first();
+        // $update = DB::table('candidats')
+        //     ->where('user_candidat_id', Auth::user()->id)
+        //     ->update([
+        //         'document_id' => $docs->id,
+        //         'statut' => 3
+        //     ]);
+
+        return redirect("accueil");
+    }
+
+    public function getPreins1(Request $request)
+    {
+        $type_recu = DB::table('type_recu')
+            ->where("type_preins_id", $request->preins)
+            ->pluck("nom_type", "id_type");
+
+        return response()->json($type_recu);
+    }
+
+    public function getPreins2(Request $request)
+    {
+        $type_recu = DB::table('type_recu')
+            ->where("type_preins_id", $request->preins)
+            ->pluck("nom_type", "id_type");
+
+        return response()->json($type_recu);
     }
 }

@@ -513,29 +513,14 @@ class PostInscriptionController extends Controller
         $cand = DB::table('candidats')->Where("nin", $request->nin)->get();
         if ($cand->count() == 1) {
             $niveau = $request->niveau;
-            // $candidat = DB::table("candidats")->where("nin", $request->nin)->first();
-            // $departement = DB::table('departement')->where("code_depart", $candidat->retenu)->first();
-            // $depart = $departement->design_depart;
-            // $code_facult = $departement->code_facult;
-            // $concours = $departement->concours;
-            // $faculte = DB::table('faculte')->where('code_facult', $code_facult)->first();
-            // $facult = $faculte->design_facult;
+          
             $concours = DB::table("candidats")
                 ->join("departement", "candidats.retenu", "=", "departement.code_depart")
                 ->select("candidats.*", "departement.*")
                 ->where("nin", $request->nin)
                 ->first();
             if ($concours->concours == 1) {
-                // $candidat = DB::table("candidats")
-                //     ->join("departement", "candidats.retenu", "=", "departement.code_depart")
-                //     ->join("faculte", "departement.code_facult", "=", "faculte.code_facult")
-                //     ->join("montant", "candidats.id_type", "=", "montant.id_type")
-                //     ->select("candidats.*", "departement.*", "faculte.code_facult as code_faculte", "montant.code_niv as n", 'montant.Montant_chiffre as udc', 'montant.Montant_lettre as lettre', 'montant.niveau as niveau', 'montant.concours as concours')
-                //     ->where("candidats.nin", $request->nin)
-                //     ->where("montant.niveau", $niveau)
-                //     ->where("montant.concours", 1)
-                //     ->first();
-
+              
                     $pro = DB::table("candidats")
                     ->join("montant", "candidats.id_type", "=", "montant.id_type")
                     ->select("candidats.*", "montant.*")
@@ -567,15 +552,7 @@ class PostInscriptionController extends Controller
                         ->first();
                 }
             } else {
-                // $candidat = DB::table("candidats")
-                //     ->join("departement", "candidats.retenu", "=", "departement.code_depart")
-                //     ->join("faculte", "departement.code_facult", "=", "faculte.code_facult")
-                //     ->join("montant", "candidats.id_type", "=", "montant.id_type")
-                //     ->select("candidats.*", "departement.*", "faculte.code_facult as code_faculte", "montant.code_niv as n", 'montant.Montant_chiffre as udc', 'montant.Montant_lettre as lettre', 'montant.niveau as niveau', 'montant.concours as concours')
-                //     ->where("candidats.nin", $request->nin)
-                //     ->where("montant.niveau", $niveau)
-                //     ->where("montant.concours", 0)
-                //     ->first();
+                
 
                     $pro = DB::table("candidats")
                     ->join("montant", "candidats.id_type", "=", "montant.id_type")
@@ -609,67 +586,7 @@ class PostInscriptionController extends Controller
                 }
             }
 
-            // if ($niveau == "N4" || $niveau == "N5") {
-            //     $udc = "60000 KMF";
-            //     $lettre = "Soixante mille Francs Comoriens";
-            // }
-            // if ($concours == 1) {
-            //     if ($niveau == "l1" || $niveau == "l2") {
-            //         $udc = "45000 KMF";
-            //         $lettre = "Quarante cinq mille Francs Comoriens";
-            //     } elseif ($niveau == "l3") {
-            //         $udc = "55000 KMF";
-            //         $lettre = "Cinquante cinq mille Francs Comoriens";
-            //     }
-            // } else {
-            //     if ($niveau == "l1" || $niveau == "l2") {
-            //         $udc = "40000 KMF";
-            //         $lettre = "Quarante mille Francs Comoriens";
-            //     } elseif ($niveau == "l3") {
-            //         $udc = "50000 KMF";
-            //         $lettre = "Cinquante mille Francs Comoriens";
-            //     }
-            // }
-            // if ($niveau == "l1") {
-            //     if ($concours == 1 and $code_facult != "EMSP") {
-            //         $niv = "1ère Année";
-            //         $n = "P1";
-            //     }
-            //     if ($concours == 0 || $code_facult == "EMSP") {
-            //         $niv = "Licence 1";
-            //         $n = "N1";
-            //     }
-            // }
-            // if ($niveau == "l2") {
-            //     if ($concours == 1 and $code_facult != "EMSP") {
-            //         $niv = "2ème Année";
-            //         $n = "P2";
-            //     }
-            //     if ($concours == 0 || $code_facult == "EMSP") {
-            //         $niv = "Licence 2";
-            //         $n = "N2";
-            //     }
-            // }
-            // if ($niveau == "l3") {
-            //     if ($concours == 1 and $code_facult != "EMSP") {
-            //         $niv = "3ème Année";
-            //         $n = "P3";
-            //     }
-            //     if ($concours == 0 || $code_facult == "EMSP") {
-            //         $niv = "Licence 3";
-            //         $n = "N3";
-            //     }
-            // }
-            // if ($niveau == "N4") {
-
-            //     $niv = "Master 1";
-            //     $n = "N4";
-            // }
-            // if ($niveau == "N5") {
-
-            //     $niv = "Master 2";
-            //     $n = "N5";
-            // }
+        
 
             $annee = DB::table('annee')->orderByDesc("id_annee")->first();
             $annees = $annee->Annee;
@@ -703,7 +620,8 @@ class PostInscriptionController extends Controller
                             'droit_lettre' => $candidat->lettre,
                             'matricule' => $mat,
                             'Annee' => $annees,
-                            'pro' => $candidat->pro
+                            'pro' => $candidat->pro,
+                            'user_candidat_id' => Auth::user()->id
                         ]);
 
                         Cookie::queue('nin', $request->nin, 10);
@@ -761,7 +679,9 @@ class PostInscriptionController extends Controller
                             'droit_lettre' => $candidat->lettre,
                             'matricule' => $mat,
                             'Annee' => $annees,
-                            'pro' => $candidat->pro
+                            'pro' => $candidat->pro,
+                            'user_candidat_id' => Auth::user()->id
+
                         ]);
 
                         Cookie::queue('nin', $request->nin, 10);
@@ -818,7 +738,9 @@ class PostInscriptionController extends Controller
                             'droit' => $candidat->udc,
                             'droit_lettre' => $candidat->lettre,
                             'Annee' => $annees,
-                            'pro' => $candidat->pro
+                            'pro' => $candidat->pro,
+                            'user_candidat_id' => Auth::user()->id
+
                         ]);
 
                         Cookie::queue('nin', $request->nin, 10);
@@ -874,7 +796,9 @@ class PostInscriptionController extends Controller
                             'droit' => $candidat->udc,
                             'droit_lettre' => $candidat->lettre,
                             'Annee' => $annees,
-                            'pro' => $candidat->pro
+                            'pro' => $candidat->pro,
+                            'user_candidat_id' => Auth::user()->id
+
                         ]);
 
                         Cookie::queue('nin', $request->nin, 10);
@@ -987,35 +911,6 @@ class PostInscriptionController extends Controller
                 $n = $niveau;
             }
 
-            // if ($n == "N4" || $n == "N5") {
-            //     $udc = "60000 KMF";
-            //     $lettre = "Soixante mille Francs Comoriens";
-            // }
-            // if ($concours == 1) {
-            //     if ($n == "N1" || $n == "N2" || $n == "P1" || $n == "P2") {
-            //         $udc = "45000 KMF";
-            //         $lettre = "Quarante cinq mille Francs Comoriens";
-            //     } elseif ($n == "N3" || $n == "P3") {
-            //         $udc = "55000 KMF";
-            //         $lettre = "Cinquante cinq mille Francs Comoriens";
-            //     }
-            // } else {
-            //     if ($n == "N1" || $n == "N2" || $n == "P1" || $n == "P2") {
-            //         $udc = "40000 KMF";
-            //         $lettre = "Quarante mille Francs Comoriens";
-            //     } elseif ($n == "N3" || $n == "P3") {
-            //         $udc = "50000 KMF";
-            //         $lettre = "Cinquante mille Francs Comoriens";
-            //     }
-            // }
-
-            // $n=DB::table("montant")
-            // ->join('inscription',"montant.code_niv","=","inscription.code_niv")
-            // ->select("montant.code_niv as n","montant.Montant_chiffre as udc","montant.Montant_lettre as lettre","inscription.*")
-            // ->where("NIN",$request->nin)
-            // ->where("code_niv",$n)
-            // ->orderByDesc("annee")
-            // ->first();
 
             $ni = DB::table("montant")
                 ->join("etudiant","montant.statut","etudiant.profession")
@@ -1060,7 +955,9 @@ class PostInscriptionController extends Controller
                             'droit' =>  $ni->Montant_chiffre,
                             'droit_lettre' => $ni->Montant_lettre,
                             'matricule' => $mat,
-                            'Annee' => $annees
+                            'Annee' => $annees,
+                            'user_candidat_id' => Auth::user()->id
+
                         ]);
 
                         Cookie::queue('nin', $request->nin, 10);
@@ -1116,7 +1013,9 @@ class PostInscriptionController extends Controller
                             'droit' =>  $ni->Montant_chiffre,
                             'droit_lettre' =>  $ni->Montant_lettre,
                             'matricule' => $mat,
-                            'Annee' => $annees
+                            'Annee' => $annees,
+                            'user_candidat_id' => Auth::user()->id
+
                         ]);
                         Cookie::queue('nin', $request->nin, 10);
                         $annee = DB::table('annee')->orderByDesc("id_annee")->first();
