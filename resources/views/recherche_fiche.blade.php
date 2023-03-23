@@ -46,7 +46,7 @@
             <div class="col-6">
               <div class="box border-shadow">
 
-                <form class="form" action="{{route('recherche_candidat')}}" method="POST">
+                <form class="form" action="{{route('fiche_renseignement')}}" method="POST">
                   @csrf
                   <div class="box-body">
                     @isset($message)
@@ -57,14 +57,14 @@
                       <div class="col-md-8">
                         <div class="form-group">
 
-                          <label class="form-label">Nin</label>
-                          <input type="text" id="nin" class="form-control" placeholder="Insérer votre nin" name="nin">
+                          <label class="form-label">Matricule</label>
+                          <input type="text" id="matricule" class="form-control" placeholder="Insérer votre matricule" name="matricule">
 
                         </div>
                         <div class="row">
-                          <div class="col-md-4">
+                          <!-- <div class="col-md-4">
                             <a href="{{'home'}}" class="btn btn-md btn-dark">Retour</a>
-                          </div>
+                          </div> -->
                           <div class="col-md-4">
                             <input type="submit" class=" btn btn-md btn-success" value="Valider">
                           </div>

@@ -17,8 +17,8 @@
                         <div class="image d-flex align-items-center">
                             <img src="images/avatar/avatar-13.png" class="rounded-0 me-10" alt="User Image">
                             <div>
-                                <h4 class="mb-0 fw-600"></h4>
-                                <p class="mb-0">Candidat</p>
+                                <h4 class="mb-0 fw-600">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h4>
+                                <p class="mb-0">Etudiant</p>
                             </div>
                         </div>
                         <div class="info">
@@ -42,29 +42,17 @@
                                 <li class="header">Menu principal</li>
                             </a>
                                     <li class="treeview">
-                                        <a href="">
-                                            <i class="icon-User"><span class="path1"></span><span class="path2"></span></i> <span>Débuter inscription</span> 
-                                            <span style="width: -1px; height: -1px;"><i class="ti-plus"></i></span>
-
-                                        </a>
-                                        <ul class="treeview-menu">
-                                            <li><a href="{{('inscriptions')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Inscription</a></li>
-                                            <li><a href="{{('re-inscription')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Re-inscription</a></li>
-                                            
-                                        </ul>
-                                    </li>
-                                    <li class="treeview">
-                                        <a href="#">
-                                        <i class="ti-search"></i><span class="path1"></span><span class="path2"></span></i>Recherche
+                                        <a href="#"  >
+                                        <span style="width: -5px; height: -5px;"><i class="ti-search"></i></span><span class="path1"></span><span class="path2"></span></i> Recherche
                                             <span class="pull-left-container">
-                                            <span style="width: -1px; height: -1px;"><i class="ti-plus"></i></span>
+                                            <span style="width: 60px; height: 60px;"><i class="ti-plus"></i></span>
                                               
                                             </span>
                                         </a>
                                         <ul class="treeview-menu">
-                                            <li><a href="box_cards.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Autorisation de paiment</a></li>
-                                            <li><a href="box_cards.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Fiche de renseignement</a></li>
-                                            <li><a href="box_advanced.html"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Matricule</a></li>
+                                            <li><a href="{{('recherche_auto')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Autorisation de paiment</a></li>
+                                            <li><a href="{{('recherche_fiche')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Fiche de renseignement</a></li>
+                                            <li><a href="{{('recherche_matricule')}}"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Matricule</a></li>
                                            
                                         </ul>
                                     </li>

@@ -125,7 +125,7 @@
                                                 <input type="hidden" name="merchantid" value="2274832632922162">
                                                 <input type="hidden" name="amount" value="{{$data->droit}}">
                                                 <input type="hidden" name="currency" value="174">
-                                                <input type="hidden" name="purchaseref" value="{{$data->num_auto}}">
+                                                <input type="hidden" name="purchaseref" value="{{$data->user_candidat_id}}">
                                                 <input type="hidden" name="accepturl" value="http://omega-xd.univ-comores.km/accepturl">
                                                 <input type="hidden" name="cancelurl" value="http://omega-xd.univ-comores.km/cancelurl">
                                                 <input type="hidden" name="declineurl" value="http://omega-xd.univ-comores.km/declineurl">

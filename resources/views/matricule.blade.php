@@ -41,49 +41,35 @@
         <section class="content">
 
           <div class="row">
-            <div class="col-3"></div>
+            <div class="col-2"></div>
 
-            <div class="col-6">
+            <div class="col-8">
               <div class="box border-shadow">
 
-                <form class="form" action="{{route('recherche_candidat')}}" method="POST">
+                <form class="form" action="" method="POST">
                   @csrf
                   <div class="box-body">
-                    @isset($message)
-                    <div class="alert alert-danger">{{ $message }}</div>
-                    @endisset
-                    <div class="row">
-                      <div class="col-md-2"></div>
-                      <div class="col-md-8">
-                        <div class="form-group">
+                    
+                  <div class="form-group row">
+                    <div class="col-md-4">Matricule : <strong>{{$mat->mat_etud}}</strong> </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-md-6">Nom : <strong>{{$mat->nom}}</strong> </div>
+                    <div class="col-md-6">Prénom : <strong>{{$mat->prenom}}</strong> </div>
 
-                          <label class="form-label">Nin</label>
-                          <input type="text" id="nin" class="form-control" placeholder="Insérer votre nin" name="nin">
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-md-6">Date de naissance : <strong>{{$mat->date_naiss}}</strong> </div>
+                    <div class="col-md-6">Lieu de naissance : <strong>{{$mat->lieu_naiss}}</strong> </div>
 
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <a href="{{'home'}}" class="btn btn-md btn-dark">Retour</a>
-                          </div>
-                          <div class="col-md-4">
-                            <input type="submit" class=" btn btn-md btn-success" value="Valider">
-                          </div>
-
-                        </div>
-
-                      </div>
-                      <div class="col-md-2"></div>
-
-
-
-                    </div> <br>
+                  </div>
 
                 </form>
                 <!-- /.box-body -->
               </div>
               <!-- /.box -->
             </div>
-            <div class="col-3"></div>
+            <div class="col-2"></div>
 
             <!-- ./col -->
           </div>

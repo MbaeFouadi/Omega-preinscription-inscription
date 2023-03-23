@@ -40,11 +40,11 @@
 
                 <!-- Main content -->
                 <section class="content">
-                    
+
                     <div class="row">
-                    
+
                         <div class="col-md-2"></div>
-                        
+
                         <div class="col-md-6">
                             <div class="box border-shadow shadow-lg p-3 mb-5 bg-white rounded">
                                 <div class="row">
@@ -59,39 +59,40 @@
                                 </div> <br> <br>
                                 <div class="row" style="font-size: 14px;">
                                     <div class="col-md-12">
-                                        <p>Matricule :</p>
-                                        <p>Nin : </p>
-                                        <p>Nom : </p>
-                                        <p>Prénom : </p>
-                                        <p>Date de naissance :</p>
-                                        <p>Lieu de naissance :</p>
-                                        <h4 class="text-center">Parcours de xxxxx à l'UDC</h4>
+                                        <p>Matricule : {{$data->mat_etud}}</p>
+                                        <p>Nin : {{$data->NIN}} </p>
+                                        <p>Nom : {{$data->nom}}</p>
+                                        <p>Prénom : {{$data->prenom}}</p>
+                                        <p>Date de naissance : {{$data->date_naiss}}</p>
+                                        <p>Lieu de naissance : {{$data->lieu_naiss}}</p>
+                                        <h4 class="text-center">Parcours de {{ $data->nom }} {{ $data->prenom }} à l'UDC</h4>
                                         <div class="table-responsive">
                                             <table class="table table-bordered mb-0">
                                                 <tbody>
                                                     <tr>
-                                                    <th scope="col">Composante</th>
-                                                    <th scope="col">Département</th>
-                                                    <th scope="col">Niveau</th>
-                                                    <th scope="col">Année Universitaire</th>
+                                                        <th scope="col">Composante</th>
+                                                        <th scope="col">Département</th>
+                                                        <th scope="col">Niveau</th>
+                                                        <th scope="col">Année Universitaire</th>
                                                     </tr>
                                                 </tbody>
+                                                @foreach($datas as $data)
                                                 <tbody>
                                                     <tr>
-                                                    <th scope="row">IUT</th>
-                                                    <td>Génie Informatique</td>
-                                                    <td>1ère Année</td>
-                                                    <td>2022-2023</td>
+                                                        <th scope="row" >{{ $data->design_facult }}</th>
+                                                        <td >{{ $data->design_depart  }}</td>
+                                                        <td >{{ $data->intit_niv  }}</td>
+                                                        <td >{{ $data->Annee }}</td>
                                                     </tr>
-                                                    
-                                                    
                                                 </tbody>
-                                                </table>
-                                            </div> <br> <br>
+                                                @endforeach
+                                               
+                                            </table>
+                                        </div> <br> <br>
 
-                                            <p>
-                                                <input type="button" value="Télécharger" class="btn btn-success">
-                                            </p>
+                                        <p>
+                                            <input type="button" value="Télécharger" class="btn btn-success">
+                                        </p>
                                     </div>
                                 </div>
                                 <!-- /.box-body -->

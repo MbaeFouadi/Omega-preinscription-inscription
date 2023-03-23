@@ -1315,8 +1315,8 @@ class candidatController extends Controller
                 // $nine = Cookie::get('nin');
 
 
-                $quitus = DB::table('quitus')->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->where("trans_udc", $_GET['paymentref'])->get();
-                $poste = DB::table('post_inscription')->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
+                $quitus = DB::table('quitus')->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->where("trans_udc", $_GET['paymentref'])->get();
+                $poste = DB::table('post_inscription')->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->orderByDesc("num_auto")->first();
 
                 if ($quitus->count() == 0) {
                     $annees = DB::table('quitus')->where("Annee", $annee->Annee)->get();
@@ -1331,7 +1331,7 @@ class candidatController extends Controller
 
                         $nin = Cookie::get('nin');
 
-                        $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
+                        $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                         if (!empty($post->matricule)) {
 
                             $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
@@ -1351,7 +1351,7 @@ class candidatController extends Controller
                                 }
 
                                 $dateJ = date('Y-m-d');
-                                $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
+                                $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                                 $etud = DB::table('etudiant')
                                     ->where("mat_etud", $post->matricule)
                                     ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
@@ -1392,7 +1392,7 @@ class candidatController extends Controller
                             } else {
                                 $message = "vous êtes deja inscris cette année";
                                 $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("num_auto", $num_auto)->first();
+                                $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->first();
                                 return view("success", compact("message", 'post'));
                             }
                         } else {
@@ -1494,7 +1494,7 @@ class candidatController extends Controller
                         }
                     } else {
                         $nin = Cookie::get('nin');
-                        $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
+                        $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                         $quitus_in = DB::table("quitus")->where("Annee", $annee->Annee)->orderByDesc("num_quitus")->first();
                         $num = intval($quitus_in->num_quitus + 1);
                         $ins_quitus = DB::table("quitus")->insert([
@@ -1507,7 +1507,7 @@ class candidatController extends Controller
                             "Annee" => $annee->Annee,
                         ]);
                         $nin = Cookie::get('nin');
-                        $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
+                        $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                         if (!empty($post->matricule)) {
 
                             $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
@@ -1527,7 +1527,7 @@ class candidatController extends Controller
                                 }
 
                                 $dateJ = date('Y-m-d');
-                                $post = DB::table("post_inscription")->where("num_auto", $num_auto)->where("Annee", $annee->Annee)->first();
+                                $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                                 $etud = DB::table('etudiant')
                                     ->where("mat_etud", $post->matricule)
                                     ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
@@ -1581,7 +1581,7 @@ class candidatController extends Controller
                             } else {
                                 $message = "vous etes deja inscris cette année";
                                 $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("num_auto", $num_auto)->first();
+                                $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->first();
                                 $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
                                 $dt = new DateTime();
                                 $date = $dt->format('Y-m-d');
@@ -1677,7 +1677,7 @@ class candidatController extends Controller
                     }
                 } else {
                     $nin = Cookie::get('nin');
-                    $post = DB::table("post_inscription")->where("num_auto", $num_auto)->first();
+                    $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->first();
                     $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
                     $dt = new DateTime();
                     $date = $dt->format('Y-m-d');
@@ -1702,12 +1702,45 @@ class candidatController extends Controller
         if ($periode->type == 1) {
 
             if ($data->statut == 4) {
+                
                 return view("accept", compact('data'));
+                
             } else {
                 return redirect("accueil");
             }
         } else {
-            return view("fiche_renseignement", compact('data'));
+
+            $Annee = DB::table('annee')->orderByDesc('id_annee')->first();
+            $num_auto = DB::table('post_inscription')->where("user_candidat_id", Auth::user()->id)->where("Annee", $Annee->Annee)->orderByDesc("num_auto")->first();
+
+            $nin = $num_auto->nin;
+
+         
+        
+            if (isset($nin)) {
+                $et = DB::table("etudiant")->where("NIN", $nin)->first();
+               
+        
+                $data = DB::table('inscription')
+                    ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+                    ->select('inscription.*', 'etudiant.*')
+                    ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
+        
+                $datas = DB::table('inscription')
+                    ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
+                    ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
+                    ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
+                    ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
+                    ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->get();
+                $message = "Matricule Ajouté avec succés!";
+                // return view("fiche", compact('message', 'data', 'datas'));
+                return view("fiche_renseignement", compact('message', 'data', 'datas'));
+
+            }
+            else
+            {
+                return view('recherche_matricule');
+            }
         }
     }
 
@@ -2089,4 +2122,17 @@ class candidatController extends Controller
 
         return response()->json($type_recu);
     }
+
+    public function recherche_fiche()
+    {
+        return view("recherche_fiche");
+
+    }
+
+    public function recherche_auto()
+    {
+        return view("recherche_auto");
+    }
+
+   
 }

@@ -67,9 +67,17 @@
 
                                                     <label class="form-label"><strong> Matricule </strong></label>
                                                     <input type="text" id="matricule" class="form-control" placeholder="Insérer votre matricule" name="matricule" required>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <a href="{{'home'}}" class="btn btn-md btn-dark">Retour</a>     
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="submit" class=" btn btn-md btn-success" value="Valider">
+                                                    </div>
 
                                                 </div>
-                                                <input type="submit" class=" btn btn-md btn-success" value="Valider">
+                                                
                                             </div>
                                             <div class="col-md-2"></div>
 

@@ -121,7 +121,7 @@
 
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <input type="submit" value="Confirmer" class="btn btn-success">
+                                                <input type="submit" value="Confirmer" class="btn btn-sm btn-success">
                                             </div>
                                         </div>
 

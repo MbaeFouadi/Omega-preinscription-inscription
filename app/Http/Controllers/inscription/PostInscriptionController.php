@@ -40,19 +40,18 @@ class PostInscriptionController extends Controller
     public function store(Request $request)
     {
         //
-        $periode=DB::table("periode_activite")
-        ->where("type",2)
-        ->where("user_candidat_id",Auth::user()->id)
-        ->orderByDesc('id')
-        ->first();
+        $periode = DB::table("periode_activite")
+            ->where("type", 2)
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('id')
+            ->first();
 
-        if(!isset($periode))
-        {
+        if (!isset($periode)) {
             DB::table("periode_activite")
-            ->insert([
-                "type"=>2,
-                "user_candidat_id"=>Auth::user()->id,
-            ]);
+                ->insert([
+                    "type" => 2,
+                    "user_candidat_id" => Auth::user()->id,
+                ]);
         }
         $niveau = $request->niveau;
         // $candidat=DB::table("candidats")->where("nin",$request->nin)->first();
@@ -150,7 +149,7 @@ class PostInscriptionController extends Controller
                 $mat = $inscriptions->mat_etud;
                 $an = DB::table("post_inscription")->where("Annee", $annees)->get();
                 if ($an->count() == 0) {
-                    
+
                     DB::table('post_inscription')->insert([
                         'num_auto' => '1',
                         'nin' => $request->nin,
@@ -167,7 +166,8 @@ class PostInscriptionController extends Controller
                         'droit' => $candidat->udc,
                         'droit_lettre' => $candidat->lettre,
                         'matricule' => $mat,
-                        'Annee' => $annees
+                        'Annee' => $annees,
+                        'user_candidat_id' => Auth::user()->id
                     ]);
 
                     Cookie::queue('nin', $request->nin, 10);
@@ -182,7 +182,7 @@ class PostInscriptionController extends Controller
                     $ch = curl_init();
                     // define options
                     $optArray = array(
-                         CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+                        CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
                         CURLOPT_RETURNTRANSFER => true
                     );
 
@@ -224,7 +224,8 @@ class PostInscriptionController extends Controller
                         'droit' => $candidat->udc,
                         'droit_lettre' => $candidat->lettre,
                         'matricule' => $mat,
-                        'Annee' => $annees
+                        'Annee' => $annees,
+                        'user_candidat_id' => Auth::user()->id
                     ]);
                     Cookie::queue('nin', $request->nin, 10);
                     $annee = DB::table('annee')->orderByDesc("id_annee")->first();
@@ -238,7 +239,7 @@ class PostInscriptionController extends Controller
                     $ch = curl_init();
                     // define options
                     $optArray = array(
-                         CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+                        CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
                         CURLOPT_RETURNTRANSFER => true
                     );
 
@@ -280,8 +281,8 @@ class PostInscriptionController extends Controller
                         'tel_mobile' => $candidat->tel_mobile,
                         'droit' => $candidat->udc,
                         'droit_lettre' => $candidat->lettre,
-
-                        'Annee' => $annees
+                        'Annee' => $annees,
+                        'user_candidat_id' => Auth::user()->id
                     ]);
 
                     Cookie::queue('nin', $request->nin, 10);
@@ -296,7 +297,7 @@ class PostInscriptionController extends Controller
                     $ch = curl_init();
                     // define options
                     $optArray = array(
-                         CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+                        CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
                         CURLOPT_RETURNTRANSFER => true
                     );
 
@@ -336,8 +337,8 @@ class PostInscriptionController extends Controller
                         'tel_mobile' => $candidat->tel_mobile,
                         'droit' => $candidat->udc,
                         'droit_lettre' => $candidat->lettre,
-
-                        'Annee' => $annees
+                        'Annee' => $annees,
+                        'user_candidat_id' => Auth::user()->id
                     ]);
 
                     Cookie::queue('nin', $request->nin, 10);
@@ -352,7 +353,7 @@ class PostInscriptionController extends Controller
                     $ch = curl_init();
                     // define options
                     $optArray = array(
-                         CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+                        CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
                         CURLOPT_RETURNTRANSFER => true
                     );
 
@@ -379,73 +380,6 @@ class PostInscriptionController extends Controller
         } else {
             $message = "Vous avez deja une fiche";
         }
-
-
-
-        // if($niveau=="N4" || $niveau=="N5"){
-        //     $udc="60000 KMF";
-        //     $lettre="Soixante mille Francs Comoriens";
-        // }
-        // if( $concours==1){
-        //     if($niveau=="l1" || $niveau=="l2"){
-        //         $udc="45000 KMF";
-        //         $lettre="Quarante cinq mille Francs Comoriens";
-        //     } elseif($niveau=="l3"){
-        //         $udc="55000 KMF";
-        //         $lettre="Cinquante cinq mille Francs Comoriens";
-        //     }
-        // }else{
-        //     if($niveau=="l1" || $niveau=="l2" ){
-        //         $udc="40000 KMF";
-        //         $lettre="Quarante mille Francs Comoriens";
-        //     } elseif($niveau=="l3"){
-        //         $udc="50000 KMF";
-        //         $lettre="Cinquante mille Francs Comoriens";
-        //     }
-
-        // }
-        // if($niveau=="l1"){
-        //     if($concours==1 and $code_facult!="EMSP"){
-        //         $niv="1ère Année" ;
-        //         $n="P1" ;
-        //     }
-        //     if($concours==0 || $code_facult=="EMSP"){
-        //         $niv="Licence 1" ;
-        //         $n="N1" ;
-        //     }
-        // } if($niveau=="l2"){
-        //     if($concours==1 and $code_facult!="EMSP"){
-        //         $niv="2ème Année" ;
-        //         $n="P2" ;
-        //     }
-        //     if($concours==0 || $code_facult=="EMSP"){
-        //         $niv="Licence 2" ;
-        //         $n="N2" ;
-        //     }
-        // }if($niveau=="l3"){
-        //     if($concours==1 and $code_facult!="EMSP"){
-        //         $niv="3ème Année" ;
-        //         $n="P3" ;
-        //     }
-        //     if($concours==0 || $code_facult=="EMSP"){
-        //         $niv="Licence 3" ;
-        //         $n="N3" ;
-        //     }
-        // }
-        // if($niveau=="N4"){
-
-        //         $niv="Master 1" ;
-        //         $n="N4" ;
-        // }
-        // if($niveau=="N5"){
-
-        //         $niv="Master 2" ;
-        //         $n="N5" ;
-
-        // }
-
-
-
     }
 
     /**
@@ -495,33 +429,32 @@ class PostInscriptionController extends Controller
 
     public function autorisation_an(Request $request)
     {
-        $periode=DB::table("periode_activite")
-        ->where("type",2)
-        ->where("user_candidat_id",Auth::user()->id)
-        ->orderByDesc('id')
-        ->first();
+        $periode = DB::table("periode_activite")
+            ->where("type", 2)
+            ->where("user_candidat_id", Auth::user()->id)
+            ->orderByDesc('id')
+            ->first();
 
-        if(!isset($periode))
-        {
+        if (!isset($periode)) {
             DB::table("periode_activite")
-            ->insert([
-                "type"=>2,
-                "user_candidat_id"=>Auth::user()->id,
-            ]);
+                ->insert([
+                    "type" => 2,
+                    "user_candidat_id" => Auth::user()->id,
+                ]);
         }
 
         $cand = DB::table('candidats')->Where("nin", $request->nin)->get();
         if ($cand->count() == 1) {
             $niveau = $request->niveau;
-          
+
             $concours = DB::table("candidats")
                 ->join("departement", "candidats.retenu", "=", "departement.code_depart")
                 ->select("candidats.*", "departement.*")
                 ->where("nin", $request->nin)
                 ->first();
             if ($concours->concours == 1) {
-              
-                    $pro = DB::table("candidats")
+
+                $pro = DB::table("candidats")
                     ->join("montant", "candidats.id_type", "=", "montant.id_type")
                     ->select("candidats.*", "montant.*")
                     ->where("candidats.nin", $request->nin)
@@ -539,7 +472,7 @@ class PostInscriptionController extends Controller
                         ->where("montant.statut", 1)
                         ->first();
                 } else {
-    
+
                     $candidat = DB::table("candidats")
                         ->join("departement", "candidats.retenu", "=", "departement.code_depart")
                         ->join("faculte", "departement.code_facult", "=", "faculte.code_facult")
@@ -552,9 +485,9 @@ class PostInscriptionController extends Controller
                         ->first();
                 }
             } else {
-                
 
-                    $pro = DB::table("candidats")
+
+                $pro = DB::table("candidats")
                     ->join("montant", "candidats.id_type", "=", "montant.id_type")
                     ->select("candidats.*", "montant.*")
                     ->where("candidats.nin", $request->nin)
@@ -572,7 +505,7 @@ class PostInscriptionController extends Controller
                         ->where("montant.statut", 1)
                         ->first();
                 } else {
-    
+
                     $candidat = DB::table("candidats")
                         ->join("departement", "candidats.retenu", "=", "departement.code_depart")
                         ->join("faculte", "departement.code_facult", "=", "faculte.code_facult")
@@ -586,7 +519,7 @@ class PostInscriptionController extends Controller
                 }
             }
 
-        
+
 
             $annee = DB::table('annee')->orderByDesc("id_annee")->first();
             $annees = $annee->Annee;
@@ -913,10 +846,10 @@ class PostInscriptionController extends Controller
 
 
             $ni = DB::table("montant")
-                ->join("etudiant","montant.statut","etudiant.profession")
-                ->select("montant.*","etudiant.profession as profession","etudiant.mat_etud as mat_etud")
+                ->join("etudiant", "montant.statut", "etudiant.profession")
+                ->select("montant.*", "etudiant.profession as profession", "etudiant.mat_etud as mat_etud")
                 ->where("montant.code_niv", $n)
-                ->where("mat_etud",$request->matricule)
+                ->where("mat_etud", $request->matricule)
                 ->first();
 
 
@@ -971,7 +904,7 @@ class PostInscriptionController extends Controller
                         $ch = curl_init();
                         // define options
                         $optArray = array(
-                             CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+                            CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
                             CURLOPT_RETURNTRANSFER => true
                         );
 
@@ -1054,5 +987,162 @@ class PostInscriptionController extends Controller
                 }
             }
         }
+    }
+
+    public function home(Request $request)
+    {
+
+        if ($request->input('inscription') == 're-inscription') {
+            $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+            $dt = new DateTime();
+            $date = $dt->format('Y-m-d');
+            return view("re-inscription", compact("s", "date"));
+        } else if ($request->input('inscription') == 'nv_inscription') {
+
+            $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+            $dt = new DateTime();
+            $date = $dt->format('Y-m-d');
+
+            return view("inscription", compact("s", "date"));
+        } else {
+
+            $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+            $dt = new DateTime();
+            $date = $dt->format('Y-m-d');
+            $nin = Cookie::get('nin');
+            $post = DB::table("post_inscription")->where("nin", $nin)->first();
+            return view('index', compact('post', 'date', 's'));
+        }
+    }
+
+    public function autorisation_paiement(Request $request)
+    {
+        $annee = DB::table('annee')->orderByDesc("id_annee")->first();
+        $annees = $annee->Annee;
+        $data = DB::table("post_inscription")->where("nin", $request->nin)->where("Annee", $annees)->first();
+        $datas = DB::table("post_inscription")->where("nin", $request->nin)->where("user_candidat_id", Auth::user()->id)->where("Annee", $annees)->get();
+        $inscription = DB::table("inscription")->where("nin", $request->nin)->where("Annee", $annees)->orderByDesc("Annee")->get();
+        if ($inscription->count() == 0) {
+            if ($datas->count() == 1) {
+                $composante = DB::table("faculte")->where("code_facult", $data->code_facult)->first();
+                $departement = DB::table("departement")->where("code_depart", $data->code_depart)->first();
+                $niveau = DB::table("niveau")->where("code_niv", $data->code_niv)->first();
+                $candidat = DB::table("candidats")->where("nin", $request->nin)->get();
+                $candidats = DB::table("candidats")->where("nin", $request->nin)->first();
+                Cookie::queue('nin', $request->nin, 10);
+
+                $ch = curl_init();
+                // define options
+                $optArray = array(
+                    CURLOPT_URL => 'https://26900.tagpay.fr/online/online.php?merchantid=2274832632922162',
+                    CURLOPT_RETURNTRANSFER => true
+                );
+
+                // apply those options
+                curl_setopt_array($ch, $optArray);
+
+                // execute request and get response
+                $result = curl_exec($ch);
+
+                // also get the error and response code
+                $errors = curl_error($ch);
+                $response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                curl_close($ch);
+
+                // var_dump($errors);
+                $sessionId = substr($result, 3);
+                $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+                $dt = new DateTime();
+                $date = $dt->format('Y-m-d');
+                if ($candidat->count() == 0) {
+                    return view("autorisation", compact("data", "composante", "departement", "niveau", "sessionId", "s", "date"));
+                } else {
+                    return view("autorisation", compact("data", "composante", "departement", "niveau", "candidats", "sessionId", "s", "date"));
+                }
+            } else {
+                $message = "Vous n'avez pas encore une fiche";
+                $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+                $dt = new DateTime();
+                $date = $dt->format('Y-m-d');
+                return view("recherche_auto", compact("message", "s", "date"));
+            }
+        } else {
+
+            $message = "Vous êtes déjà inscris cette année";
+            $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
+            $dt = new DateTime();
+            $date = $dt->format('Y-m-d');
+
+            return view("recherche_auto", compact("message", "s", "date"));
+        }
+    }
+
+    public function fiche_renseignement(Request $request)
+    {
+
+        $Annee = DB::table('annee')->orderByDesc("id_annee")->first();
+
+        $post = DB::table('post_inscription')
+            ->join("inscription", "post_inscription.nin", "inscription.NIN")
+            ->where("post_inscription.matricule", $request->matricule)
+            ->where("user_candidat_id", Auth::user()->id)
+            ->where("post_inscription.Annee", $Annee->Annee)
+            // ->where("inscription.Annee", $Annee->Annee)
+            ->select("post_inscription.*", "inscription.*")
+            ->orderByDesc("num_auto")->first();
+
+        if (isset($post)) {
+            $data1 = DB::table('inscription')
+                ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+                ->select('inscription.*', 'etudiant.*')
+                ->where("inscription.mat_etud", $request->matricule)->orderByDesc("Annee")->get();
+            if ($data1->count() >= 1) {
+                $Annee = DB::table('annee')->orderByDesc('id_annee')->first();
+                $data2 = DB::table('inscription')
+                    ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+                    ->select('inscription.*', 'etudiant.*')
+                    ->where("inscription.mat_etud", $request->matricule)->where("inscription.Annee", $Annee->Annee)->orderByDesc("Annee")->get();
+                if ($data2->count() >= 1) {
+
+                    $data = DB::table('inscription')
+                        ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
+                        ->select('inscription.*', 'etudiant.*')
+                        ->where("inscription.mat_etud", $request->matricule)->orderByDesc("Annee")->first();
+                    $datas = DB::table('inscription')
+                        ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
+                        ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
+                        ->join('faculte', 'departement.code_facult', '=', 'faculte.code_facult')
+                        ->select('inscription.*', 'niveau.*', 'departement.*', 'faculte.*')
+                        ->where("inscription.mat_etud", $request->matricule)->orderByDesc("Annee")->get();
+                    return view('fiche_renseignement', compact('data', 'datas'));
+                } else {
+                    $message = "Vous n'êtes pas inscris cette année";
+                    return view('recherche_fiche', compact('message'));
+                }
+            } else {
+
+                $message = "Cette matricule n'existe pas";
+                return view('recherche_fiche', compact('message'));
+            }
+        } else {
+            $message = "Cette fiche de renseignement n'est pas à vous";
+            return view('recherche_fiche', compact('message'));
+        }
+    }
+
+    public function matricule(Request $request)
+    {
+        $mat = DB::table("etudiant")
+        ->where("NIN", $request->nin)
+        ->first();
+    if (isset($mat)) {
+        return view('matricule', compact("mat"));
+    } else {
+
+        $message = "Vous n'êtes pas inscris à l'Université";
+        return view('recherche_matricule', compact("message"));
+    }
+       
     }
 }

@@ -63,10 +63,6 @@ Route::post("/update_doc",[candidatController::class,'update_doc'])->middleware(
 
 Route::resource('candidat', candidatController::class)->middleware(['auth', 'verified']);
 
-// Route::get('bac',function(){
-//     return view("mon_bac");
-// })->middleware(['auth', 'verified']);
-
 Route::get('mon_bac', [candidatController::class, 'mon_bac'])->middleware(['auth', 'verified'])->name("mon_bac");
 
 Route::post("/type",[candidatController::class,'type'])->middleware(['auth', 'verified'])->name("type");

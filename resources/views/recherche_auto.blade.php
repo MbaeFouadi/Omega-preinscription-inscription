@@ -46,7 +46,7 @@
             <div class="col-6">
               <div class="box border-shadow">
 
-                <form class="form" action="{{route('recherche_candidat')}}" method="POST">
+                <form class="form" action="{{route('autorisation_paiement')}}" method="POST">
                   @csrf
                   <div class="box-body">
                     @isset($message)
@@ -62,9 +62,9 @@
 
                         </div>
                         <div class="row">
-                          <div class="col-md-4">
+                          <!-- <div class="col-md-4">
                             <a href="{{'home'}}" class="btn btn-md btn-dark">Retour</a>
-                          </div>
+                          </div> -->
                           <div class="col-md-4">
                             <input type="submit" class=" btn btn-md btn-success" value="Valider">
                           </div>
