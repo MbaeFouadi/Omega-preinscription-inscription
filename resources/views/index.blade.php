@@ -18,6 +18,8 @@
 	<!-- Style-->
 	<link rel="stylesheet" href="src/css/style.css">
 	<link rel="stylesheet" href="src/css/skin_color.css">
+	<link rel="stylesheet" href="{{asset('ijaboCropTool-master/ijaboCropTool.min.css')}}">
+
 
 </head>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
@@ -30,7 +32,7 @@
 
 
 		@include("include.header")
-        @include("include.aside")
+		@include("include.aside")
 	</div>
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
@@ -813,7 +815,7 @@
 												<div class="form-group">
 													<label class="form-label">1er Choix <br> <br> Composantes <span class="text-danger">*</span></label>
 													<select class="form-control select2" id="composante1" name="composante1" style="width: 100%;">
-														<option>Sélectionner</option>
+														
 
 													</select>
 
@@ -893,7 +895,7 @@
 							<h6>Documents</h6>
 							<section id="3">
 								<div id="dossier" sec="3">
-									<div id="messaged"></div>
+									<div id="messaged"></div>docu
 									<form action="" method="post" id="document">
 										@csrf
 										<div class="row">
@@ -1102,6 +1104,10 @@
 											$("#composante1").empty();
 											$("#composante2").empty();
 											$("#composante3").empty();
+											$("#composante1").append("<option>Sélectionner</option>");
+											$("#composante2").append("<option>Sélectionner</option>");
+											$("#composante3").append("<option>Sélectionner</option>");
+
 											$("#choix1").show();
 											$("#rubrique").remove();
 											$("#buttonf").show();
@@ -1294,7 +1300,7 @@
 														$("#buttonf").empty();
 														$("#fili").empty();
 														if (data.data.id_type == 1) {
-															$("#fili").append("<div class='box-body'><h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement1.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement1.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>"+data.departement2.design_facult +"</strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement2.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong> " + data.departement3.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement3.design_depart + "</strong></label><label class='form-label'></label></div></div></div></div>")
+															$("#fili").append("<div class='box-body'><h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement1.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement1.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 2: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement2.design_facult + "</strong> </label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement2.design_depart + " </strong></label><label class='form-label'></label></div></div></div><h6>Choix 3: </h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong> " + data.departement3.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement3.design_depart + "</strong></label><label class='form-label'></label></div></div></div></div>")
 
 														} else {
 															$("#fili").append("<div class='box-body'><h6>Choix 1 :</h6><div class='row'><div class='col-md-6'><div class='form-group'><label class='form-label'>Composante : <strong>" + data.departement.design_facult + " </strong></label><label class='form-label'></label></div></div><div class='col-md-6'><div class='form-group'><label class='form-label'>Département : <strong> " + data.departement.design_depart + " </strong></label><label class='form-label'></label></div></div></div><div class='row'><div class='col-md-6'></div></div></div></div>")
@@ -1373,7 +1379,7 @@
 										$("#docs").empty();
 
 										// $("#docs").append("Votre document est bien chargé");
-										$("#docs").append("<embed  src='document/" + data.document + "' width=800 height=500 type='application/pdf' /><br><br><p class=><a href='{{route('dossier')}}' target='_blank'>Voir plus</a></p>");
+										$("#docs").append("<embed  src='document/" + data.document + "' width=800 height=500 type='application/pdf' /><br><br><p class=><a href={{route('dossier',$data->user_candidat_id) }} target='_blank'>Voir plus</a></p>");
 										// $("#docs").hide();
 
 
@@ -1817,6 +1823,27 @@
 		});
 	</script>
 
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+	<!-- <script src="{{asset('ijaboCropTool-master/ijaboCropTool.min.js')}}"></script>
+
+	
+	<script>
+    $('#image').ijaboCropTool({
+      preview: '.image-previewer',
+      setRatio: 1,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+      buttonsText: ['VALIDER', 'QUITTER'],
+      buttonsColor: ['#30bf7d', '#ee5155', -15],
+      processUrl: '',
+      withCSRF: ['_token', '{{csrf_token()}}'],
+      onSuccess: function(message, element, status) {
+        alert(message);
+      },
+      onError: function(message, element, status) {
+        alert(message);
+      }
+    });
+  </script> -->
 </body>
 
 <!-- Mirrored from crm-admin-dashboard-template.multipurposethemes.com/university/vertical/main/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 01 Feb 2023 11:39:38 GMT -->

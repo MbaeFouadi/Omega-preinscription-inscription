@@ -140,7 +140,7 @@ class candidatController extends Controller
                         'type_preins' => 'required'
                     ]);
 
-                
+
                     DB::table('candidats')->insert([
                         'type_bac' => $request->type_bac,
                         'type_preins_id' => $request->type_preins,
@@ -236,11 +236,11 @@ class candidatController extends Controller
                     } else {
 
                         $data = DB::table("candidats")
-                        ->where("user_candidat_id", Auth::user()->id)
-                        ->orWhere("nin", $request->nin_bac)
-                        ->orWhere("matricule", $request->matricule)
+                            ->where("user_candidat_id", Auth::user()->id)
+                            ->orWhere("nin", $request->nin_bac)
+                            ->orWhere("matricule", $request->matricule)
 
-                        ->first();
+                            ->first();
                         if (!isset($data)) {
                             $request->validate([
                                 'matricule' => 'required',
@@ -280,10 +280,10 @@ class candidatController extends Controller
                 } else if ($request->type_bac == 2) {
 
                     $data = DB::table("candidats")
-                    ->where("user_candidat_id", Auth::user()->id)
-                    ->orWhere("matricule", $request->matricule)
+                        ->where("user_candidat_id", Auth::user()->id)
+                        ->orWhere("matricule", $request->matricule)
 
-                    ->first();
+                        ->first();
                     if (!isset($data)) {
                         $request->validate([
                             'type_bac' => 'required',
@@ -294,7 +294,7 @@ class candidatController extends Controller
                                 'type_bac' => $request->type_bac,
                                 'type_preins_id' => $request->type_preins,
                                 'user_candidat_id' => Auth::user()->id,
-                             
+
 
                             ]);
 
@@ -453,24 +453,21 @@ class candidatController extends Controller
                         $request->validate([
                             'type_bac' => 'required',
                             'type_preins' => 'required',
-                         
+
                         ]);
 
-                        if($request->type_preins==1)
-                        {
+                        if ($request->type_preins == 1) {
                             DB::table('candidats')->insert([
 
                                 'type_bac' => $request->type_bac,
                                 'type_preins_id' => $request->type_preins,
                                 'user_candidat_id' => Auth::user()->id,
-                          
+
 
                             ]);
 
                             return redirect("accueil");
-                        }
-                        else
-                        {
+                        } else {
                             DB::table('candidats')->insert([
 
                                 'type_bac' => $request->type_bac,
@@ -481,11 +478,6 @@ class candidatController extends Controller
 
                             return redirect("accueil");
                         }
-
-                           
-
-                            
-                    
                     } else {
 
                         $messages = "Vpous avez  déjà débuté une préinscription";
@@ -579,6 +571,11 @@ class candidatController extends Controller
         $sessionId = substr($result, 3);
 
         $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+
+        $message = DB::table("message")
+            ->where("num_recu", $data->num_recu)
+            ->where("statut", 1)
+            ->first();
         if (isset($data)) {
             if (isset($data->id_type)) {
                 $recu = DB::table("type_recu")
@@ -595,7 +592,7 @@ class candidatController extends Controller
                     $preins = DB::table("type_preinscription")
                         ->where("id", $data->type_preins_id)
                         ->first();
-                    return view('index', compact('data', 'annees', 'bachelier', 'pays', 'type_recu', 'recu', 'preins', 'sessionId'));
+                    return view('index', compact('data', 'annees', 'bachelier', 'pays', 'type_recu', 'recu', 'preins', 'sessionId', 'message'));
                 } else {
                     $annees = DB::table("annee")->get();
                     $pays = DB::table('pays')->get();
@@ -606,7 +603,7 @@ class candidatController extends Controller
                         ->where("id", $data->type_preins_id)
                         ->first();
                     $recu = DB::table("type_recu")->where("id_type", $data->id_type)->first();
-                    return view('index', compact('data', 'annees', 'pays', 'type_recu', 'recu', 'preins', 'sessionId'));
+                    return view('index', compact('data', 'annees', 'pays', 'type_recu', 'recu', 'preins', 'sessionId', 'message'));
                 }
             } else {
 
@@ -620,7 +617,7 @@ class candidatController extends Controller
                     $preins = DB::table("type_preinscription")
                         ->where("id", $data->type_preins_id)
                         ->first();
-                    return view('index', compact('data', 'annees', 'bachelier', 'pays', 'type_recu', 'preins', 'sessionId'));
+                    return view('index', compact('data', 'annees', 'bachelier', 'pays', 'type_recu', 'preins', 'sessionId', 'message'));
                 } else {
                     $annees = DB::table("annee")->get();
                     $pays = DB::table('pays')->get();
@@ -631,7 +628,7 @@ class candidatController extends Controller
                         ->where("id", $data->type_preins_id)
                         ->first();
 
-                    return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId'));
+                    return view('index', compact('data', 'annees', 'pays', 'type_recu', 'preins', 'sessionId', 'message'));
                 }
             }
         } else {
@@ -874,6 +871,7 @@ class candidatController extends Controller
                 ->join('disposition', 'departement.code_depart', 'disposition.code_depart')
                 ->where('disposition.statut', 1)
                 ->where('departement.statut', 1)
+                ->where("concours", 0)
                 ->where('disposition.code_niv', 'N1')
                 ->where(function ($query) {
                     $candidats = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
@@ -907,6 +905,7 @@ class candidatController extends Controller
                 ->join('disposition', 'departement.code_depart', 'disposition.code_depart')
                 ->where('disposition.statut', 1)
                 ->where('departement.statut', 1)
+                ->where("concours", 0)
                 ->where('disposition.code_niv', 'N1')
                 ->where(function ($query) {
                     $candidats = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
@@ -1082,6 +1081,7 @@ class candidatController extends Controller
                 ->join("faculte", "departement.code_facult", "faculte.code_facult")
                 ->select("faculte.*", "departement.*")
                 ->where("code_depart", $data->choix1)
+
                 ->first();
 
             $departement2 = DB::table("departement")
@@ -1331,7 +1331,7 @@ class candidatController extends Controller
 
                         $nin = Cookie::get('nin');
 
-                        $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->where("Annee", $annee->Annee)->first();
+                        $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                         if (!empty($post->matricule)) {
 
                             $etudiants = DB::table("etudiant")->where("mat_etud", $post->matricule)->first();
@@ -1351,7 +1351,7 @@ class candidatController extends Controller
                                 }
 
                                 $dateJ = date('Y-m-d');
-                                $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->where("Annee", $annee->Annee)->first();
+                                $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->where("Annee", $annee->Annee)->first();
                                 $etud = DB::table('etudiant')
                                     ->where("mat_etud", $post->matricule)
                                     ->update(['NIN' => $post->nin, "Tel_Etud" => $post->tel_mobile, "date_j" => $dateJ, 'profession' => $post->pro]);
@@ -1392,7 +1392,7 @@ class candidatController extends Controller
                             } else {
                                 $message = "vous êtes deja inscris cette année";
                                 $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->first();
+                                $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->first();
                                 return view("success", compact("message", 'post'));
                             }
                         } else {
@@ -1581,7 +1581,7 @@ class candidatController extends Controller
                             } else {
                                 $message = "vous etes deja inscris cette année";
                                 $nin = Cookie::get('nin');
-                                $post = DB::table("post_inscription")->where("num_auto",$num_auto->num_auto)->first();
+                                $post = DB::table("post_inscription")->where("num_auto", $num_auto->num_auto)->first();
                                 $s = DB::table('date_fin')->where('type', 2)->orderByDesc('id_date')->first();
                                 $dt = new DateTime();
                                 $date = $dt->format('Y-m-d');
@@ -1698,13 +1698,40 @@ class candidatController extends Controller
             ->where("user_candidat_id", Auth::user()->id)
             ->orderByDesc('num_recu')->first();
 
+        $transaction = DB::table("holo")->where("nin", $data->nin)->first();
+
+
+        $departement1 = DB::table("departement")
+            ->join("faculte", "departement.code_facult", "faculte.code_facult")
+            ->select("faculte.*", "departement.*")
+            ->where("code_depart", $data->choix1)
+            
+            ->first();
+
+        $departement2 = DB::table("departement")
+            ->join("faculte", "departement.code_facult", "faculte.code_facult")
+            ->select("faculte.*", "departement.*")
+            ->where("code_depart", $data->choix2)
+            ->first();
+
+        $departement3 = DB::table("departement")
+            ->join("faculte", "departement.code_facult", "faculte.code_facult")
+            ->select("faculte.*", "departement.*")
+            ->where("code_depart", $data->choix3)
+            ->first();
+
+        $departement = DB::table("departement")
+            ->join("faculte", "departement.code_facult", "faculte.code_facult")
+            ->select("faculte.*", "departement.*")
+            ->where("code_depart", $data->choix1)
+            ->first();
+
 
         if ($periode->type == 1) {
 
             if ($data->statut == 4) {
-                
-                return view("accept", compact('data'));
-                
+
+                return view("fiche_preinscription", compact('data', 'departement', 'departement1', 'departement2', 'departement3', 'transaction'));
             } else {
                 return redirect("accueil");
             }
@@ -1715,17 +1742,17 @@ class candidatController extends Controller
 
             $nin = $num_auto->nin;
 
-         
-        
+
+
             if (isset($nin)) {
                 $et = DB::table("etudiant")->where("NIN", $nin)->first();
-               
-        
+
+
                 $data = DB::table('inscription')
                     ->join('etudiant', 'inscription.mat_etud', '=', 'etudiant.mat_etud')
                     ->select('inscription.*', 'etudiant.*')
                     ->where("inscription.mat_etud", $et->mat_etud)->orderByDesc("Annee")->first();
-        
+
                 $datas = DB::table('inscription')
                     ->join('niveau', 'inscription.code_niv', '=', 'niveau.code_niv')
                     ->join('departement', 'inscription.code_depart', '=', 'departement.code_depart')
@@ -1735,10 +1762,7 @@ class candidatController extends Controller
                 $message = "Matricule Ajouté avec succés!";
                 // return view("fiche", compact('message', 'data', 'datas'));
                 return view("fiche_renseignement", compact('message', 'data', 'datas'));
-
-            }
-            else
-            {
+            } else {
                 return view('recherche_matricule');
             }
         }
@@ -1823,41 +1847,41 @@ class candidatController extends Controller
             ->where("user_candidat_id", Auth::user()->id)
             ->orderByDesc('num_recu')->first();
 
-            $faculte = DB::table("faculte")->where("concours", 0)->get();
-            $facultes = DB::table("faculte")->get();
+        $faculte = DB::table("faculte")->where("concours", 0)->get();
+        $facultes = DB::table("faculte")->get();
 
-            $candidat = DB::table("candidats")
-            ->join("departement","candidats.choix1","departement.code_depart")
-            ->join("faculte","faculte.code_facult","departement.code_facult")
+        $candidat = DB::table("candidats")
+            ->join("departement", "candidats.choix1", "departement.code_depart")
+            ->join("faculte", "faculte.code_facult", "departement.code_facult")
             ->where("user_candidat_id", Auth::user()->id)
-            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
+            ->select("candidats.*", "departement.*", "faculte.design_facult as design_facult")
             ->first();
 
-            $candidat1 = DB::table("candidats")
-            ->join("departement","candidats.choix1","departement.code_depart")
-            ->join("faculte","faculte.code_facult","departement.code_facult")
+        $candidat1 = DB::table("candidats")
+            ->join("departement", "candidats.choix1", "departement.code_depart")
+            ->join("faculte", "faculte.code_facult", "departement.code_facult")
             ->where("user_candidat_id", Auth::user()->id)
-            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
+            ->select("candidats.*", "departement.*", "faculte.design_facult as design_facult")
             ->first();
-    
-            
-            $candidat2 = DB::table("candidats")
-            ->join("departement","candidats.choix2","departement.code_depart")
-            ->join("faculte","faculte.code_facult","departement.code_facult")
-            ->where("user_candidat_id", Auth::user()->id)
-            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
-            ->first();
-    
-            
-            $candidat3 = DB::table("candidats")
-            ->join("departement","candidats.choix3","departement.code_depart")
-            ->join("faculte","faculte.code_facult","departement.code_facult")
-            ->where("user_candidat_id", Auth::user()->id)
-            ->select("candidats.*","departement.*","faculte.design_facult as design_facult")
-            ->first();
-    
 
-        return view("update_fili", compact("data","faculte","facultes","candidat","candidat1","candidat2","candidat3"));
+
+        $candidat2 = DB::table("candidats")
+            ->join("departement", "candidats.choix2", "departement.code_depart")
+            ->join("faculte", "faculte.code_facult", "departement.code_facult")
+            ->where("user_candidat_id", Auth::user()->id)
+            ->select("candidats.*", "departement.*", "faculte.design_facult as design_facult")
+            ->first();
+
+
+        $candidat3 = DB::table("candidats")
+            ->join("departement", "candidats.choix3", "departement.code_depart")
+            ->join("faculte", "faculte.code_facult", "departement.code_facult")
+            ->where("user_candidat_id", Auth::user()->id)
+            ->select("candidats.*", "departement.*", "faculte.design_facult as design_facult")
+            ->first();
+
+
+        return view("update_fili", compact("data", "faculte", "facultes", "candidat", "candidat1", "candidat2", "candidat3"));
     }
 
     public function update_info(Request $request)
@@ -1976,35 +2000,31 @@ class candidatController extends Controller
             }
         } else if ($datas->type_bac == 2) {
 
-            if($request->image == null)
-            {
+            if ($request->image == null) {
                 DB::table('candidats')
-                ->where('user_candidat_id', Auth::user()->id)
-                ->update([
-                    'id_type' => $request->preinscription2,
-                    'type_preins_id' => $request->type_preinscription2,
-                    'nin' => $request->nin,
-                    'nom' => $request->nom,
-                    'prenom' => $request->prenom,
-                    'date_naiss' => $request->date_naissance,
-                    'lieu_naiss' => $request->lieu_naissance,
-                    'sexe' => $request->sexe,
-                    'adresse_cand' => $request->adresse,
-                    'pays' => $request->pays,
-                    'tel_mobile' => $request->telephone,
-                    'serie' => $request->serie,
-                    'mention' => $request->mention,
-                    'centre' => $request->centre,
-                    'num_attest' => $request->num_attest,
-                  
-                   
-                ]);
+                    ->where('user_candidat_id', Auth::user()->id)
+                    ->update([
+                        'id_type' => $request->preinscription2,
+                        'type_preins_id' => $request->type_preinscription2,
+                        'nin' => $request->nin,
+                        'nom' => $request->nom,
+                        'prenom' => $request->prenom,
+                        'date_naiss' => $request->date_naissance,
+                        'lieu_naiss' => $request->lieu_naissance,
+                        'sexe' => $request->sexe,
+                        'adresse_cand' => $request->adresse,
+                        'pays' => $request->pays,
+                        'tel_mobile' => $request->telephone,
+                        'serie' => $request->serie,
+                        'mention' => $request->mention,
+                        'centre' => $request->centre,
+                        'num_attest' => $request->num_attest,
+
+
+                    ]);
 
                 return redirect("accueil");
-
-            }
-            else
-            {
+            } else {
                 $imageName = $request->nin . '.' . $request->image->extension();
                 $request->image->move(public_path('photo'), $imageName);
                 DB::table('candidats')
@@ -2025,29 +2045,28 @@ class candidatController extends Controller
                         'mention' => $request->mention,
                         'centre' => $request->centre,
                         'num_attest' => $request->num_attest,
-                    
+
                         'photo' => $imageName,
                     ]);
-    
+
                 return redirect("accueil");
             }
-          
         }
     }
 
     public function update_fili(Request $request)
     {
         $candidat = DB::table("candidats")
-        ->where("user_candidat_id", Auth::user()->id)
-        ->first();
+            ->where("user_candidat_id", Auth::user()->id)
+            ->first();
 
         if ($candidat->id_type == 1) {
-          
+
 
             $update = DB::table('candidats')
                 ->where('user_candidat_id', Auth::user()->id)
                 ->update([
-                   
+
                     'choix1' => $request->departement1,
                     'choix2' => $request->departement2,
                     'choix3' => $request->departement3
@@ -2063,7 +2082,7 @@ class candidatController extends Controller
             $update = DB::table('candidats')
                 ->where('user_candidat_id', Auth::user()->id)
                 ->update([
-                  
+
                     'choix1' => $request->departement,
                 ]);
 
@@ -2126,7 +2145,6 @@ class candidatController extends Controller
     public function recherche_fiche()
     {
         return view("recherche_fiche");
-
     }
 
     public function recherche_auto()
@@ -2134,5 +2152,72 @@ class candidatController extends Controller
         return view("recherche_auto");
     }
 
-   
+    // public function crop(Request $request)
+    // {
+    //     $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+
+    //     $path = 'photo/';
+    //     // if (!File::exists(public_path($path))) {
+    //     //      File::makeDirectory(public_path($path),0777,true);
+    //     // }
+    //     $file =$request->image;
+    //     $new_image_name =  $data->nin . '.' . $request->image->extension();
+    //     // $resize_upload = Image::make( $file->path() )
+    //     //                       ->fit(250, 250)
+    //     //                       ->save( $path.$new_image_name );
+    //     $move = $file->move(public_path($path), $new_image_name);
+
+    //     if ($move) {
+    //         return response()->json(['status' => 1, 'msg' => 'Image has been cropped successfully.', 'name' => $new_image_name]);
+    //     } else {
+    //         return response()->json(['status' => 0, 'msg' => 'Something went wrong, try again later']);
+    //     }
+    //}
+
+
+    public function message()
+    {
+
+        $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+
+        $message = DB::table("message")->where("num_recu", $data->num_recu)
+        ->orderBy("id","DESC")
+        ->first();
+        return view("message", compact("data", "message"));
+    }
+
+    public function update_doc_co(Request $request)
+    {
+
+        $candidat = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+        $doc = DB::table("documents")->where("user_candidat_id", Auth::user()->id)->first();
+
+        $request->validate([
+            'document' => 'required|mimes:pdf|max:2048',
+        ]);
+
+
+        $document = $candidat->nin . '_co.' . $request->document->extension();
+
+        $request->document->move(public_path('document'), $document);
+
+        DB::table('documents')->where(
+            "user_candidat_id",
+            Auth::user()->id
+        )
+            ->update([
+                "document" => $document
+            ]);
+
+
+            DB::table('message')->where(
+                "num_recu",
+                $candidat->num_recu
+            )
+                ->update([
+                    "statut" =>0
+                ]);
+       
+        return redirect("accueil");
+    }
 }

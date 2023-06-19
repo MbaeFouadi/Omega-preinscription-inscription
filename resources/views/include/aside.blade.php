@@ -79,6 +79,14 @@
 									</ul>
 								</li>
 							@endif
+							@isset($message)
+							<li >
+								<a href="{{('message')}}">
+									<i class="glyphicon glyphicon-envelope" ><span class="path1"></span><span class="path2"></span></i>
+									<span>Message</span>
+								</a>
+							</li>
+							@endisset
 							
 						</ul>
 

@@ -4,7 +4,7 @@ use App\Http\Controllers\candidatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-
+use League\CommonMark\Block\Element\Document;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +21,10 @@ Route::get('/', function () {
     return view('auth_login');
 })->name('/');
 
-Route::get('/dossier', function () {
-    return view('dossier');
+Route::get('/dossier/{id}', function ($id) {
+
+    $doc=DB::table("documents")->where("user_candidat_id",$id)->first();
+    return view('dossier',compact("doc"));
 })->name('dossier');
 
 
@@ -58,6 +60,9 @@ Route::post("update_info/getPreins2",[candidatController::class,'getPreins2'])->
 Route::post("/update_fili",[candidatController::class,'update_fili'])->middleware(['auth', 'verified'])->name("update_fili");
 Route::post("/update_doc",[candidatController::class,'update_doc'])->middleware(['auth', 'verified'])->name("update_doc");
 
+Route::post("/update_doc_co",[candidatController::class,'update_doc_co'])->middleware(['auth', 'verified'])->name("update_doc_co");
+
+
 
 
 
@@ -66,11 +71,19 @@ Route::resource('candidat', candidatController::class)->middleware(['auth', 'ver
 Route::get('mon_bac', [candidatController::class, 'mon_bac'])->middleware(['auth', 'verified'])->name("mon_bac");
 
 Route::post("/type",[candidatController::class,'type'])->middleware(['auth', 'verified'])->name("type");
+// Route::post("/crop",[candidatController::class,'crop'])->name("crop");
+
+Route::get('message', [candidatController::class, 'message'])->middleware(['auth', 'verified'])->name("message");
 
 
 Route::get('inscription', function () {
     return view('auth_register');
 })->name("inscription");
+
+Route::get('fiche_preinscription', function () {
+    $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+    return view('fiche_preinscription',compact("data"));
+})->name("fiche_preinscription");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
