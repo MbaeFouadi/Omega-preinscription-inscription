@@ -893,6 +893,8 @@
                     $("#mat").show();
                 }
             })
+
+            
             $('#modal-center').modal('show');
 
             var text = "<option>Sélectionner l'année</option>";
