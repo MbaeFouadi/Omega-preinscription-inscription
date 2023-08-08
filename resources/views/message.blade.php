@@ -41,7 +41,7 @@
                 <!-- Main content -->
                 <section class="content">
 
-                    <div class="row">
+                    <!-- <div class="row">
 
                         <div class="col-md-4">
                             <div class="box">
@@ -52,46 +52,56 @@
 
 
 
-                                <!-- /.box-header -->
+                             
                                 <div class="box-body">
 
                                     <p class=""> {{$message->message}}</p> <br> <br> <br>
 
                                 </div>
-                                <!-- /.box-body -->
+                          
                             </div>
-                            <!-- /.box -->
-                        </div>
-                        <div class="col-md-8">
+                           
+                        </div> -->
+                        <div class="col-md-12">
                             <div class="box">
 
                                 <div class="box-header">
-                                    <h4 class="box-title ">Correction du document</h4>
+                                    <h4 class="box-title ">Correction de votre dossier</h4>
                                 </div>
 
 
 
                                 <!-- /.box-header -->
                                 <div class="box-body">
-             
-                                <form action="{{route('update_doc_co')}}" method="post" id="document" enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="row">
-                                                @error('document')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-                                                    <div id="docs"></div>
-                                                    <div class="col-lg-6 col-12" id="doc">
-                                                        <label for="formFile" class="form-label">Mes dossiers</label>
-                                                        <input class="form-control" type="file" id="document" name="document" required> <br>
 
-                                                        <input type="submit" id="buttond" class="form-control btn-sm btn-success" value="Enregistrez">
-                                                    </div>
+                                    <form action="{{route('update_doc_co')}}" method="post" id="document" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="row">
+                                            @error('document')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                            <div id="docs"></div>
+                                            <div class="col-lg-4 col-4" id="doc">
+                                                <label for="formFile" class="form-label">Corriger votre dossier si vous avez un problème de dossier</label>
+                                                <input class="form-control" type="file" id="document" name="document"> <br>
+
+                                                <input type="submit" id="buttond" class="form-control btn-sm btn-success" value="Enregistrez">
+                                            </div>
+                                            @error('image')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                            <div class="col-lg-8 col-8" id="doc">
+                                                <label for="formFile" class="form-label">Corriger votre image si vous avez un problème d'image <br> au format carte d'identité</label>
+                                                <input class="form-control" type="file" id="image" name="image" > <br>
+
+                                                <input type="submit" id="buttond" class="form-control btn-sm btn-success" value="Enregistrez">
+                                            </div>
 
 
-                                                
-                                                            
-                                            </form>
+
+
+
+                                    </form>
                                     <p class=""></p> <br> <br> <br>
 
                                 </div>

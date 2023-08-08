@@ -15,7 +15,7 @@
                 <div class="user-profile my-15 px-20 py-10 b-1 rounded10 mx-15">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="image d-flex align-items-center">
-                            <img src="images/avatar/avatar-13.png" class="rounded-0 me-10" alt="User Image">
+                            <img src="images/avatar/18942381.jpg" class="rounded-0 me-10" alt="User Image">
                             <div>
                                 <h4 class="mb-0 fw-600">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h4>
                                 <p class="mb-0">Etudiant</p>

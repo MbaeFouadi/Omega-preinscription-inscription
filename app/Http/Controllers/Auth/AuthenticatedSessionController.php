@@ -20,7 +20,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth_login');
+        $s = DB::table('date_fin')->where('type', 1)->orderByDesc('id_date')->first();
+        $dt = new DateTime();
+        $date = $dt->format('Y-m-d'); 
+        return view('auth_login',compact('s','date'));
     }
 
     /**

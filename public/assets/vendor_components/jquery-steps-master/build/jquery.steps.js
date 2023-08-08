@@ -2037,7 +2037,7 @@ var defaults = $.fn.steps.defaults = {
          * @default "Previous"
          * @for defaults
          **/
-        previous: "Précedent",
+        previous: "Précédent",
 
         /**
          * Label for the loading animation.

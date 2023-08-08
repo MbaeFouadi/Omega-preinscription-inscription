@@ -111,7 +111,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="image d-flex align-items-center">
 
-                            <img src="images/avatar/avatar-13.png" class="rounded-0 me-10" alt="User Image">
+                            <img src="images/avatar/18942381.jpg" class="rounded-0 me-10" alt="User Image">
 
                             <div>
                                 <h4 class="mb-0 fw-600">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h4>
@@ -137,13 +137,18 @@
                         <ul class="sidebar-menu" data-widget="tree">
                             <li class="header">Menu principal</li>
 
-                            <li>
+                            <!-- <li>
                                 <a href="{{('accueil')}}">
                                     <i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i>
                                     <span>Préinscription</span>
                                 </a>
-                            </li>
-
+                            </li> -->
+                            <li>
+						<a href="{{('logout')}}">
+							<i class="glyphicon glyphicon-log-out"><span class="path1"></span><span class="path2"></span></i>
+							<span>Déconnexion</span>
+						</a>
+					</li>
                         </ul>
 
 
@@ -162,6 +167,7 @@
                                     <h4 class="box-title text-right">Mon BAC </h4>
                                 </div>
                                 <!-- /.box-header -->
+                                @if($s->date_fin >= $dates ) 
                                 <form class="form" action="{{route('candidat.store')}}" method="POST">
                                     @csrf
                                     <div class="box-body">
@@ -190,7 +196,7 @@
                                                         <option value=''>Sélectionner l'année</option>
                                                         <script>
                                                             let an = "<option value=''>Sélectionner l'année</option>";
-                                                            for (var i = 1960; i <= 2023; i++) {
+                                                            for (var i = 2023; i >= 1960; i--) {
                                                                 an += '<option value=' + i + '>' + i + '</option>';
                                                             }
                                                             document.getElementById('annee').innerHTML = an;
@@ -254,7 +260,11 @@
                                         </button>
                                     </div>
                                 </form>
-                            </div>
+                                @else
+                                <br> <br> 
+                                <h1 class="text-center text-bold">Les préinscriptions sont déjà fermées</h1> <br> <br> <br> <br>
+                                @endif
+                            </div> 
                             <div class="col-lg-2"></div>
                         </div>
                     </div>
@@ -607,7 +617,7 @@
                                         $("#docs").empty();
 
                                         // $("#docs").append("Votre document est bien chargé");
-                                        $("#docs").append("<embed  src='document/" + data.document + "' width=800 height=500 type='application/pdf' /><br><br><p class=><a href='{{route('dossier')}}' target='_blank'>Voir plus</a></p>");
+                                        $("#docs").append("<embed  src='document/" + data.document + "' width=800 height=500 type='application/pdf' /><br><br><p class=><a href='' target='_blank'>Voir plus</a></p>");
                                         // $("#docs").hide();
 
 
@@ -893,8 +903,6 @@
                     $("#mat").show();
                 }
             })
-
-            
             $('#modal-center').modal('show');
 
             var text = "<option>Sélectionner l'année</option>";

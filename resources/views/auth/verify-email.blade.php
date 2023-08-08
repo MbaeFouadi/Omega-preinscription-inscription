@@ -40,7 +40,7 @@
 
                             </div> <br><br>
                             <div class="container text-center">
-                                Merci pour votre inscription!! <br> Avant de continuer veuillez verifier votre adresse email pour confirmer votre compte. Si vous n'avez pas reçu de mail, nous pouvons renvoyer le lien en cliquant le lien ci-dessous
+                                Merci pour votre inscription ! <br>Veuillez consulter votre adresse e-mail pour activer votre compte. <br> Si vous n'avez pas reçu d'e-mail, cliquer le boutton ci-dessous
                             </div>
                             @if (session('status') == 'verification-link-sent')
                             <div class="mb-4 font-medium text-sm text-green-600">

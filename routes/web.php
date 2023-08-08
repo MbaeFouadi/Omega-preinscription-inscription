@@ -4,6 +4,8 @@ use App\Http\Controllers\candidatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Mail\testMail;
+use Illuminate\Support\Facades\Mail;
 use League\CommonMark\Block\Element\Document;
 
 /*
@@ -18,7 +20,11 @@ use League\CommonMark\Block\Element\Document;
 */
 
 Route::get('/', function () {
-    return view('auth_login');
+    $s = DB::table('date_fin')->where('type', 1)->orderByDesc('id_date')->first();
+    $dt = new DateTime();
+    $date = $dt->format('Y-m-d');
+
+    return view('auth_login',compact("date","s"));
 })->name('/');
 
 Route::get('/dossier/{id}', function ($id) {
@@ -26,6 +32,12 @@ Route::get('/dossier/{id}', function ($id) {
     $doc=DB::table("documents")->where("user_candidat_id",$id)->first();
     return view('dossier',compact("doc"));
 })->name('dossier');
+
+Route::get('/image/{id}', function ($id) {
+
+    $candidat=DB::table("candidats")->where("user_candidat_id",$id)->first();
+    return view('image',compact("candidat"));
+})->name('image');
 
 
 
@@ -81,13 +93,22 @@ Route::get('inscription', function () {
 })->name("inscription");
 
 Route::get('fiche_preinscription', function () {
-    $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
-    return view('fiche_preinscription',compact("data"));
+    // $data = DB::table("candidats")->where("user_candidat_id", Auth::user()->id)->first();
+    // return view('fiche_preinscription',compact("data"));
+
+    return redirect("accepturl");
 })->name("fiche_preinscription");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/testroute', function() {
+    $name = "xD";
+
+    // The email sending is done using the to method on the Mail facade
+    Mail::to('mbaefouadi91@gmail.com')->send(new testMail($name));
+});
 
 require __DIR__ . '/auth.php';
 

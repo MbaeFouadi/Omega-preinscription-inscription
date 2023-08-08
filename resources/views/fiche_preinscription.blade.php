@@ -48,127 +48,128 @@
 				<!-- Step wizard -->
 				<div class="row">
 
-					<div class="col-md-2"></div>
+					<div class="col-md-1"></div>
 
-					<div class="col-md-8">
-						<div class="box border-shadow shadow-lg p-3 mb-5 bg-white rounded">
-							<div class="row">
-								<div class="col-md-2"> <br>
-									<img class="img-responsive" src="images/udc.png" alt="">
+					<div class="col-md-10">
+						<div class="box border-shadow shadow-lg p-3 mb-5 bg-white rounded" >
+							<div id='sectionAimprimer'>
+								<div class="row">
+									<div class="col-md-2"> 
+										<img class="img-responsive" width="80px" height="80px" src="images/udc.png" alt="">
+									</div>
+									<div class="col-md-10">
+										<h2 class="text-center font-weight-bold"><strong>Université des Comores</strong> </h2>
+										<h5 class="text-center font-weight-bold"><strong>Direction des études et de la Scolarité</strong> </h5>
+										<h6 class="text-center font-weight-bold"><strong>Fiche de préinscription</strong> </h6>
+									</div>
+								</div> 
+								<h4> <strong>Etat Civil</strong> </h4>
+								<div class="row" style="font-size: 14px;">
+									<div class="col-md-6">
+										<p>Nin : <strong>{{$data->nin}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p>Transaction de paiment : <strong>{{$transaction->reference}}</strong></p>
+									</div>
 								</div>
-								<div class="col-md-10">
-									<h2 class="text-center font-weight-bold"><strong>Université des Comores</strong> </h2>
-									<h5 class="text-center font-weight-bold"><strong>Direction des études et de la Scolarité</strong> </h5>
-									<h6 class="text-center font-weight-bold"><strong>Fiche de préinscription</strong> </h6>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Nom :<strong> {{$data->nom}}</strong></p>
+
+									</div>
+									<div class="col-md-6">
+										<p>Prénom : <strong>{{$data->prenom}}</strong> </p>
+
+									</div>
+
 								</div>
-							</div> <br> <br>
-							<h4> <strong>Etat Civil</strong> </h4>
-							<div class="row" style="font-size: 14px;">
-								<div class="col-md-6">
-									<p>Nin : <strong>{{$data->nin}}</strong></p>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Date de naissance : <strong>{{$data->date_naiss}}</strong></p>
+
+									</div>
+									<div class="col-md-6">
+										<p>Lieu de naissance : <strong>{{$data->lieu_naiss}}</strong></p>
+
+									</div>
 								</div>
-								<div class="col-md-6">
-									<p>Transaction de paiment : <strong>{{$transaction->reference}}</strong></p>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Adresse : <strong>{{$data->adresse_cand}}</strong></p>
+
+									</div>
+									<div class="col-md-6">
+										<p>Téléphone : <strong>{{$data->tel_mobile}}</strong></p>
+
+									</div>
 								</div>
+								<h4> <strong>Baccalauréat (ou équivalent) </strong> </h4>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Série : <strong> {{$data->serie}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p>Mention : <strong>{{$data->mention}}</strong></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<p> Année : <strong>{{$data->annee}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p> Centre : <strong>{{$data->centre}}</strong></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<p>Numéro de l'attestation : <strong> {{$data->num_attest}}</strong></p>
+									</div>
+								</div>
+								<h4> <strong>Choix des filières </strong> </h4>
+								@if ($data->id_type ==1)
+								<div class="row">
+									<div class="col-md-6">
+										<p>Composante : <strong>{{$departement1->design_facult}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p>Département : <strong>{{$departement1->design_depart}}</strong></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Composante : <strong>{{$departement2->design_facult}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p>Département : <strong>{{$departement2->design_depart}}</strong></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Composante : <strong>{{$departement3->design_facult}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p>Département : <strong>{{$departement3->design_depart}}</strong></p>
+									</div>
+								</div>
+								@else
+								<div class="row">
+									<div class="col-md-6">
+										<p>Composante : <strong> {{$departement->design_facult}}</strong></p>
+									</div>
+									<div class="col-md-6">
+										<p>Département : <strong>{{$departement->design_depart}}</strong></p>
+									</div>
+								</div>
+								@endif
+
+
+
+
 							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<p>Nom :<strong> {{$data->nom}}</strong></p>
-
-								</div>
-								<div class="col-md-6">
-									<p>Prénom : <strong>{{$data->prenom}}</strong> </p>
-
-								</div>
-
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<p>Date de naissance : <strong>{{$data->date_naiss}}</strong></p>
-
-								</div>
-								<div class="col-md-6">
-									<p>Lieu de naissance : <strong>{{$data->lieu_naiss}}</strong></p>
-
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<p>Adresse : <strong>{{$data->adresse_cand}}</strong></p>
-
-								</div>
-								<div class="col-md-6">
-									<p>Téléphone : <strong>{{$data->tel_mobile}}</strong></p>
-
-								</div>
-							</div>
-							<h4> <strong>Baccalauréat (ou équivalent) </strong> </h4>
-							<div class="row">
-								<div class="col-md-6">
-									<p>Série : <strong> {{$data->serie}}</strong></p>
-								</div>
-								<div class="col-md-6">
-									<p>Mention : <strong>{{$data->mention}}</strong></p>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<p> Année : <strong>{{$data->annee}}</strong></p>
-								</div>
-								<div class="col-md-6">
-									<p> Centre : <strong>{{$data->centre}}</strong></p>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<p>Numéro de l'attestation : <strong> {{$data->num_attest}}</strong></p>
-								</div>
-							</div>
-							<h4> <strong>Choix des filières </strong> </h4>
-							@if ($data->id_type ==1)
-							<div class="row">
-								<div class="col-md-6">
-									<p>Composante : <strong>{{$departement1->design_facult}}</strong></p>
-								</div>
-								<div class="col-md-6">
-									<p>Département : <strong>{{$departement1->design_depart}}</strong></p>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<p>Composante : <strong>{{$departement2->design_facult}}</strong></p>
-								</div>
-								<div class="col-md-6">
-									<p>Département : <strong>{{$departement2->design_depart}}</strong></p>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<p>Composante : <strong>{{$departement3->design_facult}}</strong></p>
-								</div>
-								<div class="col-md-6">
-									<p>Département : <strong>{{$departement3->design_depart}}</strong></p>
-								</div>
-							</div>
-							@else
-							<div class="row">
-								<div class="col-md-6">
-									<p>Composante :  <strong> {{$departement->design_facult}}</strong></p>
-								</div>
-								<div class="col-md-6">
-									<p>Département : <strong>{{$departement->design_depart}}</strong></p>
-								</div>
-							</div>
-							@endif
-
-							
-
-
-
-						</div> <br> <br>
+						</div> <br> 
 
 						<p>
-							<input type="button" value="Télécharger" class="btn btn-success">
+							<input type="button" value="Télécharger" onClick="imprimer('sectionAimprimer')" class="btn btn-success">
 						</p>
 
 
@@ -176,7 +177,7 @@
 					</div>
 					<!-- /.box -->
 				</div>
-				<div class="col-md-2"></div>
+				<div class="col-md-1"></div>
 
 				<!-- ./col -->
 		</div>
@@ -217,6 +218,17 @@
 	<script src="src/js/template.js"></script>
 
 	<script src="src/js/pages/steps.js"></script>
+
+	<script>
+		function imprimer(divName) {
+			var restorepage = document.body.innerHTML;
+			var printContent = document.getElementById(divName).innerHTML;
+
+			document.body.innerHTML = printContent;
+			window.print();
+			document.body.innerHTML = restorepage;
+		}
+	</script>
 
 
 

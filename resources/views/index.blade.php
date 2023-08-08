@@ -40,15 +40,18 @@
 			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="d-flex align-items-center">
-					<div class="me-auto">
+					@if($s->date_fin < $date ) <h1 class="text-center text-bold">Les préinscriptions sont déjà fermées</h1>
+						@endif
+						<div class="me-auto">
 
-					</div>
+						</div>
 
 				</div>
 			</div>
 
 			<!-- Main content -->
 			<section class="content">
+
 				<!-- Step wizard -->
 				<div class="box">
 					<div class="box-header with-border">
@@ -196,7 +199,7 @@
 									</div>
 								</div>
 
-								@elseif($data->statut == NULL && $data->type_bac==1 && $data->nin != NULL)
+								@elseif($data->statut == NULL && $data->type_bac==1 && $data->type_preins_id ==1 && $data->annee >= 2010 )
 								<div id="info" sec="1">
 									<form action="{{route('accueil')}}" method="POST" enctype="multipart/form-data">
 										@csrf
@@ -204,22 +207,20 @@
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-
-													<label for="addressline1" class="form-label">Nin </label>
-													<input type="text" class="form-control" id="nin" disabled value='{{$bachelier->NIN}}' required>
-												</div>
-											</div>
-											@if($data->type_preins_id==2 || $data->type_preins_id==3)
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('matricule')
+													@error('nin')
 													<div class="alert alert-danger">{{ $message }}</div>
 													@enderror
-													<label for="addressline1" class="form-label">Matricule </label>
-													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
+													<label for="addressline1" class="form-label">Nin </label>
+													@if ($data->nin !=NULL)
+													<input type="text" class="form-control" id="nin" disabled value='{{$bachelier->NIN}}' required>
+
+													@else
+													<input type="text" class="form-control" id="nin" required>
+
+													@endif
 												</div>
 											</div>
-											@endif
+
 										</div>
 										<div class="row">
 											<div class="col-md-6">
@@ -238,11 +239,15 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-													@error('image')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="lastName1" class="form-label">Image <span class="text-danger">*</span></label>
-													<input type="file" class="form-control" id="image" name="image" data-validation-required-message="Ce champ est obligatoire" required>
+													@if ($errors->has('image'))
+													<div class="alert alert-danger">
+														@foreach ($errors->get('image') as $error)
+														{{ $error }}
+														@endforeach
+													</div>
+													@endif
+													<label for="lastName1" class="form-label">Image format carte d'identité <span class="text-danger">*</span></label>
+													<input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" data-validation-required-message="Ce champ est obligatoire" required>
 												</div>
 											</div>
 										</div>
@@ -250,13 +255,13 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="firstName5" class="form-label">Nom </label>
-													<input type="text" class="form-control" id="nom" name="nom" value="{{$bachelier->Nom}}" required>
+													<input type="text" class="form-control" id="nom" disabled name="nom" value="{{$bachelier->Nom}}" required>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="lastName1" class="form-label">Prénom </label>
-													<input type="text" class="form-control" id="prenom" name="prenom" value="{{$bachelier->Prenom}}" required>
+													<input type="text" class="form-control" id="prenom" disabled name="prenom" value="{{$bachelier->Prenom}}" required>
 												</div>
 											</div>
 										</div>
@@ -366,15 +371,16 @@
 										<div class="row" id="button">
 											<div class="col-md-2">
 												<div class="form-group">
+													@if($s->date_fin >= $date )
 													<input type="submit" class="form-control btn-success" id="addressline1" value="Enregistrer">
+													@endif
 												</div>
 											</div>
 
 										</div>
 									</form>
 								</div>
-								@elseif($data->statut == NULL && $data->type_bac==1 && $data->nin == NULL)
-								<div id="info" sec="1">
+								@elseif($data->statut == NULL && $data->type_bac==1 && $data->type_preins_id == 1 && $data->annee <= 2010) <div id="info" sec="1">
 									<form action="{{route('accueil')}}" method="POST" enctype="multipart/form-data">
 										@csrf
 										<div id='erreur'></div>
@@ -385,11 +391,17 @@
 													<div class="alert alert-danger">{{ $message }}</div>
 													@enderror
 													<label for="addressline1" class="form-label">Nin <span class="text-danger">*</span></label>
+													@if ($data->nin == NULL)
 													<input type="text" class="form-control" name="nin" id="nin" required data-validation-required-message="Ce champ est obligatoire">
+
+													@else
+													<input type="text" class="form-control" name="nin" id="nin" value="{{$data->nin}}" required data-validation-required-message="Ce champ est obligatoire">
+
+													@endif
 												</div>
 											</div>
-											@if($data->type_preins_id==2 || $data->type_preins_id==3)
-											<div class="col-md-6">
+
+											<!-- <div class="col-md-6">
 												<div class="form-group">
 													@error('matricule')
 													<div class="alert alert-danger">{{ $message }}</div>
@@ -397,8 +409,8 @@
 													<label for="addressline1" class="form-label">Matricule </label>
 													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
 												</div>
-											</div>
-											@endif
+											</div> -->
+
 										</div>
 										<div class="row">
 											<div class="col-md-6">
@@ -417,10 +429,14 @@
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
-													@error('image')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="lastName1" class="form-label">Image <span class="text-danger">*</span></label>
+													@if ($errors->has('image'))
+													<div class="alert alert-danger">
+														@foreach ($errors->get('image') as $error)
+														{{ $error }}
+														@endforeach
+													</div>
+													@endif
+													<label for="lastName1" class="form-label">Image format carte d'identité <span class="text-danger">*</span></label>
 													<input type="file" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="image" name="image" required>
 												</div>
 											</div>
@@ -522,7 +538,18 @@
 													<div class="alert alert-danger">{{ $message }}</div>
 													@enderror
 													<label for="addressline1" class="form-label">Série <span class="text-danger">*</span></label>
-													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="serie" name="serie" required>
+													<select name="serie" class="form-control" id="" required>
+														<option value="">Sélectionner</option>
+														<option value="A1">A1</option>
+														<option value="A2">A2</option>
+														<option value="A4">A4</option>
+														<option value="C">C</option>
+														<option value="D">D</option>
+														<option value="G">G</option>
+														<option value="STC">STC</option>
+														<option value="STI">STI</option>
+													</select>
+													<!-- <input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="serie" name="serie" required> -->
 												</div>
 											</div>
 											<div class="col-md-6">
@@ -572,456 +599,709 @@
 										<div class="row" id="button">
 											<div class="col-md-2">
 												<div class="form-group">
+													@if($s->date_fin >= $date )
 													<input type="submit" class="form-control btn-success" id="addressline1" value="Enregistrez">
+													@endif
 												</div>
 											</div>
 
 										</div>
 									</form>
-								</div>
-								@elseif($data->statut == NULL && $data->type_bac==2)
-								<div id="info" sec="1">
-									<form action="{{route('accueil')}}" method="POST" enctype="multipart/form-data">
-										@csrf
-										<div id='erreur'></div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('nin')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline1" class="form-label">Nin <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('nin')}}" name="nin" id="nin" required>
-												</div>
-											</div>
-											@if($data->type_preins_id==2 || $data->type_preins_id==3)
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('matricule')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline1" class="form-label">Matricule </label>
-													<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
-												</div>
-											</div>
+						</div>
+						@elseif($data->statut == NULL && $data->type_preins_id !=1)
+						<div id="info" sec="1">
+							<form action="{{route('accueil')}}" method="POST" enctype="multipart/form-data">
+								@csrf
+								<div id='erreur'></div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('nin')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Nin <span class="text-danger">*</span></label>
+											@if ( $data->nin == NULL)
+											<input type="text" class="form-control" name="nin" id="nin" required data-validation-required-message="Ce champ est obligatoire">
+
+											@else
+											<input type="text" class="form-control" value="{{$data->nin}}" disabled name="nin" id="nin" required data-validation-required-message="Ce champ est obligatoire">
+
 											@endif
 										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('type_preinscription')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="firstName5" class="form-label">Types de {{$preins->design_preins}} <span class="text-danger">*</span></label>
-													<select class="form-control select2" data-validation-required-message="Ce champ est obligatoire" style="width: 100%;" name="type_preinscription" id="type_preinscription" required>
-														<option value="">Sélectionner</option>
-														@foreach ($type_recu as $recu )
-														<option value="{{$recu->id_type}}">{{$recu->nom_type}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('image')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="lastName1" class="form-label">Image <span class="text-danger">*</span> </label>
-													<input type="file" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="image" name="image" required>
-												</div>
-											</div>
+									</div>
+									@if($data->type_preins_id==2 || $data->type_preins_id==3)
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('matricule')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Matricule </label>
+											<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
 										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('nom')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="firstName5" class="form-label">Nom <span class="text-danger">*</span></label>
-													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('nom')}}" id="nom" name="nom" required>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('prenom')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="lastName1" class="form-label">Prénom <span class="text-danger">*</span></label>
-													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('prenom')}}" id="prenom" name="prenom" required>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('date_naissance')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="emailAddress1" class="form-label">Date de naissance <span class="text-danger">*</span></label>
-													<input type="date" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('date_naissance')}}" id="date_naissance" name="date_naissance" required>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('lieu_naissance')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="phoneNumber1" class="form-label">Lieu de naissance <span class="text-danger">*</span></label>
-													<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('lieu_naissance')}}" id="lieu_naissance" name="lieu_naissance" required>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('sexe')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline2" class="form-label">Sexe <span class="text-danger">*</span></label>
-													<select name="sexe" id="sexe" class="form-control" data-validation-required-message="Ce champ est obligatoire" required>
-														<option value="">Sélectionner le sexe</option>
-														<option value="M">M</option>
-														<option value="F">F</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('adresse')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline1" class="form-label">Adresse <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" id="adresse" value="{{old('adresse')}}" data-validation-required-message="Ce champ est obligatoire" name="adresse" required>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('pays')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline1" class="form-label">Pays <span class="text-danger">*</span></label>
-													<select name="pays" id="pays" class="form-control" required data-validation-required-message="Ce champ est obligatoire">
-														<option value="">Sélectionner le pays</option>
-														@foreach ($pays as $pay )
-														<option value="{{$pay->nom_fr_fr}}">{{$pay->nom_fr_fr}}</option>
-
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('telephone')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline2" class="form-label">Téléphone <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('telephone')}}" id="telephone" name="telephone" required>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('serie')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline1" class="form-label">Série <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" id="serie" data-validation-required-message="Ce champ est obligatoire" value="{{old('serie')}}" name="serie" required>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('mention')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline2" class="form-label">Mention <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" id="mention" data-validation-required-message="Ce champ est obligatoire" value="{{old('mention')}}" name="mention" required>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													@error('centre')
-													<div class="alert alert-danger">{{ $message }}</div>
-													@enderror
-													<label for="addressline1" class="form-label">Centre <span class="text-danger">*</span></label>
-													<input type="text" class="form-control" id="centre" data-validation-required-message="Ce champ est obligatoire" value="{{old('centre')}}" name="centre" required>
-												</div>
-											</div>
-											<div class="col-md-6">
-												@error('annees')
-												<div class="alert alert-danger">{{ $message }}</div>
-												@enderror
-												<div class="form-group">
-													<label for="addressline2" class="form-label">Année d'obtention <span class="text-danger">*</span></label>
-
-													<select id="annees" name="annees" class="form-control" data-validation-required-message="Ce champ est obligatoire">
-														<option value="">Sélectionner l'année</option>
-														<script>
-															let ane = '';
-															for (var i = 1960; i <= 2023; i++) {
-																ane += '<option value=' + i + '>' + i + '</option>';
-															}
-															document.getElementById('annees').innerHTML = ane;
-														</script>
-
-
-
-
-													</select>
-												</div>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="addressline1" class="form-label">Numéro d'attestation <span class="text-danger">*</span> </label>
-													<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" name="num_attest" id="num_attest" value="{{old('num_attest')}}" required>
-												</div>
-											</div>
-
-										</div>
-
-										<div class="row" id="button">
-											<div class="col-md-2">
-												<div class="form-group">
-													<input type="submit" class="form-control btn-success" id="addressline1" value="Enregistrez">
-												</div>
-											</div>
-
-										</div>
-									</form>
+									</div>
+									@endif
 								</div>
-								@else
-								<div> Recharger votre page pour préciser les informations</div>
-								@endif
-								@endisset
-
-							</section>
-							<!-- Step 2 -->
-							<h6>Choix de filières</h6>
-							<section id="c">
-								<div id="fili" sec="2">
-									<div id="fillie"></div>
-									<div id="messagef"></div>
-									<form action="" method="POST" id="filiere">
-										@csrf
-										<div class="row" id="choix1">
-											<div class="col-md-3">
-												<div class="form-group">
-													<label class="form-label">1er Choix <br> <br> Composantes <span class="text-danger">*</span></label>
-													<select class="form-control select2" id="composante1" name="composante1" style="width: 100%;">
-														
-
-													</select>
-
-												</div>
-												<div class="form-group">
-													<label class="form-label">Départements <span class="text-danger">*</span></label>
-													<select class="form-control select2" id="departement1" name="departement1" style="width: 100%;">
-														<option value="">Sélectionner</option>
-													</select>
-												</div>
-											</div>
-
-											<div class="col-md-3">
-												<div class="form-group">
-													<label class="form-label">2ème choix <br> <br> Composantes <span class="text-danger">*</span></label>
-													<select class="form-control select2" id="composante2" name="composante2" style="width: 100%;">
-														<option>Sélectionner</option>
-
-													</select>
-												</div>
-												<div class="form-group">
-													<label class="form-label">Départements <span class="text-danger">*</span></label>
-													<select class="form-control select2" id="departement2" name="departement2" style="width: 100%;">
-														<option value="">Sélectionner</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-md-3">
-												<div class="form-group">
-													<label class="form-label">3ème choix <br> <br> Composantes <span class="text-danger">*</span></label>
-													<select class="form-control select2" style="width: 100%;" id="composante3" name="composante3">
-														<option>Sélectionner</option>
-
-													</select>
-												</div>
-												<div class="form-group">
-													<label class="form-label">Départements <span class="text-danger">*</span></label>
-													<select class="form-control select2" id="departement3" name="departement3" style="width: 100%;">
-														<option value="">Sélectionner</option>
-													</select>
-												</div>
-											</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('type_preinscription')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="firstName5" class="form-label">Types de {{$preins->design_preins}} <span class="text-danger">*</span></label>
+											<select class="form-control select2" style="width: 100%;" required data-validation-required-message="Ce champ est obligatoire" name="type_preinscription" id="type_preinscription">
+												<option value="">Sélectionner</option>
+												@foreach ($type_recu as $recu )
+												<option value="{{$recu->id_type}}">{{$recu->nom_type}}</option>
+												@endforeach
+											</select>
 										</div>
-										<div class="row" id="choix2">
-											<div class="col-md-3">
-												<div class="form-group">
-													<label class="form-label">1er choix <br> <br> Composantes <span class="text-danger">*</span></label>
-													<select class="form-control select2" style="width: 100%;" id="composante" name="composante">
-														<option>Sélectionner</option>
-
-
-													</select>
-												</div>
-												<div class="form-group">
-													<label class="form-label">Départements <span class="text-danger">*</span></label>
-													<select class="form-control select2" style="width: 100%;" name="departement" id="departement">
-														<option value="">Sélectionner</option>
-
-													</select>
-												</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@if ($errors->has('image'))
+											<div class="alert alert-danger">
+												@foreach ($errors->get('image') as $error)
+												{{ $error }}
+												@endforeach
 											</div>
+											@endif
+											<label for="lastName1" class="form-label">Image format carte d'identité<span class="text-danger">*</span></label>
+											<input type="file" class="form-control" data-validation-required-message="Ce champ est obligatoire" id="image" name="image" required>
 										</div>
-
-										<div class="row" id="buttonf">
-											<div class="col-md-2">
-												<div class="form-group">
-													<input type="submit" class="form-control btn-success" value="Enregistrer">
-												</div>
-											</div>
-
-										</div>
-
-									</form>
+									</div>
 								</div>
-							</section>
-							<!-- Step 3 -->
-							<h6>Documents</h6>
-							<section id="3">
-								<div id="dossier" sec="3">
-									<div id="messaged"></div>docu
-									<form action="" method="post" id="document">
-										@csrf
-										<div class="row">
-
-											<div id="docs"></div>
-											<div class="col-lg-6 col-12" id="doc">
-												<label for="formFile" class="form-label">Mes dossiers</label>
-												<input class="form-control" type="file" id="document" name="document" required> <br>
-
-												<input type="submit" id="buttond" class="form-control btn-sm btn-success" value="Enregistrez">
-											</div>
-
-
-											<div class="col-lg-6 col-12" id="do">
-												<div class="box">
-													<div class="box-header with-border">
-														<h1 class="box-title"><strong>Nota Bene </strong></h1>
-													</div>
-													<!-- /.box-header -->
-
-													<div class="box-body" id="licence">
-
-														<!-- <hr class="my-15"> -->
-														<p>- Le candidat désirant s'inscrire à un concours doit choisir un seul et unique département parmi les départements exigeant un concours d'entrée</p>
-														<p>- Les 2 autres choix porteront sur des départements de facultés.</p>
-														<h6><strong> Vous êtes prié(e)s de joindre vos documents dans un seul fichier pdf en suivant cet ordre. </strong></h6>
-														<div class="row">
-															<ul>
-																<li>Copie certifiée du Relevé des notes au BAC.</li>
-																<li>Copies certifiées des bulletins de notes du 3ème trimestre des classes de 2nde ,1ère et Terminale.</li>
-																<li>Copie certifiée de l’Attestation de réussite au Bac.</li>
-																<li>Pour la 2ème ou 3ème année universitaire, les copies certifiées de l’Attestation de Diplôme et du relevé des notes justifiant l’inscription.</li>
-																<li>L’extrait de naissance ou Fiche individuelle d’Etat civil de moins de 3 mois.</li>
-																<li>Copie certifiée du titre de séjour pour les étrangers.</li>
-
-															</ul>
-														</div>
-													</div>
-													<div class="box-body" id="master">
-
-														<!-- <hr class="my-15"> -->
-														<h6><strong> Vous êtes prié(e)s de joindre vos documents dans un seul fichier pdf en suivant cet ordre. </strong></h6>
-														<div class="row">
-															<ul>
-																<li>Copie certfiée du BAC pour les primo entrants.</li>
-																<li>Copie certifiée du diplôme universitaire, de l′attestation de réussite à la Licence ou au Master 1.</li>
-																<li>Copies certifiées conformes des Relevés des notes de 3éme année de Licence ou du Master .</li>
-																<li>Extrait de naissance pour les primo entrants.</li>
-
-																<li>Attestation de séjour en cours de validité et couvrant l′année pour les candidats étrangers</li>
-															</ul>
-														</div>
-													</div>
-													<div class="box-body" id="transfert">
-
-														<!-- <hr class="my-15"> -->
-														<h6><strong> Vous êtes prié(e)s de joindre vos documents dans un seul fichier pdf en suivant cet ordre. </strong></h6>
-														<div class="row">
-															<ul>
-																<li>- Photocopie du relevet des notes annuelles justifiant le niveau d'études acquis</li>
-
-															</ul>
-														</div>
-													</div>
-													<div class="box-body" id="reprise">
-
-														<!-- <hr class="my-15"> -->
-														<h6><strong> Vous êtes prié(e)s de joindre vos documents dans un seul fichier pdf en suivant cet ordre. </strong></h6>
-														<div class="row">
-															<ul>
-																<li>- Photocopie du relevet des notes annuelles justifiant le niveau d'études acquis</li>
-														</div>
-													</div>
-
-									</form>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('nom')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="firstName5" class="form-label">Nom <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" value="{{$data->nom}}" disabled data-validation-required-message="Ce champ est obligatoire" id="nom" name="nom" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('prenom')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="lastName1" class="form-label">Prénom <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" value="{{$data->prenom}}" disabled data-validation-required-message="Ce champ est obligatoire" id="prenom" name="prenom" required>
+										</div>
+									</div>
 								</div>
-								<!-- /.box -->
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('date_naissance')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="emailAddress1" class="form-label">Date de naissance <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" value="{{$data->date_naiss}}" disabled data-validation-required-message="Ce champ est obligatoire" id="date_naissance" name="date_naissance" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('lieu_naissance')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="phoneNumber1" class="form-label">Lieu de naissance <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" value="{{$data->lieu_naiss}}" disabled data-validation-required-message="Ce champ est obligatoire" id="lieu_naissance" name="lieu_naissance" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('sexe')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Sexe <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" id="sexe" name="sexe" disabled value="{{$data->sexe}}" disabled required>
+
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('adresse')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Adresse <span class="text-danger">*</span></label>
+											<input type="text" value="{{$data->adresse_cand}}" disabled data-validation-required-message="Ce champ est obligatoire" class="form-control" name="adresse" id="adresse" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('pays')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Pays <span class="text-danger">*</span></label>
+											<select name="pays" id="pays" class="form-control" data-validation-required-message="Ce champ est obligatoire" required>
+												<option value="">Sélectionner le pays</option>
+												@foreach ($pays as $pay )
+												<option value="{{$pay->nom_fr_fr}}">{{$pay->nom_fr_fr}}</option>
+
+												@endforeach
+											</select>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('telephone')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Téléphone <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" disabled value="{{$data->tel_mobile}}" data-validation-required-message="Ce champ est obligatoire" name="telephone" id="telephone" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('serie')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Série <span class="text-danger">*</span></label>
+											<select name="serie" class="form-control" id="" required>
+											<option value="">Sélectionner</option>
+
+												<option value="A1">A1</option>
+												<option value="A2">A2</option>
+												<option value="A4">A4</option>
+												<option value="C">C</option>
+												<option value="D">D</option>
+												<option value="G">G</option>
+												<option value="STC">STC</option>
+												<option value="STI">STI</option>
+											</select>
+											<!-- <input type="text" disabled data-validation-required-message="Ce champ est obligatoire" value="{{$data->serie}}" class="form-control" id="serie" name="serie" required> -->
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('mention')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Mention <span class="text-danger">*</span></label>
+											<input type="text" disabled data-validation-required-message="Ce champ est obligatoire" value="{{$data->mention}}" class="form-control" id="mention" name="mention" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('centre')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Centre <span class="text-danger">*</span></label>
+											<input type="text" disabled data-validation-required-message="Ce champ est obligatoire" value="{{$data->centre}}" class="form-control" id="centre" name="centre" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('annee')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Année d'obtention</label>
+											<input type="text" disabled class="form-control" id="annee" name="annee" value="{{$data->annee}}" disabled required>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('num_attest')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Numéro d'attestation <span class="text-danger">*</span></label>
+											<input type="text" disabled value="{{$data->num_attest}}" data-validation-required-message="Ce champ est obligatoire" class="form-control" name="num_attest" id="num_attest" required>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="row" id="button">
+									<div class="col-md-2">
+										<div class="form-group">
+											@if($s->date_fin >= $date )
+											<input type="submit" class="form-control btn-success" id="addressline1" value="Enregistrez">
+											@endif
+										</div>
+									</div>
+
+								</div>
+							</form>
 						</div>
-					</div>
+
+						@elseif($data->statut == NULL && $data->type_bac==2)
+						<div id="info" sec="1">
+							<form action="{{route('accueil')}}" method="POST" enctype="multipart/form-data">
+								@csrf
+								<div id='erreur'></div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('nin')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Nin <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('nin')}}" name="nin" id="nin" required>
+										</div>
+									</div>
+									@if($data->type_preins_id==2 || $data->type_preins_id==3)
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('matricule')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Matricule </label>
+											<input type="text" class="form-control" id="matricule" name="matricule" value="{{$data->matricule}}" disabled required>
+										</div>
+									</div>
+									@endif
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('type_preinscription')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="firstName5" class="form-label">Types de {{$preins->design_preins}} <span class="text-danger">*</span></label>
+											<select class="form-control select2" data-validation-required-message="Ce champ est obligatoire" style="width: 100%;" name="type_preinscription" id="type_preinscription" required>
+												<option value="">Sélectionner</option>
+												@foreach ($type_recu as $recu )
+												<option value="{{$recu->id_type}}">{{$recu->nom_type}}</option>
+												@endforeach
+											</select>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@if ($errors->has('image'))
+											<div class="alert alert-danger">
+												@foreach ($errors->get('image') as $error)
+												{{ $error }}
+												@endforeach
+											</div>
+											@endif
+											<label for="lastName1" class="form-label">Image format carte d'identité<span class="text-danger">*</span> </label>
+											<input type="file" data-validation-required-message="Ce champ est obligatoire" class="form-control" id="image" name="image" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('nom')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="firstName5" class="form-label">Nom <span class="text-danger">*</span></label>
+											<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('nom')}}" id="nom" name="nom" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('prenom')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="lastName1" class="form-label">Prénom <span class="text-danger">*</span></label>
+											<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('prenom')}}" id="prenom" name="prenom" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('date_naissance')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="emailAddress1" class="form-label">Date de naissance <span class="text-danger">*</span></label>
+											<input type="date" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('date_naissance')}}" id="date_naissance" name="date_naissance" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('lieu_naissance')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="phoneNumber1" class="form-label">Lieu de naissance <span class="text-danger">*</span></label>
+											<input type="text" data-validation-required-message="Ce champ est obligatoire" class="form-control" value="{{old('lieu_naissance')}}" id="lieu_naissance" name="lieu_naissance" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('sexe')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Sexe <span class="text-danger">*</span></label>
+											<select name="sexe" id="sexe" class="form-control" data-validation-required-message="Ce champ est obligatoire" required>
+												<option value="">Sélectionner le sexe</option>
+												<option value="M">M</option>
+												<option value="F">F</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('adresse')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Adresse <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" id="adresse" value="{{old('adresse')}}" data-validation-required-message="Ce champ est obligatoire" name="adresse" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('pays')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Pays <span class="text-danger">*</span></label>
+											<select name="pays" id="pays" class="form-control" required data-validation-required-message="Ce champ est obligatoire">
+												<option value="">Sélectionner le pays</option>
+												@foreach ($pays as $pay )
+												<option value="{{$pay->nom_fr_fr}}">{{$pay->nom_fr_fr}}</option>
+
+												@endforeach
+											</select>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('telephone')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Téléphone <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" value="{{old('telephone')}}" id="telephone" name="telephone" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('serie')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Série <span class="text-danger">*</span></label>
+											<select name="serie" class="form-control" id="" required>
+											<option value="">Sélectionner</option>
+
+												<option value="A1">A1</option>
+												<option value="A2">A2</option>
+												<option value="A4">A4</option>
+												<option value="C">C</option>
+												<option value="D">D</option>
+												<option value="G">G</option>
+												<option value="STC">STC</option>
+												<option value="STI">STI</option>
+											</select>
+											<!-- <input type="text" class="form-control" id="serie" data-validation-required-message="Ce champ est obligatoire" value="{{old('serie')}}" name="serie" required> -->
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('mention')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline2" class="form-label">Mention <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" id="mention" data-validation-required-message="Ce champ est obligatoire" value="{{old('mention')}}" name="mention" required>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											@error('centre')
+											<div class="alert alert-danger">{{ $message }}</div>
+											@enderror
+											<label for="addressline1" class="form-label">Centre <span class="text-danger">*</span></label>
+											<input type="text" class="form-control" id="centre" data-validation-required-message="Ce champ est obligatoire" value="{{old('centre')}}" name="centre" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										@error('annees')
+										<div class="alert alert-danger">{{ $message }}</div>
+										@enderror
+										<div class="form-group">
+											<label for="addressline2" class="form-label">Année d'obtention <span class="text-danger">*</span></label>
+
+											<select id="annees" name="annees" class="form-control" data-validation-required-message="Ce champ est obligatoire">
+												<option value="">Sélectionner l'année</option>
+												<script>
+													let ane = '';
+													for (var i = 1960; i <= 2023; i++) {
+														ane += '<option value=' + i + '>' + i + '</option>';
+													}
+													document.getElementById('annees').innerHTML = ane;
+												</script>
 
 
-				</div>
+
+
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="addressline1" class="form-label">Numéro d'attestation <span class="text-danger">*</span> </label>
+											<input type="text" class="form-control" data-validation-required-message="Ce champ est obligatoire" name="num_attest" id="num_attest" value="{{old('num_attest')}}" required>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="row" id="button">
+									<div class="col-md-2">
+										<div class="form-group">
+											@if($s->date_fin >= $date )
+											<input type="submit" class="form-control btn-success" id="addressline1" value="Enregistrez">
+											@endif
+										</div>
+									</div>
+
+								</div>
+							</form>
+						</div>
+						@else
+						<div> Recharger votre page pour préciser les informations</div>
+						@endif
+						@endisset
+
 			</section>
-			<!-- Step 4 -->
-			<h6>Paiement</h6>
-			<section sec="4" id="4">
-
-				<div id="fil" sec="4">
-					<div class="row">
-						<div class="col-lg-6 col-12">
-							<div class="box" id="infoP">
-
-							</div>
-							<!-- /.box -->
-						</div>
-
-						<div class="col-lg-6 col-12">
-							<div class="box" id="choixf">
-								<div class="box-header with-border">
-									<h4 class="box-title">Mes choix de filières</h4>
-								</div>
-
-							</div>
-							<!-- /.box -->
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4" id="paye">
-					<form method="post" action="{{url('https://26900.tagpay.fr/online/online.php')}}">
+			<!-- Step 2 -->
+			<h6>Choix de filières</h6>
+			<section id="c">
+				<div id="fili" sec="2">
+					<div id="fillie"></div>
+					<div id="messagef"></div>
+					<form action="" method="POST" id="filiere">
 						@csrf
-						<input type="hidden" name="sessionid" value="{{$sessionId}}">
-						<input type="hidden" name="merchantid" value="2274832632922162">
-						<input type="hidden" name="amount" value="5000">
-						<input type="hidden" name="currency" value="174">
-						<input type="hidden" name="purchaseref" value="{{$data->user_candidat_id}}">
-						<input type="hidden" name="accepturl" value="http://omega-xd.univ-comores.km/accepturl">
-						<input type="hidden" name="cancelurl" value="http://omega-xd.univ-comores.km/cancelurl">
-						<input type="hidden" name="declineurl" value="http://omega-xd.univ-comores.km/declineurl">
-						<input type="submit" class="btn btn-sm btn-success" name="ok" value="Payer via Holo">
+						<div class="row" id="choix1">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="form-label">1er Choix <br> <br> Composantes <span class="text-danger">*</span></label>
+									<select class="form-control select2" id="composante1" name="composante1" style="width: 100%;">
+
+
+									</select>
+
+								</div>
+								<div class="form-group">
+									<label class="form-label">Départements <span class="text-danger">*</span></label>
+									<select class="form-control select2" id="departement1" name="departement1" style="width: 100%;">
+										<option value="">Sélectionner</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="form-label">2ème choix <br> <br> Composantes <span class="text-danger">*</span></label>
+									<select class="form-control select2" id="composante2" name="composante2" style="width: 100%;">
+										<option>Sélectionner</option>
+
+									</select>
+								</div>
+								<div class="form-group">
+									<label class="form-label">Départements <span class="text-danger">*</span></label>
+									<select class="form-control select2" id="departement2" name="departement2" style="width: 100%;">
+										<option value="">Sélectionner</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="form-label">3ème choix <br> <br> Composantes <span class="text-danger">*</span></label>
+									<select class="form-control select2" style="width: 100%;" id="composante3" name="composante3">
+										<option>Sélectionner</option>
+
+									</select>
+								</div>
+								<div class="form-group">
+									<label class="form-label">Départements <span class="text-danger">*</span></label>
+									<select class="form-control select2" id="departement3" name="departement3" style="width: 100%;">
+										<option value="">Sélectionner</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row" id="choix2">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="form-label">1er choix <br> <br> Composantes <span class="text-danger">*</span></label>
+									<select class="form-control select2" style="width: 100%;" id="composante" name="composante">
+										<option>Sélectionner</option>
+
+
+									</select>
+								</div>
+								<div class="form-group">
+									<label class="form-label">Départements <span class="text-danger">*</span></label>
+									<select class="form-control select2" style="width: 100%;" name="departement" id="departement">
+										<option value="">Sélectionner</option>
+
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" id="buttonf">
+							<div class="col-md-2">
+								<div class="form-group">
+									@if($s->date_fin >= $date )
+									<input type="submit" class="form-control btn-success" value="Enregistrer">
+									@endif
+								</div>
+							</div>
+
+						</div>
 
 					</form>
 				</div>
-
-
 			</section>
+			<!-- Step 3 -->
+			<h6>Documents</h6>
+			<section id="3">
+				<div id="dossier" sec="3">
+					<div id="messaged"></div>
+					<form action="" method="post" id="document">
+						@csrf
+						<div class="row">
+
+							<div id="docs"></div>
+							<div class="col-lg-6 col-12" id="doc">
+								<label for="formFile" class="form-label">Mes dossiers</label>
+								<input class="form-control" type="file" id="document" name="document" required> <br>
+								@if($s->date_fin >= $date )
+								<input type="submit" id="buttond" class="form-control btn-sm btn-success" value="Enregistrez">
+								@endif
+							</div>
+
+
+							<div class="col-lg-6 col-12" id="do">
+								<div class="box">
+									<div class="box-header with-border">
+										<h1 class="box-title"><strong>NB: </strong></h1>
+										<hr>
+									</div>
+									<!-- /.box-header -->
+
+									<div class="box-body" id="licence">
+
+										<!-- <hr class="my-15"> -->
+										<!-- <p>- Le candidat désirant s'inscrire à un concours doit choisir un seul et unique département parmi les départements exigeant un concours d'entrée</p>
+														<p>- Les 2 autres choix porteront sur des départements de facultés.</p> -->
+										<h6><strong> Vous êtes prié(e)s de joindre vos documents dans un seul fichier au format pdf en suivant cet ordre. </strong></h6>
+										<div class="row">
+											<ul>
+												<li>Copie certifiée du Relevé de notes au BAC.</li>
+												<li>Copies certifiées des bulletins de notes du 3ème trimestre des classes de 2nde ,1ère et Terminale.</li>
+												<li>Copie certifiée de l’Attestation de réussite au Bac.</li>
+												<li>Copies certifiées de l’attestation de Diplôme et du relevé des notes justifiant l’inscription, pour la 2èmeou 3èmeannée universitaire.</li>
+												<li>Extrait de naissance ou Fiche individuelle d’Etat civil de moins de 3 mois.</li>
+												<li>Attestation de séjour en cours de validité et couvrant l’année pour les candidats étrangers.</li>
+											</ul>
+										</div>
+									</div>
+									<div class="box-body" id="master">
+
+										<!-- <hr class="my-15"> -->
+										<h6><strong> Vous êtes prié(e)s de joindre vos documents dans un seul fichier au format pdf en suivant cet ordre. </strong></h6>
+										<div class="row">
+											<ul>
+												<li>Copie certfiée du BAC pour les primo entrants.</li>
+												<li>Copie certifiée du diplôme universitaire, de l′attestation de réussite à la Licence ou au Master 1.</li>
+												<li>Copies certifiées conformes des Relevés de notes de 3éme année de Licence ou du Master .</li>
+												<li>Curriculum vitae (CV)</li>
+												<li>Extrait de naissance pour les primo entrants.</li>
+												<li>Attestation de séjour en cours de validité et couvrant l′année pour les candidats étrangers</li>
+											</ul>
+										</div>
+									</div>
+									<div class="box-body" id="transfert">
+
+										<!-- <hr class="my-15"> -->
+										<h6><strong> Vous êtes prié(e)s de joindre ce documents au format pdf. </strong></h6>
+										<div class="row">
+											<ul>
+												<li>- Photocopie du relevé de notes annuel justifiant le niveau d’études acquis</li>
+
+											</ul>
+										</div>
+									</div>
+									<div class="box-body" id="reprise">
+
+										<!-- <hr class="my-15"> -->
+										<h6><strong> Vous êtes prié(e)s de joindre ce documents en format pdf. </strong></h6>
+										<div class="row">
+											<ul>
+												<li>- Photocopie du relevé de notes annuel justifiant le niveau d’études acquis.</li>
+										</div>
+									</div>
+
+					</form>
+				</div>
+				<!-- /.box -->
 		</div>
+	</div>
+
+
+	</div>
+	</section>
+	<!-- Step 4 -->
+	<h6>Paiement</h6>
+	<section sec="4" id="4">
+
+		<div id="fil" sec="4">
+			<div class="row">
+				<div class="col-lg-6 col-12">
+					<div class="box" id="infoP">
+
+					</div>
+					<!-- /.box -->
+				</div>
+
+				<div class="col-lg-6 col-12">
+					<div class="box" id="choixf">
+						<div class="box-header with-border">
+							<h4 class="box-title">Mes choix de filières</h4>
+						</div>
+
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4" id="paye">
+			<form method="post" action="{{url('https://26900.tagpay.fr/online/online.php')}}">
+				@csrf
+				<input type="hidden" name="sessionid" value="{{$sessionId}}">
+				<input type="hidden" name="merchantid" value="2274832632922162">
+				<input type="hidden" name="amount" value="7500">
+				<input type="hidden" name="currency" value="174">
+				<input type="hidden" name="purchaseref" value="{{$data->user_candidat_id}}">
+				<input type="hidden" name="accepturl" value="http://omega-xd.univ-comores.km/accepturl">
+				<input type="hidden" name="cancelurl" value="http://omega-xd.univ-comores.km/cancelurl">
+				<input type="hidden" name="declineurl" value="http://omega-xd.univ-comores.km/declineurl">
+				@if($s->date_fin >= $date )
+				<input type="submit" class="btn btn-sm btn-success" name="ok" value="Payer via Holo">
+				@endif
+
+			</form>
+		</div>
+
+
+	</section>
+	</div>
 	</div>
 	<!-- /.box-body -->
 	</div>
@@ -1497,7 +1777,7 @@
 			$("#filiere").submit(function(e) {
 				e.preventDefault();
 				var form = $("#filiere").serializeArray();
-				console.log(form);
+				// console.log(form);
 
 				$.ajax({
 					type: "POST",
@@ -1508,11 +1788,17 @@
 					_token: '{{csrf_token()}}',
 
 					success: function(res) {
-
 						if (res) {
-							$("#buttonf").empty();
-							$("#messagef").empty();
-							$("#messagef").append("<div class='alert alert-success'>Enregistrement réussi</div>");
+							if (res == 0) {
+
+								$("#messagef").empty();
+								$("#messagef").append("<div class='alert alert-danger'>Vous ne pouvez pas prendre plusieurs fois le même département</div>");
+							} else {
+								$("#buttonf").empty();
+								$("#messagef").empty();
+								$("#messagef").append("<div class='alert alert-success'>Enregistrement réussi</div>");
+							}
+
 							// $.each(res, function(key, value) {
 							// 	$("#info").append('<div>Insertion reussi</div>');
 							// });

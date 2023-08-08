@@ -6,7 +6,7 @@
 @if ($level === 'error')
 # @lang('Whoops!')
 @else
-# @lang('Bonjour')
+# @lang('Bonjour') 
 @endif
 @endif
 
@@ -43,15 +43,14 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-xD, <br>
-Omega
+DIRECTION DES ETUDES ET DE LA SCOLARITE
 @endif
 
 {{-- Subcopy --}}
 @isset($actionText)
 @slot('subcopy')
 @lang(
-    "Si vous n'arrivez pas à cliquer le boutton  \":actionText\" Copie et coller le lien ci-dessous\n".
+    "Si vous n'arrivez pas à cliquer le boutton  \":actionText\" Copiez et collez le lien ci-dessous\n".
     'dans votre navigateur:',
     [
         'actionText' => $actionText,

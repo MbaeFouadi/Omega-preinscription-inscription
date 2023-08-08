@@ -28,10 +28,13 @@
 		<div class="row align-items-center justify-content-md-center h-p100">	
 			
 			<div class="col-12">
+			@if($s->date_fin < $date )
+			<h1 class="text-center text-bold">Les préinscriptions seront ouvertes le lundi 07 Août 2023</h1>
+			@endif
+
 				<div class="row justify-content-center g-0">
 					<div class="col-lg-5 col-md-5 col-12">
-						<div >
-							
+						<div>
 							<div class="content-top-agile p-20 pb-0">
 							<h1 class="text-success" style="font-size: 3.9em;"><strong>Omega xD </strong></h1>
 
@@ -61,15 +64,25 @@
 										</div>
 										<!-- /.col -->
 									 
-								</form>	
+								</form> 
+								<div class="text-center">
+									<p class="mt-15 mb-0 text-dark" style="font-weight: bolder;"><strong>Pièces à fournir et processus des préinscriptions : <a href="assets/Processus.pdf" target='_blank' class="text-success ms-5"><strong>Cliquez-ici</strong></a> </strong></p>
+									<p class="mt-15 mb-0 text-dark"><strong>Offre de formation: <a href="assets/offre_de_formation.pdf" target='_blank' class="text-success ms-5"><strong>Cliquez-ici</strong></a> </strong></p>
+								</div>
+								@if($s->date_fin >= $date )
 								<div class="text-center">
 									<p class="mt-15 mb-0 text-dark"><strong>Vous n'avez pas un compte ? </strong><a href="{{('inscription')}}" class="text-success ms-5"><strong>S'inscrire</strong></a></p>
 								</div>
 								<div class="text-center">
 									<p class="mt-15 mb-0 text-dark"><strong> Mot de passe oublié ?</strong><a href="{{('forgot-password')}}" class="text-success ms-5"><strong>Réinitialiser votre mot de passe</strong></a></p>
 								</div>
+								
+								@endif
+
+								
 							</div>						
 						</div>
+
 					
 					</div>
 				</div>
